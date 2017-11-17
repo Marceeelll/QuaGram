@@ -24,4 +24,13 @@ public class UserService {
 	public List<User> getAllUsers() {
 		return new ArrayList<User>(users.values());
 	}
+	
+	public Boolean contains(String userID) {
+		users.containsKey(userID);
+		return true;
+	}
+	
+	public User getUser(String instagramID) {
+		return users.get(instagramID);
+	}
 }

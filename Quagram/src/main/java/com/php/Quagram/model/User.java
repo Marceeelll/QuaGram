@@ -1,11 +1,16 @@
 package com.php.Quagram.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 @XmlRootElement
 public class User {
 	private String instagramID;
 	private String accessToken;
+	
+	private String name;
+	private int gamesLost;
+	private int gamesWin;
 	
 	public User() {
 	}
@@ -16,6 +21,7 @@ public class User {
 		this.accessToken = accessToken;
 	}
 
+	@XmlTransient
 	public String getInstagramID() {
 		return instagramID;
 	}
@@ -24,12 +30,38 @@ public class User {
 		this.instagramID = instagramID;
 	}
 
+	@XmlTransient
 	public String getAccessToken() {
 		return accessToken;
 	}
 
 	public void setAccessToken(String accessToken) {
 		this.accessToken = accessToken;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public int getGamesLost() {
+		return gamesLost;
+	}
+	public void setGamesLost(int gamesLost) {
+		this.gamesLost = gamesLost;
+	}
+	public int getGamesWin() {
+		return gamesWin;
+	}
+	public void setGamesWin(int gamesWin) {
+		this.gamesWin = gamesWin;
+	}
+
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return name;
 	}
 	
 	
