@@ -8,7 +8,8 @@ public class User {
 	private String instagramID;
 	private String accessToken;
 	
-	private String name;
+	private String sessionID;
+	private String username;
 	private int gamesLost;
 	private int gamesWin;
 	
@@ -39,11 +40,20 @@ public class User {
 		this.accessToken = accessToken;
 	}
 	
-	public String getName() {
-		return name;
+	
+	
+	public String getSessionID() {
+		return sessionID;
 	}
-	public void setName(String name) {
-		this.name = name;
+
+	public void setSessionID(String sessionID) {
+		this.sessionID = sessionID;
+	}
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
 	}
 	public int getGamesLost() {
 		return gamesLost;
@@ -61,7 +71,7 @@ public class User {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return name;
+		return username;
 	}
 	
 	

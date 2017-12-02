@@ -14,9 +14,9 @@ public class LobbyService {
 	public LobbyService() {
 		DatabaseClass dc = new DatabaseClass();
 		Map<String, User> users = DatabaseClass.getUsers();
-		User user = users.get("id_pa");
-		System.out.println(users.toString());
-		lobbyUsers.put(user.getInstagramID(), user);
+//		User user = users.get("id_pa");
+//		System.out.println(users.toString());
+//		lobbyUsers.put(user.getInstagramID(), user);
 	}
 	
 	public User addUserToLobby(User user) {

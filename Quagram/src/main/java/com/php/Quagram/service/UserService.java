@@ -11,7 +11,6 @@ public class UserService {
 	private Map<String, User> users = DatabaseClass.getUsers();
 	
 	public UserService() {
-		addUser("aiuzghj_hhj123jhk");
 	}
 	
 	public User addUser(String accessToken) {
