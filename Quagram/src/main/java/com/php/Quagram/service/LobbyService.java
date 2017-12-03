@@ -27,8 +27,9 @@ public class LobbyService {
 		return new ArrayList<User>(lobbyUsers.values());
 	}
 	
-	public User removeUserFromLobby(String instagramID) {
-		return lobbyUsers.remove(instagramID);
+	public User removeUserFromLobby(String sessionID) {
+		User userToRemove = getUserForSessionID(sessionID);
+		return lobbyUsers.remove(userToRemove.getInstagramID());
 	}
 	
 	public Boolean isSessionIDValid(String sessionID) {

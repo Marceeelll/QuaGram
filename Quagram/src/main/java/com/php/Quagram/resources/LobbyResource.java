@@ -16,6 +16,7 @@ import com.php.Quagram.database.DatabaseClass;
 import com.php.Quagram.model.Invitation;
 import com.php.Quagram.model.User;
 import com.php.Quagram.service.LobbyService;
+import com.php.Quagram.servlets.LobbyTestServlet;
 
 @Path("/lobby")
 @Consumes(MediaType.APPLICATION_JSON)

@@ -72,7 +72,7 @@ public class DatabaseClass {
 		
 		users.put(user2.getInstagramID(), user2);
 		sessionUser.put(user2.getSessionID(), user2.getInstagramID());
-		lobbyUsers.put(user2.getInstagramID(), user2);
+		//lobbyUsers.put(user2.getInstagramID(), user2);
 		
 		
 		User user3 = new User();
@@ -85,7 +85,7 @@ public class DatabaseClass {
 		
 		users.put(user3.getInstagramID(), user3);
 		sessionUser.put(user3.getSessionID(), user3.getInstagramID());
-		lobbyUsers.put(user3.getInstagramID(), user3);
+		//lobbyUsers.put(user3.getInstagramID(), user3);
 		
 	}
 }
