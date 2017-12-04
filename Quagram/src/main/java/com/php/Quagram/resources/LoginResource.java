@@ -32,6 +32,7 @@ public class LoginResource {
 		String currentUserJSONRespond = loginService.requestAccessToken(code);
 		User instagramJSONRespondUser = jsonService.parseUserAfterLogin(currentUserJSONRespond);
 		User user = loginService.loginUser(instagramJSONRespondUser);
+		System.out.println("accessToken: " + user.getAccessToken());
 		return user;
 	}
 	

@@ -15,6 +15,8 @@ import javax.ws.rs.core.MediaType;
 import com.php.Quagram.database.DatabaseClass;
 import com.php.Quagram.model.Invitation;
 import com.php.Quagram.model.User;
+import com.php.Quagram.service.GeonamesRequestService;
+import com.php.Quagram.service.InstagramRequestService;
 import com.php.Quagram.service.LobbyService;
 import com.php.Quagram.servlets.LobbyTestServlet;
 
@@ -84,6 +86,13 @@ public class LobbyResource {
 	@Path("dummy")
 	public String dummy() {
 		DatabaseClass.appendDummyDBContent();
+		//GeonamesRequestService geo = new GeonamesRequestService();
+		//geo.getLocationData(50.325238, 11.941379);
+		
+		InstagramRequestService ig = new InstagramRequestService();
+		ig.getAllUserPictures("5894207441.334bddc.563b44fb33f047f4a39525f67713f8f3");
+		//ig.getUserProfile("5894207441.334bddc.563b44fb33f047f4a39525f67713f8f3");
+		
 		return "Dummy Content erfolgreich hinzufügefügt";
 	}
 }
