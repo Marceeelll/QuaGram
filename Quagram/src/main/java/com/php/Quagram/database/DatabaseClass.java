@@ -1,5 +1,6 @@
 package com.php.Quagram.database;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +12,8 @@ public class DatabaseClass {
 	private static Map<String, User> users = new HashMap<>(); // registrierte Nutzer in unserem Dienst
 	private static Map<String, String> sessionUser = new HashMap<>(); // Nutzer die gerade eine Sitzung laufen haben (eingeloggt) sind 
 	private static Map<String, User> lobbyUsers = new HashMap<>();
+	
+	private static Map<String, ArrayList<Invitation>> invitations = new HashMap<>();
 	
 	public DatabaseClass() {
 	}
@@ -25,6 +28,10 @@ public class DatabaseClass {
 	
 	public static Map<String, String> getSessionUser() {
 		return sessionUser;
+	}
+	
+	public static Map<String, ArrayList<Invitation>> getInvitations() {
+		return invitations;
 	}
 	
 	public static void appendDummyDBContent() {

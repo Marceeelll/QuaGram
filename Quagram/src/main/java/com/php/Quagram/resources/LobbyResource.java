@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import com.php.Quagram.database.DatabaseClass;
 import com.php.Quagram.model.Invitation;
 import com.php.Quagram.model.User;
+import com.php.Quagram.service.DBManagerService;
 import com.php.Quagram.service.GeonamesRequestService;
 import com.php.Quagram.service.InstagramRequestService;
 import com.php.Quagram.service.LobbyService;
@@ -25,12 +26,13 @@ import com.php.Quagram.servlets.LobbyTestServlet;
 @Produces(MediaType.APPLICATION_JSON)
 public class LobbyResource {
 	LobbyService lobbyService = new LobbyService();
+	DBManagerService dbManager = new DBManagerService();
 	
 	// TODO: Diese Funktion löschen (IST NUR FÜR DEBUGGING), steht nicht in der Spezifikation
 	@GET
 	@Path("/{sessionID}")
 	public List<User> getUsersInLobby(@PathParam("sessionID") String sessionID) {
-		if (!lobbyService.isSessionIDValid(sessionID)) {
+		if (!dbManager.isSessionIDValid(sessionID)) {
 			// TODO: gebe Fehler-Status zurück
 			System.out.println("TODO-Error-addUserToLobby()  (GET: /{sessionID})");
 			return null;
@@ -42,7 +44,7 @@ public class LobbyResource {
 	@PUT
 	@Path("/{sessionID}")
 	public List<User> addUserToLobby(@PathParam("sessionID") String sessionID) {
-		if (!lobbyService.isSessionIDValid(sessionID)) {
+		if (!dbManager.isSessionIDValid(sessionID)) {
 			// TODO: gebe Fehler-Status zurück
 			System.out.println("TODO-Error-addUserToLobby()  (PUT: /{sessionID})");
 			return null;

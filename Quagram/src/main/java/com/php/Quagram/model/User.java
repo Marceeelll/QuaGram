@@ -1,7 +1,5 @@
 package com.php.Quagram.model;
 
-import java.util.ArrayList;
-
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -14,8 +12,6 @@ public class User {
 	private String username;
 	private int gamesLost;
 	private int gamesWin;
-	
-	private ArrayList<Invitation> invitations = new ArrayList<>();
 	
 	public User() {
 	}
@@ -74,19 +70,6 @@ public class User {
 	@Override
 	public String toString() {
 		return username;
-	}
-
-	@XmlTransient
-	public ArrayList<Invitation> getInvitations() {
-		return invitations;
-	}
-
-	public void setInvitations(ArrayList<Invitation> invitations) {
-		this.invitations = invitations;
-	}
-	
-	public void appendInvitation(Invitation invitation) {
-		this.invitations.add(invitation);
 	}
 	
 }

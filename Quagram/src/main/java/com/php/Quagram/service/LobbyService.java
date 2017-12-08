@@ -12,14 +12,15 @@ import com.php.Quagram.model.User;
 
 public class LobbyService {
 	private Map<String, User> lobbyUsers = DatabaseClass.getLobbyUsers();
-	private Map<String, User> users = DatabaseClass.getUsers();
-	private Map<String, String> sessionUser = DatabaseClass.getSessionUser();
+	private Map<String, ArrayList<Invitation>> invitationDB = DatabaseClass.getInvitations();
+	
+	DBManagerService dbManager = new DBManagerService();
 	
 	public LobbyService() {
 	}
 	
 	public void addUserToLobby(String sessionID) {
-		User user = getUserForSessionID(sessionID);
+		User user = dbManager.getUserForSessionID(sessionID);
 		lobbyUsers.put(user.getInstagramID(), user);
 	}
 	
@@ -28,49 +29,38 @@ public class LobbyService {
 	}
 	
 	public User removeUserFromLobby(String sessionID) {
-		User userToRemove = getUserForSessionID(sessionID);
+		User userToRemove = dbManager.getUserForSessionID(sessionID);
 		return lobbyUsers.remove(userToRemove.getInstagramID());
 	}
 	
-	public Boolean isSessionIDValid(String sessionID) {
-		return sessionUser.containsKey(sessionID);
-	}
 	
-	private User getUserForSessionID(String sessionID) {
-		String userID = sessionUser.get(sessionID);
-		if (userID == null) {
-			System.out.println("TODO--throw-Error- getUserForSessionID");
-			return null;
-		}
-		User user = users.get(userID);
-		return user;
-	}
 	
-	public void removeUserForSessionID(String sessionID) {
-		// TODO: implementieren
-	}
+	
+	
+	
 	
 	public ArrayList<Invitation> getInvitationsForSessionID(String sessionID) {
-		if(!isSessionIDValid(sessionID)) {
+		if(!dbManager.isSessionIDValid(sessionID)) {
 			System.out.println("TODO--throw-Error- getInvitationsForSessionID");
 			return null;
 		}
-		User user = getUserForSessionID(sessionID);
-		return user.getInvitations();
+		User user = dbManager.getUserForSessionID(sessionID);
+		ArrayList<Invitation> invitations = invitationDB.get(user.getInstagramID());
+		return invitations;
 	}
 	
 	public Invitation sendInvitaitonToInstagramID(String instagramIDToInvite, String hostSessionID) {
-		if(!isSessionIDValid(hostSessionID)) {
+		if(!dbManager.isSessionIDValid(hostSessionID)) {
 			System.out.println("TODO--throw-Error- sendInvitaitonToInstagramID-1");
 			return null;
 		}
-		User userToInvite = getLobbyUserForInstagramID(instagramIDToInvite);
+		User userToInvite = dbManager.getLobbyUserForInstagramID(instagramIDToInvite);
 		if(userToInvite == null) {
 			System.out.println("TODO--throw-Error- sendInvitaitonToInstagramID-2");
 			return null;
 		}
 		
-		User hostUser = getUserForSessionID(hostSessionID);
+		User hostUser = dbManager.getUserForSessionID(hostSessionID);
 		String matchSessionID = UUID.randomUUID().toString();
 		
 		Invitation invitation = new Invitation();
@@ -78,9 +68,15 @@ public class LobbyService {
 		invitation.setHostUserID(hostUser.getInstagramID());
 		invitation.setMatchSessionID(matchSessionID);
 		
-		userToInvite.appendInvitation(invitation);
+		appendInvitationToUser(userToInvite, invitation);
 		
 		return invitation;
+	}
+	
+	public void appendInvitationToUser(User userWhoGotInvitation, Invitation invitation) {
+		ArrayList<Invitation> invitations = invitationDB.get(userWhoGotInvitation.getInstagramID());
+		invitations.add(invitation);
+		invitationDB.put(userWhoGotInvitation.getInstagramID(), invitations);
 	}
 	
 	/*
@@ -119,12 +115,5 @@ public class LobbyService {
 	*/
 	
 	
-	private User getLobbyUserForInstagramID(String instagramID) {
-		for(User user: lobbyUsers.values()) {
-			if (user.getInstagramID().equals(instagramID)) {
-				return user;
-			}
-		}
-		return null;
-	}
+	
 }
