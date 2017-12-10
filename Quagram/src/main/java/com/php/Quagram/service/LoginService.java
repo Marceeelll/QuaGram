@@ -20,13 +20,10 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 
-import com.php.Quagram.database.DatabaseClass;
+import com.php.Quagram.database.DatabaseQuagramSingleton;
 import com.php.Quagram.model.User;
 
 public class LoginService {
-	
-	private Map<String, String> sessionUser = DatabaseClass.getSessionUser();
-	private Map<String, User> users = DatabaseClass.getUsers();
 	
 	private String clientID = "334bddc7b37f437dbb709f44661dc458";
 	private String redirectURI = "http://localhost:8080/Quagram/webapi/registration";
@@ -101,24 +98,13 @@ public class LoginService {
 	 }
 	
 	public User loginUser(User user) {
-		sessionUser.put(user.getSessionID(), user.getInstagramID());
-		if (users.containsKey(user.getInstagramID())) {
-			User existingUser = users.get(user.getInstagramID());
-			existingUser.setAccessToken(user.getAccessToken());
-			users.put(existingUser.getInstagramID(), existingUser);
-			return existingUser;
-		} else {
-			users.put(user.getInstagramID(), user);
-			return user;
-		}
+		User userLoggedIn = DatabaseQuagramSingleton.sharedInstance.addUser(user);
+		return userLoggedIn;
 	}
 	
-	public void logoutUser(String sessionID) {
-		sessionUser.remove(sessionID);
-	}
-	
-	public ArrayList<User> debuggAllUser() {
-		return new ArrayList<User>(users.values());
+	public int logoutUser(String sessionID) {
+		int result = DatabaseQuagramSingleton.sharedInstance.logoutUser(sessionID);
+		return result;
 	}
 
 }

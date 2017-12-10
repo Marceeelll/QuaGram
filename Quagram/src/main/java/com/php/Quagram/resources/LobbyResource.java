@@ -14,12 +14,10 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.php.Quagram.database.DatabaseClass;
 import com.php.Quagram.database.DatabaseQuagram;
 import com.php.Quagram.database.DatabaseQuagramSingleton;
 import com.php.Quagram.model.Invitation;
 import com.php.Quagram.model.User;
-import com.php.Quagram.service.DBManagerService;
 import com.php.Quagram.service.GeonamesRequestService;
 import com.php.Quagram.service.InstagramRequestService;
 import com.php.Quagram.service.LobbyService;
@@ -30,38 +28,36 @@ import com.php.Quagram.servlets.LobbyTestServlet;
 @Produces(MediaType.APPLICATION_JSON)
 public class LobbyResource {
 	LobbyService lobbyService = new LobbyService();
-	DBManagerService dbManager = new DBManagerService();
 	
 	// TODO: Diese Funktion löschen (IST NUR FÜR DEBUGGING), steht nicht in der Spezifikation
 	@GET
 	@Path("/{sessionID}")
 	public List<User> getUsersInLobby(@PathParam("sessionID") String sessionID) {
-		if (!dbManager.isSessionIDValid(sessionID)) {
-			// TODO: gebe Fehler-Status zurück
+		if (!lobbyService.isSessionIDValid(sessionID)) {
+			// TODO: Throw error status
 			System.out.println("TODO-Error-addUserToLobby()  (GET: /{sessionID})");
 			return null;
 		}
-		
 		return lobbyService.getAllLobbyUsers();
 	}
 	
 	@PUT
 	@Path("/{sessionID}")
 	public List<User> addUserToLobby(@PathParam("sessionID") String sessionID) {
-		if (!dbManager.isSessionIDValid(sessionID)) {
-			// TODO: gebe Fehler-Status zurück
+		if (!lobbyService.isSessionIDValid(sessionID)) {
+			// TODO: Throw error status
 			System.out.println("TODO-Error-addUserToLobby()  (PUT: /{sessionID})");
 			return null;
 		}
-		
 		lobbyService.addUserToLobby(sessionID);
 		return lobbyService.getAllLobbyUsers();
 	}
 	
 	@DELETE
 	@Path("/{sessionID}")
-	public User deleteUserFromLobby(@PathParam("sessionID") String sessionID) {
-		return lobbyService.removeUserFromLobby(sessionID);
+	public String deleteUserFromLobby(@PathParam("sessionID") String sessionID) {
+		lobbyService.removeUserFromLobby(sessionID);
+		return "Successfully deleted";
 	}
 	
 	@GET
@@ -77,15 +73,18 @@ public class LobbyResource {
 		return invitation;
 	}
 	
+	
 	/*
-	 * TODO: erst implementieren, nachdem wir Hernn Bachman gefragt haben
+	 * TODO: implementieren, wenn mehrere Nutzer zu einer matchSessionID hinzugefügt werden sollen
 	@PUT
 	@Path("{sessionID}/invite/{instagramID}/{matchSessionID}")
 	public Invitation sendInvitation(@PathParam("sessionID") String sessionID, @PathParam("instagramID") String instagramIDToInvite, @PathParam("matchSessionID") String matchSessionID) {
-		Invitation invitation =
+		Invitation invitation = DatabaseQuagramSingleton.sharedInstance.getInvitationForMatchSessionID(matchSessionID);
+		
 		return null;
 	}
 	*/
+	
 	
 	// TODO: DELETE nur für Debugging
 	@GET
@@ -98,25 +97,7 @@ public class LobbyResource {
 		//DatabaseQuagram test = new DatabaseQuagram();
 		//test.getUsernames();
 		
-		try {
-			String sql;
-			sql = "Select username from user";
-			ResultSet rs = DatabaseQuagramSingleton.sharedInstance.stmt.executeQuery(sql);
-			// Extract data from result set
-			while (rs.next()) {
-
-				// Retrieve by column name
-				String firstname = rs.getString("username");
-				
-
-				// Display
-				System.out.println("Username = " + firstname);
-			}
-			rs.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		System.out.println(DatabaseQuagramSingleton.sharedInstance.getLobbyUsers());
 		
 		InstagramRequestService ig = new InstagramRequestService();
 		ig.getAllUserPictures("5894207441.334bddc.563b44fb33f047f4a39525f67713f8f3");

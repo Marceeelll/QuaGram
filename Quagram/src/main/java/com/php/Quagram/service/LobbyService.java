@@ -6,61 +6,62 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import com.php.Quagram.database.DatabaseClass;
+import com.php.Quagram.database.DatabaseQuagramSingleton;
 import com.php.Quagram.model.Invitation;
 import com.php.Quagram.model.User;
 
 public class LobbyService {
-	private Map<String, User> lobbyUsers = DatabaseClass.getLobbyUsers();
-	private Map<String, ArrayList<Invitation>> invitationDB = DatabaseClass.getInvitations();
-	
-	DBManagerService dbManager = new DBManagerService();
 	
 	public LobbyService() {
 	}
 	
+	
 	public void addUserToLobby(String sessionID) {
-		User user = dbManager.getUserForSessionID(sessionID);
-		lobbyUsers.put(user.getInstagramID(), user);
+		DatabaseQuagramSingleton.sharedInstance.addUserToLobby(sessionID);
 	}
 	
 	public List<User> getAllLobbyUsers() {
-		return new ArrayList<User>(lobbyUsers.values());
+		return DatabaseQuagramSingleton.sharedInstance.getLobbyUsers();
 	}
 	
-	public User removeUserFromLobby(String sessionID) {
-		User userToRemove = dbManager.getUserForSessionID(sessionID);
-		return lobbyUsers.remove(userToRemove.getInstagramID());
+	public void removeUserFromLobby(String sessionID) {
+		DatabaseQuagramSingleton.sharedInstance.removeUserFromLobby(sessionID);
 	}
 	
-	
+	public Boolean isSessionIDValid(String sessionID) {
+		return DatabaseQuagramSingleton.sharedInstance.isSessionIDValid(sessionID);
+	}
 	
 	
 	
 	
 	
 	public ArrayList<Invitation> getInvitationsForSessionID(String sessionID) {
-		if(!dbManager.isSessionIDValid(sessionID)) {
+		if(!DatabaseQuagramSingleton.sharedInstance.isSessionIDValid(sessionID)) {
 			System.out.println("TODO--throw-Error- getInvitationsForSessionID");
 			return null;
 		}
-		User user = dbManager.getUserForSessionID(sessionID);
-		ArrayList<Invitation> invitations = invitationDB.get(user.getInstagramID());
+		
+		User user = DatabaseQuagramSingleton.sharedInstance.getUserForSessionID(sessionID);
+		ArrayList<Invitation> invitations = DatabaseQuagramSingleton.sharedInstance.getInvitationsForInstagramID(user.getInstagramID());
 		return invitations;
 	}
 	
 	public Invitation sendInvitaitonToInstagramID(String instagramIDToInvite, String hostSessionID) {
-		if(!dbManager.isSessionIDValid(hostSessionID)) {
+		
+		if(!DatabaseQuagramSingleton.sharedInstance.isSessionIDValid(hostSessionID)) {
 			System.out.println("TODO--throw-Error- sendInvitaitonToInstagramID-1");
 			return null;
 		}
-		User userToInvite = dbManager.getLobbyUserForInstagramID(instagramIDToInvite);
+		
+		
+		User userToInvite = DatabaseQuagramSingleton.sharedInstance.getLobbyUserForInstagramID(instagramIDToInvite);
 		if(userToInvite == null) {
 			System.out.println("TODO--throw-Error- sendInvitaitonToInstagramID-2");
 			return null;
 		}
 		
-		User hostUser = dbManager.getUserForSessionID(hostSessionID);
+		User hostUser = DatabaseQuagramSingleton.sharedInstance.getUserForSessionID(hostSessionID);
 		String matchSessionID = UUID.randomUUID().toString();
 		
 		Invitation invitation = new Invitation();
@@ -73,10 +74,11 @@ public class LobbyService {
 		return invitation;
 	}
 	
-	public void appendInvitationToUser(User userWhoGotInvitation, Invitation invitation) {
-		ArrayList<Invitation> invitations = invitationDB.get(userWhoGotInvitation.getInstagramID());
-		invitations.add(invitation);
-		invitationDB.put(userWhoGotInvitation.getInstagramID(), invitations);
+	private void appendInvitationToUser(User userWhoGotInvitation, Invitation invitation) {
+		//ArrayList<Invitation> invitations = invitationDB.get(userWhoGotInvitation.getInstagramID());
+		//invitations.add(invitation);
+		//invitationDB.put(userWhoGotInvitation.getInstagramID(), invitations);
+		DatabaseQuagramSingleton.sharedInstance.appendInvitationToUser(userWhoGotInvitation, invitation);
 	}
 	
 	/*

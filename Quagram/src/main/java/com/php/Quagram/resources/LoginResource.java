@@ -4,7 +4,9 @@ import java.util.ArrayList;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -36,10 +38,15 @@ public class LoginResource {
 		return user;
 	}
 	
-	@GET
-	@Path("/debuggAllUser")
-	public ArrayList<User> debuggAllUser() {
-		return loginService.debuggAllUser();
+	@PUT
+	@Path("logout/{sessionID}")
+	public String loggout(@PathParam("sessionID") String sessionID) {
+		int result = loginService.logoutUser(sessionID);
+		if (result == 1) {
+			return "Succesfully logged out!";
+		} else {
+			return "Could not logg out!";
+		}
 	}
 	
 }

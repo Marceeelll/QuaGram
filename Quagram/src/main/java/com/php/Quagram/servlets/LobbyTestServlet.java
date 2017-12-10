@@ -2,7 +2,6 @@ package com.php.Quagram.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Calendar;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.php.Quagram.database.DatabaseClass;
+import com.php.Quagram.database.DatabaseQuagramSingleton;
 
 @WebServlet("/LobbyServlet")
 public class LobbyTestServlet extends HttpServlet {
@@ -29,7 +28,7 @@ public class LobbyTestServlet extends HttpServlet {
 			
 			printwriter = response.getWriter();
 			printwriter.print("data: " + "[next server time check event in " + Math.round(randomNumber/1000) + "seconds]\n");
-			printwriter.println("data: " + "Number of User in Lobby:: " + DatabaseClass.getLobbyUsers().size() + "\n");
+			printwriter.println("data: " + "Number of User in Lobby:: " + DatabaseQuagramSingleton.sharedInstance.getLobbyUsers().size() + "\n");
 			//printwriter.print("data: " + "Time: " + Calendar.getInstance().getTime() + "\n\n");
 			
 			response.flushBuffer();
