@@ -66,7 +66,7 @@ public class DatabaseClass {
 		invi1.setCreated(new Date());
 		invi1.setHostUserID("123-Marcel-ID-456");
 		invi1.setMatchSessionID("123-Match-Session-ID-456");
-		user1.appendInvitation(invi1);
+		//user1.appendInvitation(invi1);
 		
 		
 		User user2 = new User();

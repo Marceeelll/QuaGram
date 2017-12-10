@@ -16,6 +16,11 @@
   limitations under the License.
 --><web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee                       http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
 
+<resource-env-ref>
+    <resource-env-ref-name>jdbc/Quagram</resource-env-ref-name>
+    <resource-env-ref-type>javax.sql.DataSource</resource-env-ref-type>
+</resource-env-ref>
+
   <!-- ======================== Introduction ============================== -->
   <!-- This document defines default values for *all* web applications      -->
   <!-- loaded into this instance of Tomcat.  As each application is         -->

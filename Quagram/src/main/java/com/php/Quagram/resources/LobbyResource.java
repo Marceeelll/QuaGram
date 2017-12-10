@@ -1,5 +1,7 @@
 package com.php.Quagram.resources;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +15,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.php.Quagram.database.DatabaseClass;
+import com.php.Quagram.database.DatabaseQuagram;
+import com.php.Quagram.database.DatabaseQuagramSingleton;
 import com.php.Quagram.model.Invitation;
 import com.php.Quagram.model.User;
 import com.php.Quagram.service.DBManagerService;
@@ -87,9 +91,32 @@ public class LobbyResource {
 	@GET
 	@Path("dummy")
 	public String dummy() {
-		DatabaseClass.appendDummyDBContent();
+		//DatabaseClass.appendDummyDBContent();
 		//GeonamesRequestService geo = new GeonamesRequestService();
 		//geo.getLocationData(50.325238, 11.941379);
+		
+		//DatabaseQuagram test = new DatabaseQuagram();
+		//test.getUsernames();
+		
+		try {
+			String sql;
+			sql = "Select username from user";
+			ResultSet rs = DatabaseQuagramSingleton.sharedInstance.stmt.executeQuery(sql);
+			// Extract data from result set
+			while (rs.next()) {
+
+				// Retrieve by column name
+				String firstname = rs.getString("username");
+				
+
+				// Display
+				System.out.println("Username = " + firstname);
+			}
+			rs.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		InstagramRequestService ig = new InstagramRequestService();
 		ig.getAllUserPictures("5894207441.334bddc.563b44fb33f047f4a39525f67713f8f3");
