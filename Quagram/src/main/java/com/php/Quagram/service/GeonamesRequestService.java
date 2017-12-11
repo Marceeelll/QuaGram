@@ -17,11 +17,11 @@ public class GeonamesRequestService {
 				.setParameter("lng", longitudeString)
 				.addParameter("username", "marceeelll");
 		
-		System.out.println(builder.toString());
+		System.out.println("builder.toString(): " + builder.toString());
 		
 		try {
 			String geoResponse = URLConnectionReader.getText(builder.toString());
-			System.out.println(geoResponse);
+			System.out.println("geoResponse: " + geoResponse);
 			JSONService parser = new JSONService();
 			parser.getGeoNamesData(geoResponse);
 		} catch (Exception e) {

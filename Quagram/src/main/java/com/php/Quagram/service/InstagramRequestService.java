@@ -9,7 +9,7 @@ public class InstagramRequestService {
 		// https://api.instagram.com/v1/users/self/media/recent/?access_token=ACCESS-TOKEN
 		
 		URIBuilder builder = new URIBuilder()
-				.setScheme("http")
+				.setScheme("https")
 				.setHost("api.instagram.com")
 				.setPath("/v1/users/self/media/recent/")
 				.setParameter("access_token", instagramAccessToken);
@@ -19,8 +19,9 @@ public class InstagramRequestService {
 		try {
 			String instagrammAllPictureResponse = URLConnectionReader.getText(builder.toString());
 			System.out.println(instagrammAllPictureResponse);
-			//JSONService parser = new JSONService();
-			//parser.getGeoNamesData(instagrammAllPictureResponse);
+			JSONService parser = new JSONService();
+			parser.getTest(instagrammAllPictureResponse);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -45,7 +46,7 @@ public class InstagramRequestService {
 		//			followed_by
 		
 		URIBuilder builder = new URIBuilder()
-				.setScheme("http")
+				.setScheme("https")
 				.setHost("api.instagram.com")
 				.setPath("/v1/users/self/")
 				.setParameter("access_token", instagramAccessToken);
@@ -59,9 +60,8 @@ public class InstagramRequestService {
 			String instagramProfileResponse = URLConnectionReader.getText(builder.toString());
 			System.out.println("DATA---->" +instagramProfileResponse);
 			
-			
-			//JSONService parser = new JSONService();
-			//parser.getInstagramUser(instagramProfileResponse);
+			JSONService parser = new JSONService();
+			parser.getInstagramUser(instagramProfileResponse);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

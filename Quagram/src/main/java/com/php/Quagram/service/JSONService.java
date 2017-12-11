@@ -2,6 +2,7 @@ package com.php.Quagram.service;
 
 import java.util.UUID;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.php.Quagram.model.User;
@@ -58,6 +59,42 @@ public class JSONService {
 		System.out.println("numberOfMedia: " + numberOfMedia);
 		System.out.println("numberOfFollows: " + numberOfFollows);
 		System.out.println("numberOfFollowedBy: " + numberOfFollowedBy);
+	}
+	
+	public void getTest(String respond) {
+		JSONObject object = new JSONObject(respond);
+		
+		JSONArray array = object.getJSONArray("data");
+		System.out.println("Hello: " + array.toString());
+		
+		for(int i = 0; i < array.length(); i++) {
+			object = array.getJSONObject(i);
+			
+			int imageComments = object.getJSONObject("comments").getInt("count");
+			int imageLikes = object.getJSONObject("likes").getInt("count");
+			double latitude = 0;
+			double longitude = 0;
+			String locationName = "";
+			String imageURL = object.getJSONObject("images").getJSONObject("standard_resolution").getString("url");
+			
+			try {
+				latitude = object.getJSONObject("location").getInt("latitude");
+				longitude = object.getJSONObject("location").getInt("longitude");
+				locationName = object.getJSONObject("location").getString("name");
+			} catch(Exception e) {
+				System.out.println("Image has no location");
+			}
+			
+			
+			System.out.println("imageComments: " + imageComments);
+			System.out.println("imageLikes: " + imageLikes);
+			System.out.println("latitude: " + latitude);
+			System.out.println("longitude: " + longitude);
+			System.out.println("locationName: " + locationName);
+			System.out.println("imageURL: " + imageURL+"\n");
+		}
+		
+		
 	}
 	
 	

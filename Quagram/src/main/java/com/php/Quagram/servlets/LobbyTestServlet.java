@@ -21,7 +21,7 @@ public class LobbyTestServlet extends HttpServlet {
 		
 		PrintWriter printwriter = null;
 		
-		response.setIntHeader("Refresh", 3);
+		response.setIntHeader("Refresh", 30);
 		
 		try {
 			double randomNumber = Math.random() * 10000;

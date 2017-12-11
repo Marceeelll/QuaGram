@@ -90,20 +90,15 @@ public class LobbyResource {
 	@GET
 	@Path("dummy")
 	public String dummy() {
-		//DatabaseClass.appendDummyDBContent();
-		//GeonamesRequestService geo = new GeonamesRequestService();
-		//geo.getLocationData(50.325238, 11.941379);
 		
-		//DatabaseQuagram test = new DatabaseQuagram();
-		//test.getUsernames();
-		
-		System.out.println(DatabaseQuagramSingleton.sharedInstance.getLobbyUsers());
+		// GeonamesRequestService geo = new GeonamesRequestService();
+		// geo.getLocationData(50.325238, 11.941379);
 		
 		InstagramRequestService ig = new InstagramRequestService();
 		ig.getAllUserPictures("5894207441.334bddc.563b44fb33f047f4a39525f67713f8f3");
 		//ig.getUserProfile("5894207441.334bddc.563b44fb33f047f4a39525f67713f8f3");
 		
-		return "Dummy Content erfolgreich hinzufügefügt";
+		return "Dummy erfolgreich ausgeführt";
 	}
 }
 
