@@ -1,5 +1,14 @@
 package com.php.Quagram.service;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import org.apache.http.client.utils.URIBuilder;
 
 public class InstagramRequestService {
@@ -66,16 +75,60 @@ public class InstagramRequestService {
 			e.printStackTrace();
 		}
 		
-		
 	}
 	
-	// Alle Bilder
-	//		--> Anzahl der Komentare
-	//		--> Anzahl der Likes
-	//		--> Anzahl der Personen die auf dem Bild verlinkt sind
-	//		--> Location
-	//			--> latitude
-	//			--> longitude
-	//			--> adress
-	//			-->
+	public void downloadImageFromURL(String imageURL) {		 
+        InputStream inputStream = null;
+        OutputStream outputStream = null;
+        
+        String path = "/Users/marcelhagmann/Desktop/DownloadFromInternet/";
+        String imageName = createImageNameFromURL(imageURL);
+        
+        File file = new File(path + imageName);
+ 
+        // only download file if it doesnt exist
+        if (!file.exists()) {
+        		try {
+                URL url = new URL(imageURL);
+                inputStream = url.openStream();
+                outputStream = new FileOutputStream(path + imageName);
+     
+                byte[] buffer = new byte[2048];
+                int length;
+     
+                while ((length = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, length);
+                }
+     
+            } catch (MalformedURLException e) {
+                System.out.println("MalformedURLException :- " + e.getMessage());
+     
+            } catch (FileNotFoundException e) {
+                System.out.println("FileNotFoundException :- " + e.getMessage());
+     
+            } catch (IOException e) {
+                System.out.println("IOException :- " + e.getMessage());
+     
+            } finally {
+                try {
+     
+                    inputStream.close();
+                    outputStream.close();
+     
+                } catch (IOException e) {
+                    System.out.println("Finally IOException :- " + e.getMessage());
+                }
+            }
+        } else {
+        		System.out.println("Didnt Load Image! :)");
+        }
+	}
+	
+	private String createImageNameFromURL(String imageURL) {
+		String[] urlComponents = imageURL.split("/");
+		String imageName = urlComponents[urlComponents.length - 1];
+		return imageName;
+	}
+	
+	
 }

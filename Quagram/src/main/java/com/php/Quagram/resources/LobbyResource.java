@@ -1,7 +1,5 @@
 package com.php.Quagram.resources;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,14 +12,10 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.php.Quagram.database.DatabaseQuagram;
-import com.php.Quagram.database.DatabaseQuagramSingleton;
 import com.php.Quagram.model.Invitation;
 import com.php.Quagram.model.User;
-import com.php.Quagram.service.GeonamesRequestService;
 import com.php.Quagram.service.InstagramRequestService;
 import com.php.Quagram.service.LobbyService;
-import com.php.Quagram.servlets.LobbyTestServlet;
 
 @Path("/lobby")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -33,22 +27,14 @@ public class LobbyResource {
 	@GET
 	@Path("/{sessionID}")
 	public List<User> getUsersInLobby(@PathParam("sessionID") String sessionID) {
-		if (!lobbyService.isSessionIDValid(sessionID)) {
-			// TODO: Throw error status
-			System.out.println("TODO-Error-addUserToLobby()  (GET: /{sessionID})");
-			return null;
-		}
+		lobbyService.isSessionIDValid(sessionID);
 		return lobbyService.getAllLobbyUsers();
 	}
 	
 	@PUT
 	@Path("/{sessionID}")
 	public List<User> addUserToLobby(@PathParam("sessionID") String sessionID) {
-		if (!lobbyService.isSessionIDValid(sessionID)) {
-			// TODO: Throw error status
-			System.out.println("TODO-Error-addUserToLobby()  (PUT: /{sessionID})");
-			return null;
-		}
+		lobbyService.isSessionIDValid(sessionID);
 		lobbyService.addUserToLobby(sessionID);
 		return lobbyService.getAllLobbyUsers();
 	}
@@ -97,6 +83,10 @@ public class LobbyResource {
 		InstagramRequestService ig = new InstagramRequestService();
 		ig.getAllUserPictures("5894207441.334bddc.563b44fb33f047f4a39525f67713f8f3");
 		//ig.getUserProfile("5894207441.334bddc.563b44fb33f047f4a39525f67713f8f3");
+		
+		// IMAGE URL to download
+		//String imageURL = "https://scontent.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/25014974_528050640882518_3544772908960186368_n.jpg";
+		//ig.downloadImageFromURL(imageURL);
 		
 		return "Dummy erfolgreich ausgeführt";
 	}

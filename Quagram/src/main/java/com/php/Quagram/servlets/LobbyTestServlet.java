@@ -28,7 +28,7 @@ public class LobbyTestServlet extends HttpServlet {
 			
 			printwriter = response.getWriter();
 			printwriter.print("data: " + "[next server time check event in " + Math.round(randomNumber/1000) + "seconds]\n");
-			printwriter.println("data: " + "Number of User in Lobby:: " + DatabaseQuagramSingleton.sharedInstance.getLobbyUsers().size() + "\n");
+			printwriter.println("data: " + "Number of User in Lobby:: " + 123 + "\n");
 			//printwriter.print("data: " + "Time: " + Calendar.getInstance().getTime() + "\n\n");
 			
 			response.flushBuffer();

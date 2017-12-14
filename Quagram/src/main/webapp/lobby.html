@@ -15,7 +15,6 @@
 				eventSource = new EventSource('http://localhost:8080/Quagram/LobbyServlet2');
 				eventSource.onopen=function(){displayTextArea.value += 'Connected...\n';};
 				eventSource.onmessage=function(message){displayTextArea.value = message.data + '\n\n';};
-				eventSource.onerror=function(){displayTextArea.value += 'Error Occured...\n';};
 				startButton.disabled = true;
 			}
 			function stop() {

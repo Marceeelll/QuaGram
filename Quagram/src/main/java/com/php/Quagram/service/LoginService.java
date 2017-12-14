@@ -20,10 +20,14 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 
+import com.php.Quagram.database.DatabaseQuagramInvitations;
 import com.php.Quagram.database.DatabaseQuagramSingleton;
+import com.php.Quagram.database.DatabaseQuagramUsers;
 import com.php.Quagram.model.User;
 
 public class LoginService {
+	DatabaseQuagramUsers dbUsers = new DatabaseQuagramUsers();
+	DatabaseQuagramInvitations dbInvitations = new DatabaseQuagramInvitations();
 	
 	private String clientID = "334bddc7b37f437dbb709f44661dc458";
 	private String redirectURI = "http://localhost:8080/Quagram/webapi/registration";
@@ -98,12 +102,12 @@ public class LoginService {
 	 }
 	
 	public User loginUser(User user) {
-		User userLoggedIn = DatabaseQuagramSingleton.sharedInstance.addUser(user);
+		User userLoggedIn = dbUsers.addUser(user);
 		return userLoggedIn;
 	}
 	
 	public int logoutUser(String sessionID) {
-		int result = DatabaseQuagramSingleton.sharedInstance.logoutUser(sessionID);
+		int result = dbUsers.logoutUser(sessionID);
 		return result;
 	}
 

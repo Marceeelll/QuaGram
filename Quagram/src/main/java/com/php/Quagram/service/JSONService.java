@@ -85,6 +85,8 @@ public class JSONService {
 				System.out.println("Image has no location");
 			}
 			
+			InstagramRequestService service = new InstagramRequestService();
+			service.downloadImageFromURL(imageURL);
 			
 			System.out.println("imageComments: " + imageComments);
 			System.out.println("imageLikes: " + imageLikes);
