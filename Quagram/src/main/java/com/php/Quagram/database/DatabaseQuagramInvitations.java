@@ -16,15 +16,15 @@ public class DatabaseQuagramInvitations {
 			databaseConnection.statement = databaseConnection.connection.createStatement();
 			
 			String sql;
-			sql = "select * from invitation where instagramID='" + instagramID + "'";
+			sql = "select * from invitation where receiver_id='" + instagramID + "'";
 			ResultSet result = databaseConnection.statement.executeQuery(sql);
 			
 			ArrayList<Invitation> invitations = new ArrayList<>();
 			
 			while (result.next()) {
-				Date created = result.getDate("created");
-				String hostUserID = result.getString("hostUserID");
-				String matchSessionID = result.getString("matchSessionID");
+				Date created = result.getDate("created_on");
+				String hostUserID = result.getString("host_user_id");
+				String matchSessionID = result.getString("match_session_id");
 				
 				Invitation invitation = new Invitation();
 				invitation.setHostUserID(hostUserID);
@@ -44,8 +44,7 @@ public class DatabaseQuagramInvitations {
 	public void appendInvitationToUser(User userWhoGotInvitation, Invitation invitation) {
 		try {
 			databaseConnection.statement = databaseConnection.connection.createStatement();
-			
-			String sql = "insert into invitation values ('" + userWhoGotInvitation.getInstagramID() + "', '" + invitation.getCreatedFormated() +"', '" + invitation.getHostUserID() + "', '" + invitation.getMatchSessionID() + "');";
+			String sql = "insert into invitation values ('" + invitation.getCreated() + userWhoGotInvitation.getInstagramID() +"', '" + invitation.getHostUserID() + "', '" + invitation.getMatchSessionID() + "');";
 			int result = databaseConnection.statement.executeUpdate(sql);
 			System.out.println("Inserted Invitation (appendInvitationToUser): " +result);
 		} catch (SQLException e) {

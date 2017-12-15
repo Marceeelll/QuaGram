@@ -12,6 +12,7 @@ public class User {
 	private String username;
 	private int gamesLost;
 	private int gamesWin;
+	private String profilePic;
 	
 	public User() {
 	}
@@ -65,6 +66,12 @@ public class User {
 	}
 	public void setGamesWin(int gamesWin) {
 		this.gamesWin = gamesWin;
+	}
+	public String getProfilePic() {
+		return profilePic;
+	}
+	public void setProfilePic(String profilePic) {
+		this.profilePic = profilePic;
 	}
 
 	@Override

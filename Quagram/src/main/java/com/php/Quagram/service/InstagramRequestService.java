@@ -77,7 +77,7 @@ public class InstagramRequestService {
 		
 	}
 	
-	public void downloadImageFromURL(String imageURL) {		 
+	public String downloadImageFromURL(String imageURL) {		 
         InputStream inputStream = null;
         OutputStream outputStream = null;
         
@@ -108,19 +108,20 @@ public class InstagramRequestService {
      
             } catch (IOException e) {
                 System.out.println("IOException :- " + e.getMessage());
-     
             } finally {
                 try {
      
                     inputStream.close();
                     outputStream.close();
-     
+                    return imageName;
                 } catch (IOException e) {
                     System.out.println("Finally IOException :- " + e.getMessage());
                 }
             }
+        		return imageName;
         } else {
         		System.out.println("Didnt Load Image! :)");
+        		return imageName;
         }
 	}
 	

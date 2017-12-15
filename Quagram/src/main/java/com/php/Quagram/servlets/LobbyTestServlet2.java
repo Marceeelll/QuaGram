@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.php.Quagram.database.DatabaseQuagramSingleton;
+import com.php.Quagram.database.DatabaseQuagramUsers;
 import com.php.Quagram.model.User;
 
 
@@ -36,7 +37,11 @@ public class LobbyTestServlet2 extends HttpServlet {
 		//}
 
 		printwriter = response.getWriter();
-		printwriter.print("data: " + "{123123" + listOfLobbyUser + "}" + "\n\n");
+		
+		User user = new DatabaseQuagramUsers().getUserForSessionID("ab63415a-bf90-4e23-891b-4b9c599d4f49");
+		ArrayList<User> users = new DatabaseQuagramUsers().getLobbyUsers();
+		
+		printwriter.print("data: " + "{ " + users + " }" + "\n\n");
 		//printwriter.println("data: " + "Number of User in Lobby:: " + DatabaseQuagramSingleton.sharedInstance.getLobbyUsers().size() + "\n");
 		response.flushBuffer();
 		printwriter.close();

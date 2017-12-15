@@ -23,10 +23,16 @@ public class JSONService {
 		String username = jsonUserObject.getString("username");
 		String profilePictureURL = jsonUserObject.getString("profile_picture");
 		
+		InstagramRequestService service = new InstagramRequestService();
+		String imageName = service.downloadImageFromURL(profilePictureURL);
+		
+		System.out.println("ProfileImageName: " + imageName + "---" + profilePictureURL);
+		
 		User user = new User();
 		user.setAccessToken(accessToken);
 		user.setUsername(username);
 		user.setInstagramID(userInstagramID);
+		user.setProfilePic(imageName);
 		UUID sessionID = UUID.randomUUID();
 		user.setSessionID(sessionID.toString());
 		// TODO: profilePictureURL wird noch nicht verwendet

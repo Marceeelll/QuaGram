@@ -1,5 +1,7 @@
 package com.php.Quagram.database;
 
+import java.io.File;
+import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -16,15 +18,17 @@ public class DatabaseQuagramUsers {
 	
 	private void addUser(User user, Boolean shouldInsert) {
 		System.out.println("Creating statement");
+		
 		try {
 			databaseConnection.statement = databaseConnection.connection.createStatement();
 			
 			if (shouldInsert) {
-				String sql = "insert into user values ('" + user.getInstagramID() + "', '" + user.getAccessToken() +"', '" + user.getSessionID() + "', '" + user.getUsername() + "', 0, 0, 0);";
+				String sql = "insert into user values ('" + user.getInstagramID()+ "', '"  + user.getAccessToken() +"', '" + user.getSessionID() + "', " + 0 + ", '" + "NULL" + "', '"  + user.getUsername() + "', 0, 0," + user.getProfilePic() +", NULL);";      
 				int result = databaseConnection.statement.executeUpdate(sql);
 				System.out.println("Inserted User (addUser): " +result);
 			} else {
-				String sql = "update user set accessToken='" + user.getAccessToken() + "', sessionID='" + user.getSessionID() + "' where id='" + user.getInstagramID() + "'";
+				String sql = "update user set access_token='" + user.getAccessToken() + "', session_id='" + user.getSessionID() + "', profile_pic='" + user.getProfilePic() + "' where instagram_id='" + user.getInstagramID() + "'";
+				System.out.println("sql: " + sql);
 				int result = databaseConnection.statement.executeUpdate(sql);
 				System.out.println("Updated User (addUser): " +result);
 			}
@@ -39,15 +43,15 @@ public class DatabaseQuagramUsers {
 			databaseConnection.statement = databaseConnection.connection.createStatement();
 			
 			String sql;
-			sql = "Select * from user where sessionID='"+ sessionID + "'";
+			sql = "select * from user where session_id='"+ sessionID + "'";
 			ResultSet rs = databaseConnection.statement.executeQuery(sql);
 			
 			if (rs.next()) {
-				String id = rs.getString("id");
-				String accessToken = rs.getString("accessToken");
+				String id = rs.getString("instagram_id");
+				String accessToken = rs.getString("access_token");
 				String username = rs.getString("username");
-				int gamesLost = rs.getInt("gamesLost");
-				int gamesWon = rs.getInt("gamesWon");
+				int gamesLost = rs.getInt("games_lost");
+				int gamesWon = rs.getInt("games_won");
 				
 				User user = new User();
 				user.setInstagramID(id);
@@ -70,16 +74,16 @@ public class DatabaseQuagramUsers {
 			databaseConnection.statement = databaseConnection.connection.createStatement();
 			
 			String sql;
-			sql = "Select * from user where id='"+ instagramID + "'";
+			sql = "select * from user where instagram_id='"+ instagramID + "'";
 			ResultSet rs = databaseConnection.statement.executeQuery(sql);
 			
 			if (rs.next()) {
-				String id = rs.getString("id");
-				String accessToken = rs.getString("accessToken");
-				String sessionID = rs.getString("sessionID");
+				String id = rs.getString("instagram_id");
+				String accessToken = rs.getString("access_token");
+				String sessionID = rs.getString("session_id");
 				String username = rs.getString("username");
-				int gamesLost = rs.getInt("gamesLost");
-				int gamesWon = rs.getInt("gamesWon");
+				int gamesLost = rs.getInt("games_lost");
+				int gamesWon = rs.getInt("games_won");
 				
 				User user = new User();
 				user.setInstagramID(id);
@@ -102,18 +106,18 @@ public class DatabaseQuagramUsers {
 			databaseConnection.statement = databaseConnection.connection.createStatement();
 			
 			String sql;
-			sql = "select * from user where isInLobby=1";
+			sql = "select * from user where is_in_lobby=1";
 			ResultSet rs = databaseConnection.statement.executeQuery(sql);
 			
 			ArrayList<User> lobbyUser = new ArrayList<>();
 			
 			while (rs.next()) {
-				String id = rs.getString("id");
-				String accessToken = rs.getString("accessToken");
-				String sessionID = rs.getString("sessionID");
+				String id = rs.getString("instagram_id");
+				String accessToken = rs.getString("access_token");
+				String sessionID = rs.getString("session_id");
 				String username = rs.getString("username");
-				int gamesLost = rs.getInt("gamesLost");
-				int gamesWon = rs.getInt("gamesWon");
+				int gamesLost = rs.getInt("games_lost");
+				int gamesWon = rs.getInt("games_won");
 				
 				User user = new User();
 				user.setSessionID(id);
@@ -137,7 +141,7 @@ public class DatabaseQuagramUsers {
 			databaseConnection.statement = databaseConnection.connection.createStatement();
 			
 			String sql;
-			sql = "update user set isInLobby=0 where sessionID='" + sessionID +"'";
+			sql = "update user set is_in_lobby=0 where session_id='" + sessionID +"'";
 			int result = databaseConnection.statement.executeUpdate(sql);
 			System.out.println("Removed User to Lobby Successfully: " + result);
 		} catch (Exception e) {
@@ -151,7 +155,7 @@ public class DatabaseQuagramUsers {
 			databaseConnection.statement = databaseConnection.connection.createStatement();
 			
 			String sql;
-			sql = "update user set isInLobby=1 where sessionID='" + sessionID +"'";
+			sql = "update user set is_in_lobby=1 where session_id='" + sessionID +"'";
 			int result = databaseConnection.statement.executeUpdate(sql);
 			System.out.println("Added User to Lobby Successfully: " + result);
 		} catch (Exception e) {
@@ -163,7 +167,7 @@ public class DatabaseQuagramUsers {
 	public Boolean isSessionIDValid(String sessionID) {
 		try {
 			databaseConnection.statement = databaseConnection.connection.createStatement();
-			String sql = "select * from user where sessionID='" + sessionID + "'";
+			String sql = "select * from user where session_id='" + sessionID + "'";
 			ResultSet result = databaseConnection.statement.executeQuery(sql);
 			return result.next();
 		} catch (SQLException e) {
@@ -176,7 +180,7 @@ public class DatabaseQuagramUsers {
 	public int logoutUser(String sessionID) {
 		try {
 			databaseConnection.statement = databaseConnection.connection.createStatement();
-			String sql = "update user set sessionID=NULL where sessionID='" + sessionID + "'";
+			String sql = "update user set session_id=NULL where session_id='" + sessionID + "'";
 			int result = databaseConnection.statement.executeUpdate(sql);
 			return result;
 		} catch (SQLException e) {
@@ -190,16 +194,16 @@ public class DatabaseQuagramUsers {
 			databaseConnection.statement = databaseConnection.connection.createStatement();
 			
 			String sql;
-			sql = "Select * from user where id='"+ instagramID + "' and isInLobby=1";
+			sql = "select * from user where instagram_id='"+ instagramID + "' and is_in_lobby=1";
 			ResultSet rs = databaseConnection.statement.executeQuery(sql);
 			
 			if (rs.next()) {
-				String id = rs.getString("id");
-				String accessToken = rs.getString("accessToken");
-				String sessionID = rs.getString("sessionID");
+				String id = rs.getString("instagram_id");
+				String accessToken = rs.getString("access_token");
+				String sessionID = rs.getString("session_id");
 				String username = rs.getString("username");
-				int gamesLost = rs.getInt("gamesLost");
-				int gamesWon = rs.getInt("gamesWon");
+				int gamesLost = rs.getInt("games_lost");
+				int gamesWon = rs.getInt("games_won");
 				
 				User user = new User();
 				user.setInstagramID(id);
