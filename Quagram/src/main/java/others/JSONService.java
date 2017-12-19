@@ -1,10 +1,13 @@
-package com.php.Quagram.service;
+package others;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.php.Quagram.model.Card;
+import com.php.Quagram.model.Location;
 import com.php.Quagram.model.User;
 
 public class JSONService {
@@ -23,10 +26,8 @@ public class JSONService {
 		String username = jsonUserObject.getString("username");
 		String profilePictureURL = jsonUserObject.getString("profile_picture");
 		
-		InstagramRequestService service = new InstagramRequestService();
-		String imageName = service.downloadImageFromURL(profilePictureURL);
-		
-		System.out.println("ProfileImageName: " + imageName + "---" + profilePictureURL);
+		PictureController pictureController = new PictureController();
+		String imageName = pictureController.saveImageToFilesystem(profilePictureURL);
 		
 		User user = new User();
 		user.setAccessToken(accessToken);
@@ -55,6 +56,7 @@ public class JSONService {
 		int numberOfFollows = object.getInt("follows");
 		int numberOfFollowedBy = object.getInt("followed_by");
 		
+		// TODO: IG Nutzer in DB sichern ???
 		System.out.println("\nProfil Info");
 		System.out.println("id: " + id);
 		System.out.println("username: " + username);
@@ -67,11 +69,12 @@ public class JSONService {
 		System.out.println("numberOfFollowedBy: " + numberOfFollowedBy);
 	}
 	
-	public void getTest(String respond) {
+	public ArrayList<Card> getInstagramCards(String respond) {
 		JSONObject object = new JSONObject(respond);
 		
 		JSONArray array = object.getJSONArray("data");
-		System.out.println("Hello: " + array.toString());
+		
+		ArrayList<Card> instagramCards = new ArrayList<Card>();
 		
 		for(int i = 0; i < array.length(); i++) {
 			object = array.getJSONObject(i);
@@ -88,21 +91,27 @@ public class JSONService {
 				longitude = object.getJSONObject("location").getInt("longitude");
 				locationName = object.getJSONObject("location").getString("name");
 			} catch(Exception e) {
-				System.out.println("Image has no location");
+				continue;
 			}
 			
-			InstagramRequestService service = new InstagramRequestService();
-			service.downloadImageFromURL(imageURL);
+			PictureController pictureController = new PictureController();
+			pictureController.saveImageToFilesystem(imageURL);
 			
-			System.out.println("imageComments: " + imageComments);
-			System.out.println("imageLikes: " + imageLikes);
-			System.out.println("latitude: " + latitude);
-			System.out.println("longitude: " + longitude);
-			System.out.println("locationName: " + locationName);
-			System.out.println("imageURL: " + imageURL+"\n");
+			Location location = new Location(locationName, latitude, longitude);
+			
+			Card card = new Card();
+			card.setComments(imageComments);
+			card.setLikes(imageLikes);
+			card.setLocation(location);
+			card.setLocation(location);
+			card.setPictureURL(imageURL);
+			String cardNameID = PictureController.createImageNameFromURL(imageURL);
+			card.setId(cardNameID);
+			
+			instagramCards.add(card);
 		}
 		
-		
+		return instagramCards;
 	}
 	
 	
@@ -113,23 +122,22 @@ public class JSONService {
 	 * Geonames API
 	 *
 	 * */
-	public String getGeoNamesData(String respond) {
+	public Card getGeoNameCard(String respond) {
 		JSONObject object = new JSONObject(respond).getJSONObject("weatherObservation");
 		int elevation = object.getInt("elevation");
 		String temperature = object.getString("temperature");
+		int temperatureInt = Integer.valueOf(temperature);
 		int humidity = object.getInt("humidity");
 		String windSpeed = object.getString("windSpeed");
-		String countryCode = object.getString("countryCode");
+		int windSpeedInt = Integer.valueOf(windSpeed);
+		// TODO: ???? String countryCode = object.getString("countryCode");
 		
-		System.out.println("elevation: " + elevation);
-		System.out.println("temperature: " + temperature);
-		System.out.println("humidity: " + humidity);
-		System.out.println("windSpeed: " + windSpeed);
-		System.out.println("countryCode: " + countryCode);
+		Card card = new Card();
+		card.setHeightMeter(elevation);
+		card.setTemperature(0.0 + temperatureInt);
+		card.setWindspeed(windSpeedInt);
+		card.setHumidity(humidity);
 		
-		// Anmerkung: Diese Funktion liest alles richtig aus
-		// --> muss nur noch in ein Model verpackt werden
-		
-		return null;
+		return card;
 	}
 }

@@ -12,8 +12,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.php.Quagram.model.User;
-import com.php.Quagram.service.JSONService;
 import com.php.Quagram.service.LoginService;
+
+import others.JSONService;
 
 @Path("/registration")
 @Consumes(MediaType.APPLICATION_JSON)

@@ -10,9 +10,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import com.php.Quagram.database.DatabaseQuagramSingleton;
 import com.php.Quagram.database.DatabaseQuagramUsers;
 import com.php.Quagram.model.User;
+import com.php.Quagram.service.JSONClientOutput;
 
 
 @WebServlet("/LobbyServlet2")
@@ -30,18 +34,15 @@ public class LobbyTestServlet2 extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 
 		PrintWriter printwriter = null;
-		
-		String listOfLobbyUser = "";
-		//for (User user: DatabaseQuagramSingleton.sharedInstance.getLobbyUsers()) {
-		//	listOfLobbyUser += user.getUsername() +",";
-		//}
 
 		printwriter = response.getWriter();
 		
-		User user = new DatabaseQuagramUsers().getUserForSessionID("ab63415a-bf90-4e23-891b-4b9c599d4f49");
 		ArrayList<User> users = new DatabaseQuagramUsers().getLobbyUsers();
 		
-		printwriter.print("data: " + "{ " + users + " }" + "\n\n");
+		JSONClientOutput test = new JSONClientOutput();
+		JSONArray hello = test.doIt(users);
+		
+		printwriter.print("data: " + "{ " + hello + " }" + "\n\n");
 		//printwriter.println("data: " + "Number of User in Lobby:: " + DatabaseQuagramSingleton.sharedInstance.getLobbyUsers().size() + "\n");
 		response.flushBuffer();
 		printwriter.close();

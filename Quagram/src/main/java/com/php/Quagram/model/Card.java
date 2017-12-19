@@ -4,19 +4,22 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class Card {
-	private int id;
+	private String id;
 	private String pictureURL;
 	private int likes;
 	private int comments;
 	private double temperature;
-	private double heightMeter;
+	private int heightMeter;
+	private int humidity;
+	private int engagement;
+	private int windspeed;
 	private Location location;
 	
 	public Card() {
 	}
 	
-	public Card(int id, String pictureURL, int likes, int comments, double temperature, double heightMeter,
-			Location location) {
+	public Card(String id, String pictureURL, int likes, int comments, double temperature, int heightMeter,
+			Location location, int humidity, int engagement, int windspeed) {
 		super();
 		this.id = id;
 		this.pictureURL = pictureURL;
@@ -25,13 +28,16 @@ public class Card {
 		this.temperature = temperature;
 		this.heightMeter = heightMeter;
 		this.location = location;
+		this.humidity = humidity;
+		this.engagement = engagement;
+		this.windspeed = windspeed;
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -67,11 +73,11 @@ public class Card {
 		this.temperature = temperature;
 	}
 
-	public double getHeightMeter() {
+	public int getHeightMeter() {
 		return heightMeter;
 	}
 
-	public void setHeightMeter(double heightMeter) {
+	public void setHeightMeter(int heightMeter) {
 		this.heightMeter = heightMeter;
 	}
 
@@ -81,5 +87,29 @@ public class Card {
 
 	public void setLocation(Location location) {
 		this.location = location;
+	}
+
+	public int getHumidity() {
+		return humidity;
+	}
+
+	public void setHumidity(int humidity) {
+		this.humidity = humidity;
+	}
+
+	public int getEngagement() {
+		return engagement;
+	}
+
+	public void setEngagement(int engagement) {
+		this.engagement = engagement;
+	}
+
+	public int getWindspeed() {
+		return windspeed;
+	}
+
+	public void setWindspeed(int windspeed) {
+		this.windspeed = windspeed;
 	}
 }
