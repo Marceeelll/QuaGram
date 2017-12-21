@@ -58,7 +58,7 @@ public class LobbyResource {
 		//ig.getAllUserPictures("5894207441.334bddc.563b44fb33f047f4a39525f67713f8f3");
 		
 		CardDownloadController cardDownloadController = new CardDownloadController();
-		cardDownloadController.downloadCardsForUserAndSafeToDB("5894207441.334bddc.563b44fb33f047f4a39525f67713f8f3");
+		cardDownloadController.downloadCardsForUserAndSafeToDB("5894207441.334bddc.563b44fb33f047f4a39525f67713f8f3", "5894207441");
 		
 		// IMAGE URL to download
 		//String imageURL = "https://scontent.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/25014974_528050640882518_3544772908960186368_n.jpg";

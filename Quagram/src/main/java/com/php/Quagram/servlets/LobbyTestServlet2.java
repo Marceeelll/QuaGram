@@ -11,9 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
-import com.php.Quagram.database.DatabaseQuagramSingleton;
 import com.php.Quagram.database.DatabaseQuagramUsers;
 import com.php.Quagram.model.User;
 import com.php.Quagram.service.JSONClientOutput;
@@ -41,6 +39,8 @@ public class LobbyTestServlet2 extends HttpServlet {
 		
 		JSONClientOutput test = new JSONClientOutput();
 		JSONArray hello = test.doIt(users);
+		
+		System.out.println(hello);
 		
 		printwriter.print("data: { \"data\": " + hello + " }" + "\n\n");
 		//printwriter.println("data: " + "Number of User in Lobby:: " + DatabaseQuagramSingleton.sharedInstance.getLobbyUsers().size() + "\n");

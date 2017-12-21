@@ -10,14 +10,15 @@ import com.php.Quagram.model.User;
 public class JSONClientOutput {
 	public JSONArray doIt(ArrayList<User> users) {
 		JSONArray userArray = new JSONArray();
-		JSONObject userObject = new JSONObject();
 		
 		for (User user: users) {
+			JSONObject userObject = new JSONObject();
 			userObject.put("gamesLost", user.getGamesLost());
 			userObject.put("gamesWin", user.getGamesWin());
 			userObject.put("username", user.getUsername());
 			userArray.put(userObject);
 		}
+		
 		
 		return userArray;
 	}

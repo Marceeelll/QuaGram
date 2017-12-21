@@ -27,13 +27,13 @@ public class CardDownloadController {
 		return cardsFromInstagram;
 	}
 	
-	public void downloadCardsForUserAndSafeToDB(String instagramAccessToken) {
+	public void downloadCardsForUserAndSafeToDB(String instagramAccessToken, String instagramID) {
 		ArrayList<Card> cardsFromInstagram = new ArrayList<>();
 		cardsFromInstagram = downloadCardsForUser(instagramAccessToken);
 		
 		DatabaseQuagramCards cardsDB = new DatabaseQuagramCards();
 		for(Card card: cardsFromInstagram) {
-			cardsDB.addCard(card, "5894207441"); //"5894207441.334bddc.563b44fb33f047f4a39525f67713f8f3"); // TODO: hier weiter machen :)
+			cardsDB.addCard(card, instagramID);
 		}
 	}
 }

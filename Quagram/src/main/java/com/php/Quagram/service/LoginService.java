@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.http.HttpEntity;
@@ -21,7 +20,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 
 import com.php.Quagram.database.DatabaseQuagramInvitations;
-import com.php.Quagram.database.DatabaseQuagramSingleton;
 import com.php.Quagram.database.DatabaseQuagramUsers;
 import com.php.Quagram.model.User;
 

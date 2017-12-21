@@ -23,7 +23,7 @@ public class DatabaseQuagramUsers {
 			databaseConnection.statement = databaseConnection.connection.createStatement();
 			
 			if (shouldInsert) {
-				String sql = "insert into user values ('" + user.getInstagramID()+ "', '"  + user.getAccessToken() +"', '" + user.getSessionID() + "', " + 0 + ", '" + "NULL" + "', '"  + user.getUsername() + "', 0, 0," + user.getProfilePic() +", NULL);";      
+				String sql = "insert into user values ('" + user.getInstagramID()+ "', '"  + user.getAccessToken() +"', '" + user.getSessionID() + "', " + 0 + ", '" + "NULL" + "', '"  + user.getUsername() + "', 0, 0, '" + user.getProfilePic() +"' , NULL);";
 				int result = databaseConnection.statement.executeUpdate(sql);
 				System.out.println("Inserted User (addUser): " +result);
 			} else {
@@ -76,6 +76,8 @@ public class DatabaseQuagramUsers {
 			String sql;
 			sql = "select * from user where instagram_id='"+ instagramID + "'";
 			ResultSet rs = databaseConnection.statement.executeQuery(sql);
+			
+			System.out.println("Statement das wahrscheinlich nicht funktioniert: " + sql);
 			
 			if (rs.next()) {
 				String id = rs.getString("instagram_id");
