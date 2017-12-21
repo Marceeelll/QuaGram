@@ -42,7 +42,7 @@ public class LobbyTestServlet2 extends HttpServlet {
 		JSONClientOutput test = new JSONClientOutput();
 		JSONArray hello = test.doIt(users);
 		
-		printwriter.print("data: " + "{ " + hello + " }" + "\n\n");
+		printwriter.print("data: { \"data\": " + hello + " }" + "\n\n");
 		//printwriter.println("data: " + "Number of User in Lobby:: " + DatabaseQuagramSingleton.sharedInstance.getLobbyUsers().size() + "\n");
 		response.flushBuffer();
 		printwriter.close();

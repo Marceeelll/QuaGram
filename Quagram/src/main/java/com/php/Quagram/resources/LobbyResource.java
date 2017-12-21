@@ -1,26 +1,20 @@
 package com.php.Quagram.resources;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.php.Quagram.database.DatabaseQuagramCards;
-import com.php.Quagram.model.Card;
-import com.php.Quagram.model.Invitation;
-import com.php.Quagram.model.Location;
 import com.php.Quagram.model.User;
 import com.php.Quagram.service.LobbyService;
 
 import others.CardDownloadController;
-import others.InstagramRequestService;
 
 @Path("/lobby")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -28,7 +22,6 @@ import others.InstagramRequestService;
 public class LobbyResource {
 	LobbyService lobbyService = new LobbyService();
 	
-	// TODO: Diese Funktion löschen (IST NUR FÜR DEBUGGING), steht nicht in der Spezifikation
 	@GET
 	@Path("/{sessionID}")
 	public List<User> getUsersInLobby(@PathParam("sessionID") String sessionID) {
@@ -36,7 +29,7 @@ public class LobbyResource {
 		return lobbyService.getAllLobbyUsers();
 	}
 	
-	@PUT
+	@POST
 	@Path("/{sessionID}")
 	public List<User> addUserToLobby(@PathParam("sessionID") String sessionID) {
 		lobbyService.isSessionIDValid(sessionID);
@@ -51,18 +44,6 @@ public class LobbyResource {
 		return "Successfully deleted";
 	}
 	
-	@GET
-	@Path("{sessionID}/invitations")
-	public ArrayList<Invitation> getInvitations(@PathParam("sessionID") String sessionID) {
-		return lobbyService.getInvitationsForSessionID(sessionID);
-	}
-	
-	@PUT
-	@Path("{sessionID}/invite/{instagramID}")
-	public Invitation sendInvitation(@PathParam("sessionID") String sessionID, @PathParam("instagramID") String instagramIDToInvite) {
-		Invitation invitation = lobbyService.sendInvitaitonToInstagramID(instagramIDToInvite, sessionID);
-		return invitation;
-	}
 	
 	
 	// TODO: DELETE nur für Debugging
