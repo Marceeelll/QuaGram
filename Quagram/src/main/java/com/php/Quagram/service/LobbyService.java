@@ -81,7 +81,7 @@ public class LobbyService {
 		//ArrayList<Invitation> invitations = invitationDB.get(userWhoGotInvitation.getInstagramID());
 		//invitations.add(invitation);
 		//invitationDB.put(userWhoGotInvitation.getInstagramID(), invitations);
-		dbInvitations.appendInvitationToUser(userWhoGotInvitation, invitation);
+		dbInvitations.addInvitation(userWhoGotInvitation, invitation);
 	}
 	
 }

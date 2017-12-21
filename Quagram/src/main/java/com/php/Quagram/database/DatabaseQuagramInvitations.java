@@ -11,9 +11,16 @@ import com.php.Quagram.model.User;
 public class DatabaseQuagramInvitations {
 	private DatabaseQuagramSingleton databaseConnection = DatabaseQuagramSingleton.sharedInstance;
 
-	public ArrayList<Invitation> getInvitationsForInstagramID(String instagramID) {
+	public ArrayList<Invitation> getInvitationsForUser(String sessionID) {
 		try {
 			databaseConnection.statement = databaseConnection.connection.createStatement();
+			
+			//Get InstagramID for SessionID
+			String instagramID = new DatabaseQuagramUsers().getInstagramIDForSessionID(sessionID);
+			
+			if(instagramID == null) {
+				return new ArrayList<>();
+			}
 			
 			String sql;
 			sql = "select * from invitation where receiver_id='" + instagramID + "'";
@@ -40,13 +47,39 @@ public class DatabaseQuagramInvitations {
 		}
 		return new ArrayList<>();
 	}
-	
-	public void appendInvitationToUser(User userWhoGotInvitation, Invitation invitation) {
+	//TODO: Wenn Spieler schon eingeladen wurde, darf die Einladung nicht noch einmal eingetragen werden
+	public void addInvitation(User receiver, Invitation invitation) {
 		try {
 			databaseConnection.statement = databaseConnection.connection.createStatement();
-			String sql = "insert into invitation values ('" + invitation.getCreated() + userWhoGotInvitation.getInstagramID() +"', '" + invitation.getHostUserID() + "', '" + invitation.getMatchSessionID() + "');";
+			String sql;
+			
+			sql = "insert into invitation values (";
+			sql += "'" + invitation.getCreated() + "',";
+			sql += "'" + receiver.getInstagramID() + "',";
+			sql += "'" + invitation.getHostUserID() + "',";
+			sql += "'" + invitation.getMatchSessionID() + "'";
+			sql += ")";
+			
 			int result = databaseConnection.statement.executeUpdate(sql);
-			System.out.println("Inserted Invitation (appendInvitationToUser): " +result);
+			System.out.println("Inserted Invitation (addInvitation): " +result);
+		} catch (SQLException e) {
+			// if contains id already -> make update instead of insert 
+			e.printStackTrace();
+		}
+	}
+	
+	public void deleteInvitation(User host, User receiver) {
+		try {
+			databaseConnection.statement = databaseConnection.connection.createStatement();
+			String sql;
+			
+			sql = "delete from invitation where ";
+			sql += "host_user_id='" + host.getInstagramID() + "' and ";
+			sql += "receiver_id='" + receiver.getInstagramID() + "'";
+			sql += ")";
+			
+			int result = databaseConnection.statement.executeUpdate(sql);
+			System.out.println("Delete Invitation (deleteInvitation): " + result);
 		} catch (SQLException e) {
 			// if contains id already -> make update instead of insert 
 			e.printStackTrace();

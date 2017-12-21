@@ -220,5 +220,58 @@ public class DatabaseQuagramUsers {
 		}
 		return null;
 	}
+	
+	public String getInstagramIDForSessionID(String sessionID) {
+		
+		try {
+			databaseConnection.statement = databaseConnection.connection.createStatement();
+			
+			String sql;
+			sql = "select instagram_id from user where session_id='" + sessionID + "'";
+			ResultSet rs = databaseConnection.statement.executeQuery(sql);
+			
+			if (rs.next()) {
+				String id = rs.getString("instagram_id");
+				
+				return id;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public void addMatchSessionIDToUser(String sessionID, String matchSessionID) {
+		
+		try {
+			databaseConnection.statement = databaseConnection.connection.createStatement();
+			
+			//TODO: vorher muss eine MatchSessionID generiert werden
+			
+			String sql;
+			sql = "update user set match_session_id='" + matchSessionID + "' where session_id='" + sessionID + "'";
+			int result = databaseConnection.statement.executeUpdate(sql);
+			System.out.println("Match SessionID zu user hinzugefügt: " + result);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void addGameplayIDToUser(String instagramID, String gameplayID) {
+		
+		try {
+			databaseConnection.statement = databaseConnection.connection.createStatement();
+			
+			//TODO: vorher muss neues Gameplay erstellt werden -> Dann die gameplayID hier zum User hinzufügen
+			
+			String sql;
+			sql = "update user set gameplay_id='" + gameplayID + "' where instagram_id='" + instagramID + "'";
+			int result = databaseConnection.statement.executeUpdate(sql);
+			System.out.println("GameplayID zu user hinzugefügt: " + result);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 }
