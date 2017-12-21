@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.php.Quagram.model.Card;
 import com.php.Quagram.model.Invitation;
 import com.php.Quagram.model.User;
 
@@ -84,6 +85,22 @@ public class DatabaseQuagramInvitations {
 			// if contains id already -> make update instead of insert 
 			e.printStackTrace();
 		}
+	}
+	
+	public boolean doesInvitationExist(String hostID, String receiverID) {
+		
+		try {
+			databaseConnection.statement = databaseConnection.connection.createStatement();
+			
+			String sql;
+			sql = "select * from invitation where host_user_id='"+ hostID + "' and receiver_id='" + receiverID + "'";
+			ResultSet rs = databaseConnection.statement.executeQuery(sql);
+			
+			return rs.next();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 	
 	/*

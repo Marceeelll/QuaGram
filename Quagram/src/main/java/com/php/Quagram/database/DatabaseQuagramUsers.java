@@ -266,9 +266,25 @@ public class DatabaseQuagramUsers {
 			//TODO: vorher muss neues Gameplay erstellt werden -> Dann die gameplayID hier zum User hinzufügen
 			
 			String sql;
-			sql = "update user set gameplay_id='" + gameplayID + "' where instagram_id='" + instagramID + "'";
+			sql = "update user set game_id='" + gameplayID + "' where instagram_id='" + instagramID + "'";
 			int result = databaseConnection.statement.executeUpdate(sql);
 			System.out.println("GameplayID zu user hinzugefügt: " + result);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void eraseGameplayIDFromUser(String instagramID) {
+		
+		try {
+			databaseConnection.statement = databaseConnection.connection.createStatement();
+			
+			//TODO: vorher muss neues Gameplay erstellt werden -> Dann die gameplayID hier zum User hinzufügen
+			
+			String sql;
+			sql = "update user set game_id='NULL' where instagram_id='" + instagramID + "'";
+			int result = databaseConnection.statement.executeUpdate(sql);
+			System.out.println("GameplayID wurd gelöscht: " + result);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
