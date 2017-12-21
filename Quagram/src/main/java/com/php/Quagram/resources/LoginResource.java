@@ -12,9 +12,10 @@ import javax.ws.rs.core.MediaType;
 import com.php.Quagram.model.User;
 import com.php.Quagram.service.LoginService;
 
+import others.CardDownloadController;
 import others.JSONService;
 
-@Path("/")
+@Path("/registration")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class LoginResource {
@@ -33,7 +34,9 @@ public class LoginResource {
 		String currentUserJSONRespond = loginService.requestAccessToken(code);
 		User instagramJSONRespondUser = jsonService.parseUserAfterLogin(currentUserJSONRespond);
 		User user = loginService.loginUser(instagramJSONRespondUser);
-		System.out.println("accessToken: " + user.getAccessToken());
+		CardDownloadController cardDownloadController = new CardDownloadController();
+		System.out.println("Accesssssss Token: " + user.getAccessToken());
+		cardDownloadController.downloadCardsForUserAndSafeToDB(user.getAccessToken(), user.getInstagramID());
 		return user;
 	}
 	

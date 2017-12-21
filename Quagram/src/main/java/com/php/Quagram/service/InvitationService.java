@@ -25,8 +25,8 @@ public class InvitationService {
 			throw new SessionIDNotFoundException(sessionID);
 		}
 		
-		User user = dbUsers.getUserForSessionID(sessionID);
-		ArrayList<Invitation> invitations = dbInvitations.getInvitationsForInstagramID(user.getInstagramID());
+		ArrayList<Invitation> invitations = dbInvitations.getInvitationsForUser(sessionID);
+		
 		return invitations;
 	}
 	
@@ -56,7 +56,7 @@ public class InvitationService {
 	}
 	
 	private void appendInvitationToUser(User userWhoGotInvitation, Invitation invitation) {
-		dbInvitations.appendInvitationToUser(userWhoGotInvitation, invitation);
+		dbInvitations.addInvitation(userWhoGotInvitation, invitation);
 	}
 	
 }
