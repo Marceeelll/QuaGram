@@ -25,11 +25,4 @@
     <!--
     <Manager pathname="" />
     -->
-    <Resource
-        name="jdbc/Quagram" type="javax.sql.DataSource"
-        maxActive="100" maxIdle="30" maxWait="10000" 
-        url="jdbc:mysql://localhost:3306/Quagram"
-        driverClassName="com.mysql.jdbc.Driver"
-        username="root" password="pmp"
-    />
 </Context>
