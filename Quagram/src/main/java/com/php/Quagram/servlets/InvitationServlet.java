@@ -17,8 +17,8 @@ import com.php.Quagram.model.User;
 import com.php.Quagram.service.JSONClientOutput;
 
 
-@WebServlet("/LobbyServlet2")
-public class LobbyTestServlet2 extends HttpServlet {
+@WebServlet("/InvitationServlet")
+public class InvitationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

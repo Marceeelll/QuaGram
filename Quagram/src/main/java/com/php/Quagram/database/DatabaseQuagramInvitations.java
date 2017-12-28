@@ -55,7 +55,7 @@ public class DatabaseQuagramInvitations {
 			String sql;
 			
 			sql = "insert into invitation values (";
-			sql += "'" + invitation.getCreated() + "',";
+			sql += "'" + invitation.getCreatedFormated() + "',";
 			sql += "'" + receiver.getInstagramID() + "',";
 			sql += "'" + invitation.getHostUserID() + "',";
 			sql += "'" + invitation.getMatchSessionID() + "'";

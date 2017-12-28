@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 @XmlRootElement
 public class Invitation {
@@ -12,12 +13,26 @@ public class Invitation {
 	private String hostUserID;
 	private String matchSessionID;
 	
-	
+	@XmlTransient
 	public Date getCreated() {
 		return created;
 	}
 	public void setCreated(Date created) {
 		this.created = created;
+	}
+	public String getCreatedDate() {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		return dateFormat.format(getCreated());
+	}
+	public void setCreatedDate(String dateString) {
+		try {
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+			Date date = dateFormat.parse(dateString);
+			setCreated(date);
+		} catch (Exception e) {
+			e.printStackTrace();
+			setCreated(new Date());
+		}
 	}
 	public String getHostUserID() {
 		return hostUserID;
