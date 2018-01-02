@@ -10,17 +10,21 @@ import com.php.Quagram.model.Invitation;
 import com.php.Quagram.model.User;
 
 public class JSONClientOutput {
-	public JSONArray parseUserArrayListToJSON(ArrayList<User> users) {
+	public JSONArray parseUserArrayListToJSON(ArrayList<User> users, String withoutSessionID) {
 		JSONArray userArray = new JSONArray();
 		
-		for (User user: users) {
-			JSONObject userObject = new JSONObject();
-			userObject.put("gamesLost", user.getGamesLost());
-			userObject.put("gamesWin", user.getGamesWin());
-			userObject.put("username", user.getUsername());
-			userArray.put(userObject);
-		}
+		DatabaseQuagramUsers userDB = new DatabaseQuagramUsers();
+		String withoutInstagramID = userDB.getUsernameForSessionID(withoutSessionID);
 		
+		for (User user: users) {
+			if (!user.getUsername().equals(withoutInstagramID)) {
+				JSONObject userObject = new JSONObject();
+				userObject.put("gamesLost", user.getGamesLost());
+				userObject.put("gamesWin", user.getGamesWin());
+				userObject.put("username", user.getUsername());
+				userArray.put(userObject);
+			}
+		}
 		
 		return userArray;
 	}

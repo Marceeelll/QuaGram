@@ -30,13 +30,13 @@ public class InvitationService {
 		return invitations;
 	}
 	
-	public Invitation sendInvitaitonToInstagramID(String instagramIDToInvite, String hostSessionID) {
+	public Invitation sendInvitaitonToInstagramUsername(String instagramUsername, String hostSessionID) {
 		if (!dbUsers.isSessionIDValid(hostSessionID)) {
 			throw new SessionIDNotFoundException(hostSessionID);
 		}
 		
 		
-		User userToInvite = dbUsers.getLobbyUserForInstagramID(instagramIDToInvite);
+		User userToInvite = dbUsers.getLobbyUserForInstagramUsername(instagramUsername);
 		if(userToInvite == null) {
 			System.out.println("TODO--throw-Error- sendInvitaitonToInstagramID-2");
 			return null;

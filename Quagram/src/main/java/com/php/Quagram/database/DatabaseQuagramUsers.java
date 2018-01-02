@@ -77,8 +77,6 @@ public class DatabaseQuagramUsers {
 			sql = "select * from user where instagram_id='"+ instagramID + "'";
 			ResultSet rs = databaseConnection.statement.executeQuery(sql);
 			
-			System.out.println("Statement das wahrscheinlich nicht funktioniert: " + sql);
-			
 			if (rs.next()) {
 				String id = rs.getString("instagram_id");
 				String accessToken = rs.getString("access_token");
@@ -191,12 +189,12 @@ public class DatabaseQuagramUsers {
 		return 0;
 	}
 	
-	public User getLobbyUserForInstagramID(String instagramID) {
+	public User getLobbyUserForInstagramUsername(String instagramUsername) {
 		try {
 			databaseConnection.statement = databaseConnection.connection.createStatement();
 			
 			String sql;
-			sql = "select * from user where instagram_id='"+ instagramID + "' and is_in_lobby=1";
+			sql = "select * from user where username='"+ instagramUsername + "' and is_in_lobby=1";
 			ResultSet rs = databaseConnection.statement.executeQuery(sql);
 			
 			if (rs.next()) {
@@ -234,6 +232,27 @@ public class DatabaseQuagramUsers {
 			
 			if (rs.next()) {
 				String id = rs.getString("instagram_id");
+				
+				return id;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+public String getUsernameForSessionID(String sessionID) {
+		
+		try {
+			databaseConnection.statement = databaseConnection.connection.createStatement();
+			
+			String sql;
+			sql = "select username from user where session_id='" + sessionID + "'";
+			ResultSet rs = databaseConnection.statement.executeQuery(sql);
+			
+			if (rs.next()) {
+				String id = rs.getString("username");
 				
 				return id;
 			}

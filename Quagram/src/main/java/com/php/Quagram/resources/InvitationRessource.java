@@ -10,7 +10,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.php.Quagram.database.DatabaseQuagramUsers;
 import com.php.Quagram.model.Invitation;
+import com.php.Quagram.model.User;
 import com.php.Quagram.service.InvitationService;
 
 @Path("/lobby")
@@ -26,9 +28,10 @@ public class InvitationRessource {
 	}
 	
 	@PUT
-	@Path("{sessionID}/invite/{instagramID}")
-	public Invitation sendInvitation(@PathParam("sessionID") String sessionID, @PathParam("instagramID") String instagramIDToInvite) {
-		Invitation invitation = invitationService.sendInvitaitonToInstagramID(instagramIDToInvite, sessionID);
+	@Path("{sessionID}/invite/{instagramUsername}")
+	public Invitation sendInvitation(@PathParam("sessionID") String sessionID, @PathParam("instagramUsername") String instagramUsername) {
+		User instagramUserToInvite = new DatabaseQuagramUsers().getLobbyUserForInstagramUsername(instagramUsername);
+		Invitation invitation = invitationService.sendInvitaitonToInstagramUsername(instagramUserToInvite.getUsername(), sessionID);
 		return invitation;
 	}
 }

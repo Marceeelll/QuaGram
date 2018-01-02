@@ -30,6 +30,8 @@ public class LobbyServlet extends HttpServlet {
 
 		//encoding must be set to UTF-8
 		response.setCharacterEncoding("UTF-8");
+		
+		String sessionID = request.getParameter("sessionID");
 
 		PrintWriter printwriter = null;
 
@@ -38,7 +40,7 @@ public class LobbyServlet extends HttpServlet {
 		ArrayList<User> users = new DatabaseQuagramUsers().getLobbyUsers();
 		
 		JSONClientOutput test = new JSONClientOutput();
-		JSONArray hello = test.parseUserArrayListToJSON(users);
+		JSONArray hello = test.parseUserArrayListToJSON(users, sessionID);
 		
 		printwriter.print("data: { \"data\": " + hello + " }" + "\n\n");
 		
