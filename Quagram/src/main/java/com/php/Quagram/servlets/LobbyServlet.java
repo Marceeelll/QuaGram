@@ -17,8 +17,8 @@ import com.php.Quagram.model.User;
 import com.php.Quagram.service.JSONClientOutput;
 
 
-@WebServlet("/LobbyServlet2")
-public class LobbyTestServlet2 extends HttpServlet {
+@WebServlet("/LobbyServlet")
+public class LobbyServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -40,10 +40,8 @@ public class LobbyTestServlet2 extends HttpServlet {
 		JSONClientOutput test = new JSONClientOutput();
 		JSONArray hello = test.parseUserArrayListToJSON(users);
 		
-		System.out.println(hello);
-		
 		printwriter.print("data: { \"data\": " + hello + " }" + "\n\n");
-		//printwriter.println("data: " + "Number of User in Lobby:: " + DatabaseQuagramSingleton.sharedInstance.getLobbyUsers().size() + "\n");
+		
 		response.flushBuffer();
 		printwriter.close();
 	}

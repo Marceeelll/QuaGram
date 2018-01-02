@@ -18,7 +18,7 @@ public class DatabaseQuagramInvitations {
 			
 			//Get InstagramID for SessionID
 			String instagramID = new DatabaseQuagramUsers().getInstagramIDForSessionID(sessionID);
-			
+			System.out.println(instagramID);
 			if(instagramID == null) {
 				return new ArrayList<>();
 			}

@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONArray;
 
-import com.php.Quagram.database.DatabaseQuagramUsers;
-import com.php.Quagram.model.User;
+import com.php.Quagram.database.DatabaseQuagramInvitations;
+import com.php.Quagram.model.Invitation;
 import com.php.Quagram.service.JSONClientOutput;
 
 
@@ -30,20 +30,18 @@ public class InvitationServlet extends HttpServlet {
 
 		//encoding must be set to UTF-8
 		response.setCharacterEncoding("UTF-8");
-
+		
+		String sessionID = request.getParameter("sessionID");
+		
 		PrintWriter printwriter = null;
 
 		printwriter = response.getWriter();
 		
-		ArrayList<User> users = new DatabaseQuagramUsers().getLobbyUsers();
+		ArrayList<Invitation> userInvitations = new DatabaseQuagramInvitations().getInvitationsForUser(sessionID);
+		JSONClientOutput jsonOutput = new JSONClientOutput();
+		JSONArray invitationJSONArray = jsonOutput.parseInvitationListToJSON(userInvitations);
 		
-		JSONClientOutput test = new JSONClientOutput();
-		JSONArray hello = test.parseUserArrayListToJSON(users);
-		
-		System.out.println(hello);
-		
-		printwriter.print("data: { \"data\": " + hello + " }" + "\n\n");
-		//printwriter.println("data: " + "Number of User in Lobby:: " + DatabaseQuagramSingleton.sharedInstance.getLobbyUsers().size() + "\n");
+		printwriter.print("data: { \"data\": " + invitationJSONArray + " }" + "\n\n");
 		response.flushBuffer();
 		printwriter.close();
 	}
