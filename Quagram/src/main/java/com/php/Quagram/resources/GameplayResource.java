@@ -19,7 +19,8 @@ public class GameplayResource {
 	@GET
 	@Path("/{sessionID}/matchSession/{matchSessionID}")
 	public String getGamplay(@PathParam("sessionID") String sessionID, @PathParam("matchSessionID") String matchSessionID) {
-		return "GET the Gameplay\nSessionID: " + sessionID +"\nMatchSessionID: " + matchSessionID;
+		return gameplayService.getGameplay(sessionID, matchSessionID);
+		//return "GET the Gameplay\nSessionID: " + sessionID +"\nMatchSessionID: " + matchSessionID;
 	}
 	
 	@POST

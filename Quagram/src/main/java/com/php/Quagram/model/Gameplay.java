@@ -3,7 +3,7 @@ package com.php.Quagram.model;
 public class Gameplay {
 	
 	private String gameplayID;
-	private String turnInstagramID;
+	private String turnInstagramUsername;
 	private int totalNumberOfTurns;
 	private int currentTurnNumber;
 	
@@ -11,10 +11,10 @@ public class Gameplay {
 		
 	}
 	
-	public Gameplay(String gameplayID, String instagramID, int totalNumberOfTurns, int currentTurnNumber) {
+	public Gameplay(String gameplayID, String instagramUsername, int totalNumberOfTurns, int currentTurnNumber) {
 		super();
 		this.gameplayID = gameplayID;
-		this.turnInstagramID = instagramID;
+		this.turnInstagramUsername = instagramUsername;
 		this.totalNumberOfTurns = totalNumberOfTurns;
 		this.currentTurnNumber = currentTurnNumber;
 	}
@@ -28,11 +28,11 @@ public class Gameplay {
 	}
 
 	public String getTurnInstagramID() {
-		return turnInstagramID;
+		return turnInstagramUsername;
 	}
 
 	public void setTurnInstagramID(String turnInstagramID) {
-		this.turnInstagramID = turnInstagramID;
+		this.turnInstagramUsername = turnInstagramID;
 	}
 
 	public int getTotalNumberOfTurns() {

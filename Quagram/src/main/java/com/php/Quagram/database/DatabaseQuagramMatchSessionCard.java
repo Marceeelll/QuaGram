@@ -2,6 +2,9 @@ package com.php.Quagram.database;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import javax.activation.DataContentHandler;
+
 import com.php.Quagram.model.MatchSessionCard;
 
 public class DatabaseQuagramMatchSessionCard {
@@ -71,5 +74,20 @@ public class DatabaseQuagramMatchSessionCard {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public Boolean alreadyContainsCardsForMatchSessionID(String matchSessionID) {
+		try {
+			databaseConnection.statement = databaseConnection.connection.createStatement();
+			
+			String sql = "select * from match_session_card where match_session_id='" + matchSessionID + "'";
+			ResultSet result = databaseConnection.statement.executeQuery(sql);
+			Boolean contains = result.next();
+			System.out.println("------- " + contains);
+			return contains;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 }

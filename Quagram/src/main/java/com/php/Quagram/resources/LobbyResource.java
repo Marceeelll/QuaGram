@@ -12,6 +12,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.php.Quagram.model.User;
+import com.php.Quagram.service.GameplayService;
 import com.php.Quagram.service.LobbyService;
 
 @Path("/lobby")
@@ -67,7 +68,9 @@ public class LobbyResource {
 //		
 //		DatabaseQuagramCards dbCard = new DatabaseQuagramCards();
 //		dbCard.addCard(card, "5894207441");
-		System.out.println("Hello world! :)");
+		
+		GameplayService service = new GameplayService();
+		service.getGameplay("30be6033-36d1-46bb-8152-65de48be641b", "e076c7a3-3965-4e0b-b3b1-89365c097793");
 		return "Dummy erfolgreich ausgeführt";
 	}
 }

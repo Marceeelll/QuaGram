@@ -279,7 +279,7 @@ public class DatabaseQuagramUsers {
 				int gamesWon = rs.getInt("games_won");
 				
 				User user = new User();
-				user.setSessionID(id);
+				user.setInstagramID(id);
 				user.setAccessToken(accessToken);
 				user.setSessionID(sessionID);
 				user.setUsername(username);

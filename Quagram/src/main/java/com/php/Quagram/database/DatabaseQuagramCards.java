@@ -2,8 +2,11 @@ package com.php.Quagram.database;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import com.php.Quagram.model.Card;
+import com.php.Quagram.model.Location;
+import com.php.Quagram.model.User;
 
 public class DatabaseQuagramCards {
 	private DatabaseQuagramSingleton databaseConnection = DatabaseQuagramSingleton.sharedInstance;
@@ -70,4 +73,69 @@ public class DatabaseQuagramCards {
 		}
 		return false;
 	}
+	
+	public int numberOfCardsFromUser(String userInstagramID) {
+		try {
+			databaseConnection.statement = databaseConnection.connection.createStatement();
+			
+			//String sql = "select * from card where owner_id='" + userInstagramID + "'";
+			String sql = "select * from card where owner_id='" + userInstagramID + "'";
+			ResultSet rs = databaseConnection.statement.executeQuery(sql);
+			
+			int numberOfCards = 0;
+			while(rs.next()) {
+				numberOfCards += 1;
+			}
+			
+			return numberOfCards;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	
+	public ArrayList<Card> getCardsForUserInstagramID(String userInstagramID) {
+		try {
+			databaseConnection.statement = databaseConnection.connection.createStatement();
+			
+			String sql = "select * from card where owner_id='" + userInstagramID + "';";
+			ResultSet rs = databaseConnection.statement.executeQuery(sql);
+			
+			ArrayList<Card> userCards = new ArrayList<>();
+			
+			while (rs.next()) {
+				String id = rs.getString("card_pic_id");
+				String owner_id = rs.getString("owner_id");
+				int number_of_comments = rs.getInt("number_of_comments");
+				int number_of_likes = rs.getInt("number_of_likes");
+				Double longitude = rs.getDouble("longitude");
+				Double latitude = rs.getDouble("latitude");
+				String place_name = rs.getString("place_name");
+				int elevation = rs.getInt("elevation");
+				Double temperature = rs.getDouble("temperature");
+				int humidity = rs.getInt("humidity");
+				int engagement = rs.getInt("engagement");
+				int windspeed = rs.getInt("windspeed");
+				
+				Location location = new Location();
+				location.setLatitude(latitude);
+				location.setLongitude(longitude);
+				location.setName(place_name);
+				
+				// TODO: Picture URL NOCH SETZEN!
+				Card card = new Card(id, "", number_of_likes, number_of_comments, temperature, elevation, location, humidity, engagement, windspeed);
+				userCards.add(card);
+			}
+			
+			return userCards;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }
+
+
+
+
+
