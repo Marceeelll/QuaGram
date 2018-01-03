@@ -1,5 +1,7 @@
 package com.php.Quagram.resources;
 
+import java.util.ArrayList;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -10,6 +12,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.php.Quagram.model.User;
 import com.php.Quagram.service.MatchSessionService;
 
 @Path("/matchSession")
@@ -20,19 +23,21 @@ public class MatchSessionRessource {
 	
 	@GET
 	@Path("/{matchSessionID}")
-	public String getMatchSession(@PathParam("matchSessionID") String matchSessionID) {
-		return "GET the MatchSession - " + matchSessionID;
+	public ArrayList<User> getMatchSession(@PathParam("matchSessionID") String matchSessionID) {
+		return matchSessionService.getMatchSession(matchSessionID);
 	}
 	
 	@DELETE
 	@Path("/{sessionID}/{matchSessionID}")
 	public String deleteMatchSession(@PathParam("sessionID") String sessionID, @PathParam("matchSessionID") String matchSessionID) {
+		matchSessionService.leaveMatchSession(sessionID, matchSessionID);
 		return "DELETE the MatchSession - " + matchSessionID;
 	}
 	
 	@PUT
 	@Path("/{sessionID}/{matchSessionID}")
-	public String addUserToLobby(@PathParam("sessionID") String sessionID, @PathParam("matchSessionID") String matchSessionID, @QueryParam("accepted") String accepted_status) {
+	public String answerToMatchSessionInvitation(@PathParam("sessionID") String sessionID, @PathParam("matchSessionID") String matchSessionID, @QueryParam("accepted") String accepted_status) {
+		matchSessionService.answerToMatchSessionInvitation(sessionID, matchSessionID, accepted_status);
 		System.out.println("PUT\nSessionID: " + sessionID + "\nMatchSession: " + matchSessionID + "\nAccepted_Status: " + accepted_status);
 		return "PUT\nSessionID: " + sessionID + "\nMatchSession: " + matchSessionID + "\nAccepted_Status: " + accepted_status;
 	}

@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.php.Quagram.model.Card;
-import com.php.Quagram.model.User;
 
 public class DatabaseQuagramCards {
 	private DatabaseQuagramSingleton databaseConnection = DatabaseQuagramSingleton.sharedInstance;

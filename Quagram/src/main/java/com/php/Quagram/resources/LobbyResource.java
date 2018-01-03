@@ -14,8 +14,6 @@ import javax.ws.rs.core.MediaType;
 import com.php.Quagram.model.User;
 import com.php.Quagram.service.LobbyService;
 
-import others.CardDownloadController;
-
 @Path("/lobby")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)

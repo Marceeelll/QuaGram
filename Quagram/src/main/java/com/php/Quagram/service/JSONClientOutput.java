@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.php.Quagram.database.DatabaseQuagramUsers;
+import com.php.Quagram.model.Card;
 import com.php.Quagram.model.Invitation;
 import com.php.Quagram.model.User;
 
@@ -45,4 +46,28 @@ public class JSONClientOutput {
 		
 		return invitationArray;
 	}
+	
+	public JSONObject parseCardToJSON(Card card) {
+		JSONObject cardObject = new JSONObject();
+		
+		cardObject.put("id", card.getId());
+		cardObject.put("picture_url", card.getPictureURL());
+		cardObject.put("likes", card.getLikes());
+		cardObject.put("comments", card.getComments());
+		cardObject.put("temperature", card.getTemperature());
+		cardObject.put("height_meter", card.getHeightMeter());
+		
+		JSONObject locationObject = new JSONObject();
+		locationObject.put("name", card.getLocation().getName());
+		locationObject.put("latitude", card.getLocation().getLatitude());
+		locationObject.put("longitude", card.getLocation().getLongitude());
+		
+		cardObject.put("location", locationObject);
+		
+		return cardObject;
+	}
 }
+
+
+
+

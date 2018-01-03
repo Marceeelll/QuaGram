@@ -3,9 +3,7 @@ package com.php.Quagram.database;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 
-import com.php.Quagram.model.Invitation;
 import com.php.Quagram.model.User;
 
 public class DatabaseQuagramRound {

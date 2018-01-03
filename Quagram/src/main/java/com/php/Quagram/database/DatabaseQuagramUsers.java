@@ -1,7 +1,5 @@
 package com.php.Quagram.database;
 
-import java.io.File;
-import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -242,7 +240,7 @@ public class DatabaseQuagramUsers {
 		return null;
 	}
 	
-public String getUsernameForSessionID(String sessionID) {
+	public String getUsernameForSessionID(String sessionID) {
 		
 		try {
 			databaseConnection.statement = databaseConnection.connection.createStatement();
@@ -263,17 +261,62 @@ public String getUsernameForSessionID(String sessionID) {
 		return null;
 	}
 	
+	public ArrayList<User> getUserForMatchSessionID(String matchSessionID) {
+		try {
+			databaseConnection.statement = databaseConnection.connection.createStatement();
+			
+			String sql = "select * from user where match_session_id='" + matchSessionID + "';";
+			ResultSet rs = databaseConnection.statement.executeQuery(sql);
+			
+			ArrayList<User> matchSessionUsers = new ArrayList<>();
+			
+			while (rs.next()) {
+				String id = rs.getString("instagram_id");
+				String accessToken = rs.getString("access_token");
+				String sessionID = rs.getString("session_id");
+				String username = rs.getString("username");
+				int gamesLost = rs.getInt("games_lost");
+				int gamesWon = rs.getInt("games_won");
+				
+				User user = new User();
+				user.setSessionID(id);
+				user.setAccessToken(accessToken);
+				user.setSessionID(sessionID);
+				user.setUsername(username);
+				user.setGamesLost(gamesLost);
+				user.setGamesWin(gamesWon);
+				matchSessionUsers.add(user);
+			}
+			
+			return matchSessionUsers;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	public void addMatchSessionIDToUser(String sessionID, String matchSessionID) {
 		
 		try {
 			databaseConnection.statement = databaseConnection.connection.createStatement();
 			
-			//TODO: vorher muss eine MatchSessionID generiert werden
-			
 			String sql;
 			sql = "update user set match_session_id='" + matchSessionID + "' where session_id='" + sessionID + "'";
 			int result = databaseConnection.statement.executeUpdate(sql);
 			System.out.println("Match SessionID zu user hinzugefügt: " + result);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void leaveMatchSession(String sessionID, String matchSessionID) {
+		try {
+			databaseConnection.statement = databaseConnection.connection.createStatement();
+			//TODO: ACHTUNG HIER WIRD NICHT AUF DIE MATCHSESSIONID EINGEGANGEN !!?!!
+			String sql = "update user set match_session_id=null where session_id='" + sessionID +"'";
+			int result = databaseConnection.statement.executeUpdate(sql);
+			System.out.println("Match Session Leave-Status: " + result);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

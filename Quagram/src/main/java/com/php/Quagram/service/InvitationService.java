@@ -50,6 +50,7 @@ public class InvitationService {
 		invitation.setHostUserID(hostUser.getInstagramID());
 		invitation.setMatchSessionID(matchSessionID);
 		
+		dbUsers.addMatchSessionIDToUser(hostSessionID, matchSessionID);
 		appendInvitationToUser(userToInvite, invitation);
 		
 		return invitation;
