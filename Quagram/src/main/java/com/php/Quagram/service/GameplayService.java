@@ -1,10 +1,14 @@
 package com.php.Quagram.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import org.json.JSONObject;
 
 import com.php.Quagram.database.DatabaseQuagramCards;
 import com.php.Quagram.database.DatabaseQuagramGamePlay;
 import com.php.Quagram.database.DatabaseQuagramMatchSessionCard;
+import com.php.Quagram.database.DatabaseQuagramRound;
 import com.php.Quagram.database.DatabaseQuagramUsers;
 import com.php.Quagram.model.Card;
 import com.php.Quagram.model.Gameplay;
@@ -15,6 +19,8 @@ public class GameplayService {
 	DatabaseQuagramUsers dbUsers = new DatabaseQuagramUsers();
 	DatabaseQuagramCards dbCards = new DatabaseQuagramCards();
 	DatabaseQuagramMatchSessionCard dbMatchSessionCard = new DatabaseQuagramMatchSessionCard();
+	DatabaseQuagramGamePlay dbGameplay = new DatabaseQuagramGamePlay();
+	DatabaseQuagramRound dbRound = new DatabaseQuagramRound();
 	
 	public String getGameplay(String sessionID, String matchSessionID) {
 		createGameplayIfNecessaryForMatchSessionID(matchSessionID, sessionID);
@@ -89,4 +95,94 @@ public class GameplayService {
 		
 		new DatabaseQuagramGamePlay().addGameplay(gameplay);
 	}
+	
+	
+	
+	/*
+	 *
+	 *	Methoden für GameplayServlet
+	 *
+	 * */
+	public JSONObject getGameplayRoundJSON(String sessionID, String gameplayID) {
+		String userID = dbUsers.getInstagramIDForSessionID(sessionID);
+		Card userCard = getCardToPlay(gameplayID, userID);
+		String usernameWhoHasNextTurn = getUsernameWhoHasNextTurn(gameplayID);
+		HashMap<String, Integer> gameplayInfo = createGameplayInfos(gameplayID);
+		Gameplay gameplay = dbGameplay.getGameplay(gameplayID);
+		int numberOfMaxRounds = gameplay.getTotalNumberOfTurns();
+		int currentRound = gameplay.getCurrentTurnNumber();
+		
+		JSONClientOutput jsonOutput = new JSONClientOutput();
+		JSONObject gameplayJSON = jsonOutput.createGameplayJSON(usernameWhoHasNextTurn, userCard, gameplayInfo, numberOfMaxRounds, currentRound);
+		
+		return gameplayJSON;
+	}
+	
+	private Boolean hasGameplayFinished(String gameplayID) {
+		Gameplay gameplay = dbGameplay.getGameplay(gameplayID);
+		return gameplay.getCurrentTurnNumber() == gameplay.getTotalNumberOfTurns();
+	}
+	
+	private String getUsernameWhoHasNextTurn(String gameplayID) {
+		String playerIdWhoHasNextTurn = getPlayerIdWhoHasNextTurn(gameplayID);
+		return getUsernameForPlayerID(playerIdWhoHasNextTurn);
+	}
+	
+	private String getPlayerIdWhoHasNextTurn(String gameplayID) {
+		ArrayList<String> winnerInRounds = dbRound.getWinnersForGameplay(gameplayID);
+		return winnerInRounds.get(winnerInRounds.size()-1);
+	}
+	
+	private String getUsernameForPlayerID(String instagramID) {
+		return dbUsers.getUserForInstagramID(instagramID).getUsername();
+	}
+	
+	private HashMap<String, Integer> createGameplayInfos(String gameplayID) {
+		ArrayList<String> winnerInRounds = dbRound.getWinnersForGameplay(gameplayID);
+		ArrayList<String> winnerUsernamesInRound = new ArrayList<>();
+		
+		for(String winner: winnerInRounds) {
+			String username = getUsernameForPlayerID(winner);
+			winnerUsernamesInRound.add(username);
+		}
+		
+		HashMap<String, Integer> result = new HashMap<>();
+		
+		for(String winnerUsername: winnerUsernamesInRound) {
+			if (result.containsKey(winnerUsername)) {
+				int oldValue = result.get(winnerUsername);
+				int newValue = oldValue + 1;
+				result.put(winnerUsername, newValue);
+			} else {
+				result.put(winnerUsername, 1);
+			}
+		}
+		
+		return result;
+	}
+	
+	public Card getCardToPlay(String matchSessionID, String instagramID) {
+		Gameplay gameplay = dbGameplay.getGameplay(matchSessionID);
+		int currentTurn = gameplay.getCurrentTurnNumber();
+		String cardID = dbGameplay.getCardID(matchSessionID, instagramID, currentTurn);
+		
+		for(Card card: dbCards.getCardsForUserInstagramID(instagramID)) {
+			System.out.println("\tCARD ID: " + card.getId());
+			if(card.getId().equals(cardID)) {
+				return card;
+			}
+		}
+		
+		return null;
+	}
+	
+	
+	
  }
+
+
+
+
+
+
+

@@ -11,6 +11,10 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.json.JSONObject;
+
+import com.php.Quagram.database.DatabaseQuagramGamePlay;
+import com.php.Quagram.database.DatabaseQuagramRound;
 import com.php.Quagram.model.User;
 import com.php.Quagram.service.GameplayService;
 import com.php.Quagram.service.LobbyService;
@@ -69,9 +73,18 @@ public class LobbyResource {
 //		DatabaseQuagramCards dbCard = new DatabaseQuagramCards();
 //		dbCard.addCard(card, "5894207441");
 		
+		//GameplayService service = new GameplayService();
+		//service.getGameplay("30be6033-36d1-46bb-8152-65de48be641b", "e076c7a3-3965-4e0b-b3b1-89365c097793");
+		
+//		new DatabaseQuagramGamePlay().addWinnerForRoundInGameplayID("e076c7a3-3965-4e0b-b3b1-89365c097793", "1429667371");
+		
+		//new DatabaseQuagramRound().addTurnForGameplay("1429667371", "e076c7a3-3965-4e0b-b3b1-89365c097793");
+		//String cardID = new DatabaseQuagramGamePlay().getCardID("e076c7a3-3965-4e0b-b3b1-89365c097793", "1429667371", 2);
+		
 		GameplayService service = new GameplayService();
-		service.getGameplay("30be6033-36d1-46bb-8152-65de48be641b", "e076c7a3-3965-4e0b-b3b1-89365c097793");
-		return "Dummy erfolgreich ausgeführt";
+		JSONObject object = service.getGameplayRoundJSON("23a80f93-ac97-4a30-bdba-54b6b8fae225", "e076c7a3-3965-4e0b-b3b1-89365c097793");
+		
+		return "Dummy erfolgreich ausgeführt - " + object;
 	}
 }
 

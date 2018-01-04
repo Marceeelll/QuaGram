@@ -2,6 +2,10 @@ package com.php.Quagram.database;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import javax.activation.DataContentHandler;
+
+import com.php.Quagram.model.Card;
 import com.php.Quagram.model.Gameplay;
 
 public class DatabaseQuagramGamePlay {
@@ -30,6 +34,28 @@ public class DatabaseQuagramGamePlay {
 			}
 			return gameplay;
 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public String getCardID(String matchSessionID, String instagramID, int turn) {
+		try {
+			databaseConnection.statement = databaseConnection.connection.createStatement();
+			
+			String sql = "select * from match_session_card where ";
+			sql += "match_session_id='" + matchSessionID + "' and ";
+			sql += "turn='" + turn  + "' and ";
+			sql += "instagram_id='" + instagramID + "'";
+			ResultSet result = databaseConnection.statement.executeQuery(sql);
+			
+			if (result.next()) {
+				String cardID = result.getString("card_pic_id");
+				return cardID;
+			}
+			
+			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -68,6 +94,46 @@ public class DatabaseQuagramGamePlay {
 			e.printStackTrace();
 		}
 	}
+	
+	/*
+	public int currentRoundInGameplayID(String gameplayID) {
+		try {
+			databaseConnection.statement = databaseConnection.connection.createStatement();
+			
+			String sql = "select * from turn where gameplay_id='" + gameplayID + "'";
+			
+			ResultSet result = databaseConnection.statement.executeQuery(sql);
+			
+			int currentRound = 0;
+			
+			while (result.next()) {
+				currentRound += 1;
+			}
+			
+			return currentRound;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	
+	public void addWinnerForRoundInGameplayID(String gameplayID, String winnerUserID) {
+		try {
+			databaseConnection.statement = databaseConnection.connection.createStatement();
+			
+			String sql = "insert into turn values (";
+			sql += "'" + gameplayID + "',";
+			sql += "'" + winnerUserID + "'";
+			sql += ")";
+			
+			int result = databaseConnection.statement.executeUpdate(sql);
+			System.out.println("Inserted Winner Status: " + result);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	*/
+	
 	/*
 	public void deleteGameplay(String gameplayID) {
 		try {

@@ -1,6 +1,7 @@
 package com.php.Quagram.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -66,7 +67,39 @@ public class JSONClientOutput {
 		
 		return cardObject;
 	}
+	
+	public JSONObject createGameplayJSON(String usernamePlayerInTurn,
+									Card cardToPlay,
+									HashMap<String, Integer> usersInGame,
+									int numberOfMaxRounds,
+									int currentRound) {
+		JSONObject gameplayObject = new JSONObject();
+		
+		gameplayObject.put("username_of_player_in_turn", usernamePlayerInTurn);
+		gameplayObject.put("number_of_max_rounds", numberOfMaxRounds);
+		gameplayObject.put("current_round", currentRound);
+		gameplayObject.put("card", parseCardToJSON(cardToPlay));
+		
+		JSONArray userGameplayInfos = new JSONArray();
+		for (String username: usersInGame.keySet()) {
+			int wonRounds = usersInGame.get(username);
+			JSONObject userGameplayInfo = new JSONObject();
+			userGameplayInfo.put("username", username);
+			userGameplayInfo.put("won_rounds", wonRounds);
+			userGameplayInfos.put(userGameplayInfo);
+		}
+		
+		gameplayObject.put("userGameplayInfos", userGameplayInfos);
+		
+		return gameplayObject;
+	}
 }
+
+
+
+
+
+
 
 
 

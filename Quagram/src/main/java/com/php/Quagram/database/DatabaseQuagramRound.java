@@ -32,7 +32,7 @@ public class DatabaseQuagramRound {
 		return new ArrayList<>();
 	}
 	
-	public void addTurnForGameplay(User winnerID, String gameplayID) {
+	public void addTurnForGameplay(String winnerID, String gameplayID) {
 		try {
 			databaseConnection.statement = databaseConnection.connection.createStatement();
 			String sql;
