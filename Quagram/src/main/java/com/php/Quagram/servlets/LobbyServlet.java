@@ -31,6 +31,8 @@ public class LobbyServlet extends HttpServlet {
 		//encoding must be set to UTF-8
 		response.setCharacterEncoding("UTF-8");
 		
+		response.setIntHeader("Refresh", 3);
+		
 		String sessionID = request.getParameter("sessionID");
 
 		PrintWriter printwriter = null;

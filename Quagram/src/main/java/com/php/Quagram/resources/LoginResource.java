@@ -9,7 +9,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.json.JSONObject;
+
 import com.php.Quagram.model.User;
+import com.php.Quagram.service.JSONClientOutput;
 import com.php.Quagram.service.LoginService;
 
 import others.CardDownloadController;
@@ -30,14 +33,14 @@ public class LoginResource {
 	}
 	
 	@GET
-	public User userDidAllowedPermissions(@QueryParam("code") String code) {
+	public String userDidAllowedPermissions(@QueryParam("code") String code) {
 		String currentUserJSONRespond = loginService.requestAccessToken(code);
 		User instagramJSONRespondUser = jsonService.parseUserAfterLogin(currentUserJSONRespond);
 		User user = loginService.loginUser(instagramJSONRespondUser);
 		CardDownloadController cardDownloadController = new CardDownloadController();
 		System.out.println("Accesssssss Token: " + user.getAccessToken());
 		cardDownloadController.downloadCardsForUserAndSafeToDB(user.getAccessToken(), user.getInstagramID());
-		return user;
+		return "" + new JSONClientOutput().parseLoginUserWithSessionID(user);
 	}
 	
 	@PUT

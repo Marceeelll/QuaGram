@@ -21,6 +21,7 @@ public class JSONClientOutput {
 		result.put("username", user.getUsername());
 		result.put("sessionID", user.getSessionID());
 		
+		System.out.println("MAAARCEL:) -- " + result);
 		return result;
 	}
 	

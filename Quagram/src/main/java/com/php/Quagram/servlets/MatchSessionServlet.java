@@ -30,6 +30,8 @@ public class MatchSessionServlet extends HttpServlet {
 		//encoding must be set to UTF-8
 		response.setCharacterEncoding("UTF-8");
 		
+		response.setIntHeader("Refresh", 3);
+		
 		String matchSessionID = request.getParameter("matchSessionID");
 		
 		PrintWriter printwriter = null;
