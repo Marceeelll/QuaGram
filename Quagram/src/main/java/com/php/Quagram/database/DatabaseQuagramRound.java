@@ -37,10 +37,12 @@ public class DatabaseQuagramRound {
 			databaseConnection.statement = databaseConnection.connection.createStatement();
 			String sql;
 			
-			sql = "insert into turn values (";
+			sql = "insert into turn values(";
 			sql += "'" + gameplayID + "',";
 			sql += "'" + winnerID + "'";
 			sql += ")";
+			
+			System.out.println("SQQQQQQL: " + sql);
 			
 			int result = databaseConnection.statement.executeUpdate(sql);
 			System.out.println("Inserted Turn (addTurnForGameplay): " +result);

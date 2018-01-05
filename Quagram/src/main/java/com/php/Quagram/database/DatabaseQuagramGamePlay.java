@@ -14,7 +14,7 @@ public class DatabaseQuagramGamePlay {
 	public Gameplay getGameplay(String gameID) {
 		try {
 			databaseConnection.statement = databaseConnection.connection.createStatement();
-			
+			System.out.println("Get gameplayID die falsch ist: " + gameID);
 			String sql;
 			sql = "select * from gameplay where gameplay_id='" + gameID + "'";
 			ResultSet result = databaseConnection.statement.executeQuery(sql);
@@ -34,6 +34,7 @@ public class DatabaseQuagramGamePlay {
 			}
 			return gameplay;
 
+		} catch (NullPointerException e) {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

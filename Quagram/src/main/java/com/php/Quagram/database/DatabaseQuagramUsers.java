@@ -58,9 +58,13 @@ public class DatabaseQuagramUsers {
 				user.setUsername(username);
 				user.setGamesLost(gamesLost);
 				user.setGamesWin(gamesWon);
+				
+				rs.close();
 				return user;
 			}
 
+		} catch(NullPointerException e) {
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -90,9 +94,13 @@ public class DatabaseQuagramUsers {
 				user.setUsername(username);
 				user.setGamesLost(gamesLost);
 				user.setGamesWin(gamesWon);
+				
+				rs.close();
 				return user;
 			}
 
+		} catch(NullPointerException e) {
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -126,8 +134,12 @@ public class DatabaseQuagramUsers {
 				user.setGamesWin(gamesWon);
 				lobbyUser.add(user);
 			}
+			
+			rs.close();
 			return lobbyUser;
 
+		} catch(NullPointerException e) {
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -167,7 +179,11 @@ public class DatabaseQuagramUsers {
 			databaseConnection.statement = databaseConnection.connection.createStatement();
 			String sql = "select * from user where session_id='" + sessionID + "'";
 			ResultSet result = databaseConnection.statement.executeQuery(sql);
-			return result.next();
+			Boolean next = result.next();
+			result.close();
+			return next;
+		} catch(NullPointerException e) {
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -210,9 +226,13 @@ public class DatabaseQuagramUsers {
 				user.setUsername(username);
 				user.setGamesLost(gamesLost);
 				user.setGamesWin(gamesWon);
+				
+				rs.close();
 				return user;
 			}
 
+		} catch(NullPointerException e) {
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -231,9 +251,12 @@ public class DatabaseQuagramUsers {
 			if (rs.next()) {
 				String id = rs.getString("instagram_id");
 				
+				rs.close();
 				return id;
 			}
 
+		} catch(NullPointerException e) {
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -252,9 +275,12 @@ public class DatabaseQuagramUsers {
 			if (rs.next()) {
 				String id = rs.getString("username");
 				
+				rs.close();
 				return id;
 			}
 
+		} catch(NullPointerException e) {
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -288,7 +314,10 @@ public class DatabaseQuagramUsers {
 				matchSessionUsers.add(user);
 			}
 			
+			rs.close();
 			return matchSessionUsers;
+			
+		} catch(NullPointerException e) {
 			
 		} catch (Exception e) {
 			e.printStackTrace();

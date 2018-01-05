@@ -12,6 +12,18 @@ import com.php.Quagram.model.Invitation;
 import com.php.Quagram.model.User;
 
 public class JSONClientOutput {
+	public JSONObject parseLoginUserWithSessionID(User user) {
+		JSONObject result = new JSONObject();
+		
+		result.put("gamesLost", user.getGamesLost());
+		result.put("gamesWin", user.getGamesWin());
+		result.put("instagramID", user.getInstagramID());
+		result.put("username", user.getUsername());
+		result.put("sessionID", user.getSessionID());
+		
+		return result;
+	}
+	
 	public JSONArray parseUserArrayListToJSON(ArrayList<User> users, String withoutSessionID) {
 		JSONArray userArray = new JSONArray();
 		
