@@ -86,6 +86,59 @@ public class DatabaseQuagramInvitations {
 		}
 	}
 	
+	public void deleteInvitation(String matchSessionID) {
+		try {
+			databaseConnection.statement = databaseConnection.connection.createStatement();
+			String sql;
+			
+			sql = "delete from invitation where ";
+			sql += "match_session_id='" + matchSessionID + "'";
+			
+			int result = databaseConnection.statement.executeUpdate(sql);
+			System.out.println("Delete Invitation (deleteInvitation): " + result);
+		} catch (SQLException e) {
+			// if contains id already -> make update instead of insert 
+			e.printStackTrace();
+		}
+	}
+	
+	public void deleteAllInvitationsFromUserID(String userID) {
+		deleteInvitationWithHostID(userID);
+		deleteInvitationWithReceiverID(userID);
+	}
+	
+	public void deleteInvitationWithReceiverID(String receiverID) {
+		try {
+			databaseConnection.statement = databaseConnection.connection.createStatement();
+			String sql;
+			
+			sql = "delete from invitation where ";
+			sql += "receiver_id='" + receiverID + "'";
+			
+			int result = databaseConnection.statement.executeUpdate(sql);
+			System.out.println("Delete Invitation (deleteInvitation): " + result);
+		} catch (SQLException e) {
+			// if contains id already -> make update instead of insert 
+			e.printStackTrace();
+		}
+	}
+	
+	public void deleteInvitationWithHostID(String hostID) {
+		try {
+			databaseConnection.statement = databaseConnection.connection.createStatement();
+			String sql;
+			
+			sql = "delete from invitation where ";
+			sql += "host_user_id='" + hostID + "'";
+			
+			int result = databaseConnection.statement.executeUpdate(sql);
+			System.out.println("Delete Invitation (deleteInvitation): " + result);
+		} catch (SQLException e) {
+			// if contains id already -> make update instead of insert 
+			e.printStackTrace();
+		}
+	}
+	
 	public boolean doesInvitationExist(String hostID, String receiverID) {
 		
 		try {

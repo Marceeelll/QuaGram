@@ -32,6 +32,8 @@ public class GameplayService {
 	private void makeMatchIDToGameplayID(String matchSessionID) {
 		ArrayList<User> usersInMatchSession = dbUsers.getUserForMatchSessionID(matchSessionID);
 		for(User user: usersInMatchSession) {
+			// TODO: alte gameplays löschen !!!
+			asd
 			dbUsers.addGameplayIDToUser(user.getInstagramID(), matchSessionID);
 		}
 	}
@@ -138,6 +140,8 @@ public class GameplayService {
 		String roundWinner = getWinnerIDForGameplayID(gameplayID, cardAttribute);
 		incrementRound(gameplayID);
 		
+		// TODO: hier nur Status zurück geben ob alles geklappt hat
+		// 		 Der Client muss dann die Anzeige logik übernehmen
 		return "Post :) - Der Gewinner ist: " + roundWinner;
 	}
 	

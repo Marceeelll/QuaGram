@@ -47,6 +47,7 @@ public class LoginResource {
 	@Path("logout/{sessionID}")
 	public String loggout(@PathParam("sessionID") String sessionID) {
 		int result = loginService.logoutUser(sessionID);
+		System.out.println("LOGOUT: " + result);
 		if (result == 1) {
 			return "Succesfully logged out!";
 		} else {

@@ -126,7 +126,7 @@ public class JSONService {
 		JSONObject object = new JSONObject(respond).getJSONObject("weatherObservation");
 		int elevation = object.getInt("elevation");
 		String temperature = object.getString("temperature");
-		int temperatureInt = Integer.valueOf(temperature);
+		int temperatureInt = Double.valueOf(temperature).intValue();
 		int humidity = object.getInt("humidity");
 		String windSpeed = object.getString("windSpeed");
 		int windSpeedInt = Integer.valueOf(windSpeed);

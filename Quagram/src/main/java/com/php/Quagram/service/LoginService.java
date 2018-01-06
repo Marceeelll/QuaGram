@@ -20,12 +20,14 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 
 import com.php.Quagram.database.DatabaseQuagramInvitations;
+import com.php.Quagram.database.DatabaseQuagramMatchSessionCard;
 import com.php.Quagram.database.DatabaseQuagramUsers;
 import com.php.Quagram.model.User;
 
 public class LoginService {
 	DatabaseQuagramUsers dbUsers = new DatabaseQuagramUsers();
 	DatabaseQuagramInvitations dbInvitations = new DatabaseQuagramInvitations();
+	DatabaseQuagramMatchSessionCard dbMatchSessionCards = new DatabaseQuagramMatchSessionCard();
 	
 	private String clientID = "334bddc7b37f437dbb709f44661dc458";
 	private String redirectURI = "http://localhost:8080/Quagram/webapi/registration";
@@ -106,6 +108,10 @@ public class LoginService {
 	
 	public int logoutUser(String sessionID) {
 		int result = dbUsers.logoutUser(sessionID);
+		if (result == 1) {
+			String userID = dbUsers.getInstagramIDForSessionID(sessionID);
+			dbInvitations.deleteAllInvitationsFromUserID(userID);
+		}
 		return result;
 	}
 

@@ -194,7 +194,7 @@ public class DatabaseQuagramUsers {
 	public int logoutUser(String sessionID) {
 		try {
 			databaseConnection.statement = databaseConnection.connection.createStatement();
-			String sql = "update user set session_id=NULL where session_id='" + sessionID + "'";
+			String sql = "update user set match_session_id=null and game_id=null and is_in_lobby=0 where session_id='" + sessionID + "'";
 			int result = databaseConnection.statement.executeUpdate(sql);
 			return result;
 		} catch (SQLException e) {
@@ -360,6 +360,7 @@ public class DatabaseQuagramUsers {
 			
 			String sql;
 			sql = "update user set game_id='" + gameplayID + "' where instagram_id='" + instagramID + "'";
+			System.out.println("VOR der EXCELPTION: sql: " +sql);
 			int result = databaseConnection.statement.executeUpdate(sql);
 			System.out.println("GameplayID zu user hinzugefügt: " + result);
 		} catch (Exception e) {

@@ -70,7 +70,7 @@ public class DatabaseQuagramMatchSessionCard {
 			String sql;
 			sql = "delete from match_session_card where match_session_id='" + matchSessionID + "'";
 			int result = databaseConnection.statement.executeUpdate(sql);
-			System.out.println("MatchSessionCards gelöscht: " + result);
+			System.out.println("MatchSessionCards gelöscht: " + result + "--- " + sql);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
