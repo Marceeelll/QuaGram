@@ -15,7 +15,7 @@ public class DatabaseQuagramUsers {
 	}
 	
 	private void addUser(User user, Boolean shouldInsert) {
-		System.out.println("Creating statement");
+		System.out.println("Creating statement - " + shouldInsert);
 		
 		try {
 			databaseConnection.statement = databaseConnection.connection.createStatement();
@@ -86,6 +86,7 @@ public class DatabaseQuagramUsers {
 				String username = rs.getString("username");
 				int gamesLost = rs.getInt("games_lost");
 				int gamesWon = rs.getInt("games_won");
+				String profilePictureID = rs.getString("profile_pic");
 				
 				User user = new User();
 				user.setInstagramID(id);
@@ -94,6 +95,7 @@ public class DatabaseQuagramUsers {
 				user.setUsername(username);
 				user.setGamesLost(gamesLost);
 				user.setGamesWin(gamesWon);
+				user.setProfilePic(profilePictureID);
 				
 				rs.close();
 				return user;

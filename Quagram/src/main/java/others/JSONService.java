@@ -29,6 +29,9 @@ public class JSONService {
 		PictureController pictureController = new PictureController();
 		String imageName = pictureController.saveImageToFilesystem(profilePictureURL);
 		
+		System.out.println("Profile Picture URL: " + profilePictureURL);
+		System.out.println("IMAGE-NAME: " + imageName);
+		
 		User user = new User();
 		user.setAccessToken(accessToken);
 		user.setUsername(username);
@@ -37,6 +40,8 @@ public class JSONService {
 		UUID sessionID = UUID.randomUUID();
 		user.setSessionID(sessionID.toString());
 		// TODO: profilePictureURL wird noch nicht verwendet
+		
+		System.out.println("USER-PROFILE-PIC: " + user.getProfilePic());
 		
 		return user;
 	}

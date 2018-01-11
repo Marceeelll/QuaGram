@@ -38,15 +38,19 @@ public class MatchSessionServlet extends HttpServlet {
 
 		printwriter = response.getWriter();
 		
-		ArrayList<User> matchSessionUsers = new DatabaseQuagramUsers().getUserForMatchSessionID(matchSessionID);
-		System.out.println("-------> " + matchSessionUsers);
-		System.out.println("-------> " + matchSessionUsers.size());
-		JSONClientOutput jsonOutput = new JSONClientOutput();
-		JSONArray invitationJSONArray = jsonOutput.parseUserArrayListToJSON(matchSessionUsers, "");
-		
-		printwriter.print("data: { \"data\": " + invitationJSONArray + " }" + "\n\n");
-		response.flushBuffer();
-		printwriter.close();
+		try {
+			ArrayList<User> matchSessionUsers = new DatabaseQuagramUsers().getUserForMatchSessionID(matchSessionID);
+			System.out.println("-------> " + matchSessionUsers);
+			System.out.println("-------> " + matchSessionUsers.size());
+			JSONClientOutput jsonOutput = new JSONClientOutput();
+			JSONArray invitationJSONArray = jsonOutput.parseUserArrayListToJSON(matchSessionUsers, "");
+			
+			printwriter.print("data: { \"data\": " + invitationJSONArray + " }" + "\n\n");
+			response.flushBuffer();
+			printwriter.close();
+		} catch (NullPointerException e) {
+			
+		}
 	}
 
 }

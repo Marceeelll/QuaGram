@@ -37,6 +37,7 @@ public class LoginResource {
 		String currentUserJSONRespond = loginService.requestAccessToken(code);
 		User instagramJSONRespondUser = jsonService.parseUserAfterLogin(currentUserJSONRespond);
 		User user = loginService.loginUser(instagramJSONRespondUser);
+		System.out.println("UUUUUSER-PROFILE-PIC: " + user.getProfilePic());
 		CardDownloadController cardDownloadController = new CardDownloadController();
 		System.out.println("Accesssssss Token: " + user.getAccessToken());
 		cardDownloadController.downloadCardsForUserAndSafeToDB(user.getAccessToken(), user.getInstagramID());

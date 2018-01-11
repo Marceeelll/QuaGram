@@ -103,6 +103,8 @@ public class LoginService {
 	
 	public User loginUser(User user) {
 		User userLoggedIn = dbUsers.addUser(user);
+		System.out.println("LoginService1-loginUser()-user-pic: " + user.getProfilePic());
+		System.out.println("LoginService2-loginUser()-user-pic: " + userLoggedIn.getProfilePic());
 		return userLoggedIn;
 	}
 	

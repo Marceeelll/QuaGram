@@ -32,15 +32,19 @@ public class GameplayServlet extends HttpServlet {
 		String sessionID = request.getParameter("sessionID");
 		String matchSessionID = request.getParameter("matchSessionID");
 		
-		JSONObject gameplayRoundJSON = new GameplayService().getGameplayRoundJSON(sessionID, matchSessionID); 
-		
-		PrintWriter printwriter = null;
+		try {
+			JSONObject gameplayRoundJSON = new GameplayService().getGameplayRoundJSON(sessionID, matchSessionID); 
+			
+			PrintWriter printwriter = null;
 
-		printwriter = response.getWriter();
-		
-		printwriter.print("data: { \"data\": " + gameplayRoundJSON + " }" + "\n\n");
-		response.flushBuffer();
-		printwriter.close();
+			printwriter = response.getWriter();
+			
+			printwriter.print("data: { \"data\": " + gameplayRoundJSON + " }" + "\n\n");
+			response.flushBuffer();
+			printwriter.close();
+		} catch (NullPointerException e) {
+			
+		}
 	}
 
 }

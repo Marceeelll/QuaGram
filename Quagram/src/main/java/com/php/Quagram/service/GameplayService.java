@@ -174,6 +174,8 @@ public class GameplayService {
 		ArrayList<String> validAttributeNames = new ArrayList<>();
 		validAttributeNames.add("likes");
 		validAttributeNames.add("comments");
+		validAttributeNames.add("temperature");
+		validAttributeNames.add("height");
 		
 		Boolean isValid = false;
 		
@@ -216,6 +218,18 @@ public class GameplayService {
 						winnerID = userID;
 					}
 					break;
+				case "temperature":
+					if (Math.abs(winnerCard.getTemperature()) < Math.abs(card.getTemperature())) {
+						winnerCard = card;
+						winnerID = userID;
+					}
+					break;
+				case "height":
+					if (winnerCard.getHeightMeter() < card.getHeightMeter()) {
+						winnerCard = card;
+						winnerID = userID;
+					}
+					break;
 				default:
 					break;
 				}
@@ -243,16 +257,21 @@ public class GameplayService {
 	public JSONObject getGameplayRoundJSON(String sessionID, String gameplayID) {
 		String userID = dbUsers.getInstagramIDForSessionID(sessionID);
 		Card userCard = getCardToPlay(gameplayID, userID);
+		// TODO: 🚨⚠️ wenn das Gameplay zu Ende ist, steht in der nachfolgenden Zeile --> null
 		String usernameWhoHasNextTurn = getUsernameWhoHasNextTurn(gameplayID);
-		HashMap<String, Integer> gameplayInfo = createGameplayInfos(gameplayID);
-		Gameplay gameplay = dbGameplay.getGameplay(gameplayID);
-		int numberOfMaxRounds = gameplay.getTotalNumberOfTurns();
-		int currentRound = gameplay.getCurrentTurnNumber();
-		
-		JSONClientOutput jsonOutput = new JSONClientOutput();
-		JSONObject gameplayJSON = jsonOutput.createGameplayJSON(usernameWhoHasNextTurn, userCard, gameplayInfo, numberOfMaxRounds, currentRound);
-		
-		return gameplayJSON;
+		if (usernameWhoHasNextTurn != null) {
+			HashMap<String, Integer> gameplayInfo = createGameplayInfos(gameplayID);
+			Gameplay gameplay = dbGameplay.getGameplay(gameplayID);
+			int numberOfMaxRounds = gameplay.getTotalNumberOfTurns();
+			int currentRound = gameplay.getCurrentTurnNumber();
+			
+			JSONClientOutput jsonOutput = new JSONClientOutput();
+			JSONObject gameplayJSON = jsonOutput.createGameplayJSON(usernameWhoHasNextTurn, userCard, gameplayInfo, numberOfMaxRounds, currentRound);
+			
+			return gameplayJSON;
+		} else {
+			return new JSONObject();
+		}
 	}
 	
 	private Boolean checkIfIsLastGameplayRound(String gameplayID) {
@@ -336,7 +355,12 @@ public class GameplayService {
 	}
 	
 	private String getUsernameForPlayerID(String instagramID) {
-		return dbUsers.getUserForInstagramID(instagramID).getUsername();
+		User user = dbUsers.getUserForInstagramID(instagramID);
+		if (user != null) {
+			String username = user.getUsername();
+			return username;
+		} 
+		return null;
 	}
 	
 	private HashMap<String, Integer> createGameplayInfos(String gameplayID) {
@@ -365,14 +389,16 @@ public class GameplayService {
 	
 	public Card getCardToPlay(String matchSessionID, String instagramID) {
 		Gameplay gameplay = dbGameplay.getGameplay(matchSessionID);
-		int currentTurn = gameplay.getCurrentTurnNumber();
-		String cardID = dbGameplay.getCardID(matchSessionID, instagramID, currentTurn);
-		
-		for(Card card: dbCards.getCardsForUserInstagramID(instagramID)) {
-			if(card.getId().equals(cardID)) {
-				System.out.println("\tCARD ID: " + card.getId() + " turn: " + currentTurn + " likes: " + card.getLikes());
-				return card;
-			}
+		if (gameplay != null) {
+			int currentTurn = gameplay.getCurrentTurnNumber();
+			String cardID = dbGameplay.getCardID(matchSessionID, instagramID, currentTurn);
+			
+			for(Card card: dbCards.getCardsForUserInstagramID(instagramID)) {
+				if(card.getId().equals(cardID)) {
+					System.out.println("\tCARD ID: " + card.getId() + " turn: " + currentTurn + " likes: " + card.getLikes());
+					return card;
+				}
+			}			
 		}
 		
 		return null;
