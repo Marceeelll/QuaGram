@@ -383,5 +383,97 @@ public class DatabaseQuagramUsers {
 			e.printStackTrace();
 		}
 	}
+	
+	public void incrementGameLostFromUser(String sessionID) {
+		int lostGames = getLostGamesFromUser(sessionID);
+		if (lostGames != -1) {
+			lostGames += 1;
+			try {
+				databaseConnection.statement = databaseConnection.connection.createStatement();
+				
+				String sql = "update user set games_lost=" + lostGames + " where session_id='" + sessionID + "';";
+				int result = databaseConnection.statement.executeUpdate(sql);
+				System.out.println("incrementGameLostFromUser: " + result);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public int getLostGamesFromUser(String sessionID) {
+		try {
+			databaseConnection.statement = databaseConnection.connection.createStatement();
+			
+			String sql;
+			sql = "select games_lost from user where session_id='" + sessionID + "'";
+			ResultSet rs = databaseConnection.statement.executeQuery(sql);
+			
+			if (rs.next()) {
+				int lostGames = rs.getInt("games_lost");
+				
+				rs.close();
+				return lostGames;
+			}
+
+		} catch(NullPointerException e) {
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	
+	public void incrementGameWonFromUser(String sessionID) {
+		int wonGames = getWonGamesFromUser(sessionID);
+		
+		if (wonGames != -1) {
+			wonGames += 1;
+			try {
+				databaseConnection.statement = databaseConnection.connection.createStatement();
+				
+				String sql = "update user set games_won=" + wonGames + " where session_id='" + sessionID + "';";
+				int result = databaseConnection.statement.executeUpdate(sql);
+				System.out.println("incrementGameLostFromUser: " + result);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public int getWonGamesFromUser(String sessionID) {
+		try {
+			databaseConnection.statement = databaseConnection.connection.createStatement();
+			
+			String sql;
+			sql = "select games_won from user where session_id='" + sessionID + "'";
+			ResultSet rs = databaseConnection.statement.executeQuery(sql);
+			
+			if (rs.next()) {
+				int wonGames = rs.getInt("games_won");
+				
+				rs.close();
+				return wonGames;
+			}
+
+		} catch(NullPointerException e) {
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	
+	public void setUserAttribetuToNull(String attribute, String sessionID) {
+		try {
+			databaseConnection.statement = databaseConnection.connection.createStatement();
+			
+			String sql = "update user set " + attribute + "=null where session_id='" + sessionID + "';";
+			int result = databaseConnection.statement.executeUpdate(sql);
+			System.out.println("incrementGameLostFromUser: " + result);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 }
+

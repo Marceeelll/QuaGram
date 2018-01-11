@@ -33,11 +33,14 @@ public class PictureDownloadResource implements IFileService {
 	
 	//http://localhost:8080/Quagram/webapi/picture/{card_picture_id} ??
 	@GET
-	@Path("/{picture_id}")
+	@Path("/{pictureID}")
 	@Produces({"image/png", "image/jpg", "image/gif"}) //Welcher Typ kommt von Instagram zurück?
 	public Response downloadImageFile(@PathParam("pictureID") String pictureID) {
+		String path = "/Users/marcelhagmann/Desktop/DownloadFromInternet/";
 		
-		File file = new File(""); //Hier muss das Image von Instagram rein
+		File file = new File(path + pictureID); //pictureID); // Hier muss das Image von Instagram rein
+		
+		System.out.println("PATH: ------ " + path + pictureID);
 		
 		ResponseBuilder responseBuilder = Response.ok((Object) file);
 		responseBuilder.header("Content-Disposition", "attachment; filename=\"MyImageFile.png\"");

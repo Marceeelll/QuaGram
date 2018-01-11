@@ -95,7 +95,8 @@ public class JSONClientOutput {
 		
 		JSONArray userGameplayInfos = new JSONArray();
 		for (String username: usersInGame.keySet()) {
-			int wonRounds = usersInGame.get(username);
+			// -1 weil jeder beim erstellen der GameplaySession einmal in die Turn spalte eingetragen wird!
+			int wonRounds = usersInGame.get(username) - 1;
 			JSONObject userGameplayInfo = new JSONObject();
 			userGameplayInfo.put("username", username);
 			userGameplayInfo.put("won_rounds", wonRounds);

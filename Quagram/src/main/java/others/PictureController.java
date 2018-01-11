@@ -33,7 +33,7 @@ public class PictureController {
                 while ((length = inputStream.read(buffer)) != -1) {
                     outputStream.write(buffer, 0, length);
                 }
-     
+
             } catch (MalformedURLException e) {
                 System.out.println("MalformedURLException :- " + e.getMessage());
      

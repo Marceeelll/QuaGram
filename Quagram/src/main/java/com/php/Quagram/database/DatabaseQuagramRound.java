@@ -4,8 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import com.php.Quagram.model.User;
-
 public class DatabaseQuagramRound {
 	private DatabaseQuagramSingleton databaseConnection = DatabaseQuagramSingleton.sharedInstance;
 
@@ -59,7 +57,6 @@ public class DatabaseQuagramRound {
 			
 			sql = "delete from turn where ";
 			sql += "gameplay_id='" + gameplayID + "'";
-			sql += ")";
 			
 			int result = databaseConnection.statement.executeUpdate(sql);
 			System.out.println("Delete Turns (deleteTurnsForGameplay): " + result);

@@ -3,10 +3,13 @@ package com.php.Quagram.resources;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+import org.json.JSONObject;
 
 import com.php.Quagram.service.GameplayService;
 
@@ -19,7 +22,8 @@ public class GameplayResource {
 	@GET
 	@Path("/{sessionID}/matchSession/{matchSessionID}")
 	public String getGamplay(@PathParam("sessionID") String sessionID, @PathParam("matchSessionID") String matchSessionID) {
-		return gameplayService.getGameplay(sessionID, matchSessionID);
+		JSONObject gameplayJSON = gameplayService.getGameplay(sessionID, matchSessionID);
+		return gameplayJSON.toString();
 		//return "GET the Gameplay\nSessionID: " + sessionID +"\nMatchSessionID: " + matchSessionID;
 	}
 	
@@ -29,4 +33,31 @@ public class GameplayResource {
 		return gameplayService.postSelectedGameplayAttribute(card_attribute, matchSessionID, sessionID);
 		//return "PUT\nSessionID: " + sessionID + "\nMatchSession: " + matchSessionID + "\nCard_attribute: " + card_attribute;
 	}
+	
+	@PUT
+	@Path("/{sessionID}/matchSession/{matchSessionID}")
+	public String putGameplayIDtoMatchSessionID(@PathParam("sessionID") String sessionID, @PathParam("matchSessionID") String matchSessionID) {
+		gameplayService.putMatchIDtoGameplayID(sessionID, matchSessionID);
+		return "Erfolgreich die matchID zur GameID gemacht";
+	}
+	
+	// TODO: Delete methode implementieren, um Gameplay zu beenden!
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

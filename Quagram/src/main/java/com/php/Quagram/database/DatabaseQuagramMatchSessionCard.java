@@ -3,8 +3,6 @@ package com.php.Quagram.database;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import javax.activation.DataContentHandler;
-
 import com.php.Quagram.model.MatchSessionCard;
 
 public class DatabaseQuagramMatchSessionCard {
