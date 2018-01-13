@@ -20,7 +20,7 @@ import com.php.Quagram.service.LoginService;
 import others.CardDownloadController;
 import others.JSONService;
 
-@Path("/registration")
+@Path("/")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class LoginResource {
@@ -28,7 +28,7 @@ public class LoginResource {
 	JSONService jsonService = new JSONService();
 
 	@GET
-	@Path("/login")
+	@Path("/registration/login")
 	public Response instagramRegistration() {
 		String registrationURIResponse = loginService.getRegistrationURI();
 		return Response.status(Status.OK)
@@ -37,6 +37,7 @@ public class LoginResource {
 	}
 	
 	@GET
+	@Path("/registration")
 	public String userDidAllowedPermissions(@QueryParam("code") String code) {
 		String currentUserJSONRespond = loginService.requestAccessToken(code);
 		ErrorService errorService = new ErrorService();
@@ -51,7 +52,7 @@ public class LoginResource {
 	}
 	
 	@PUT
-	@Path("logout/{sessionID}")
+	@Path("/logout/{sessionID}")
 	public Response loggout(@PathParam("sessionID") String sessionID) {
 		int result = loginService.logoutUser(sessionID);
 		System.out.println("Logout result: " +result);

@@ -35,15 +35,24 @@ public class GameplayService {
 	
 	private void makeMatchIDToGameplayID(String matchSessionID) {
 		ArrayList<User> usersInMatchSession = dbUsers.getUserForMatchSessionID(matchSessionID);
+		
+		System.out.println("hheeeeellllooooo.... ---> " + dbGameplay.getGameplay(matchSessionID));
+		
+		if (usersInMatchSession.size() != 0 && dbGameplay.getGameplay(matchSessionID) == null) {
+			dbGameplay.addGameplayWithID(matchSessionID, usersInMatchSession.get(0).getInstagramID());
+		}
+		
 		for(User user: usersInMatchSession) {
 			dbUsers.addGameplayIDToUser(user.getInstagramID(), matchSessionID);
-			dbRound.addTurnForGameplay(user.getInstagramID(), matchSessionID);
 		}
 	}
 	
 	public JSONObject getGameplay(String sessionID, String matchSessionID) {
 		makeMatchIDToGameplayID(matchSessionID);
 		createGameplayIfNecessaryForMatchSessionID(matchSessionID, sessionID);
+		
+		System.out.println("Debug-sessionID: " + sessionID);
+		System.out.println("Debug-matchSessionID: " + matchSessionID);
 		JSONObject gameplayRoundJSON = getGameplayRoundJSON(sessionID, matchSessionID);
 		return gameplayRoundJSON;
 	}
@@ -68,17 +77,16 @@ public class GameplayService {
 					String cardPicID = userCards.get(currentTurn).getId();
 					MatchSessionCard matchSessionCard = new MatchSessionCard(matchSessionID, currentTurn, ownerID, cardPicID);
 					dbMatchSessionCard.addMatchSessionCard(matchSessionCard);
-					
-//					// Spieler in turn eintragen
-//					dbRound.addTurnForGameplay(ownerID, matchSessionID);
 				}
 				
 				// Spieler in turn eintragen
+				System.out.println("Trägt spieler in turn ein.");
 				dbRound.addTurnForGameplay(user.getInstagramID(), matchSessionID);
 			}
 			
 			User userToStartWith = dbUsers.getUserForSessionID(sessionID);
 			createGamePlayInDB(matchSessionID, userToStartWith.getInstagramID(), maxRounds);
+			System.out.println("Ist NICHT im else Block");
 		} else {
 			System.out.println("Ist im else Block");
 		}
@@ -121,12 +129,12 @@ public class GameplayService {
 		gameplay.setTurnInstagramID(hostID);
 		gameplay.setGameplayID(gameplayID);
 		
-		new DatabaseQuagramGamePlay().addGameplay(gameplay);
+		new DatabaseQuagramGamePlay().updateGameplay(gameplay);
 	}
 	
 	
 	
-	public String postSelectedGameplayAttribute(String cardAttribute, String gameplayID, String sessionID) {
+	public void postSelectedGameplayAttribute(String cardAttribute, String gameplayID, String sessionID) {
 		// 1. checken ob Nutzer wirklich dran ist mit Attribut auswählen
 		// 1.1 - Nein Nutzer ist nicht dran - Fehler werfen
 		// 1.2 - Ja Nutzer ist dran
@@ -134,26 +142,6 @@ public class GameplayService {
 		//			Gewinner und verlierer für die Runde zurück geben
 		// 2. Aktuelle Runde um 1 erhöhen
 		
-		// TODO: check if sessionID ist valid
-		
-		System.out.println("GameplayID: " +gameplayID);
-		String userIDWhoHasNextTurn = getPlayerIdWhoHasNextTurn(gameplayID);
-		String userWhoTriesToPost = dbUsers.getInstagramIDForSessionID(sessionID);
-		Boolean doesMatchIDExist = dbGameplay.getGameplay(gameplayID) != null;
-		
-		if (!doesMatchIDExist) {
-			System.out.println("Exeption werfen, dass das Spiel nicht mehr existiert");
-		}
-		
-		if (!userIDWhoHasNextTurn.equals(userWhoTriesToPost)) {
-			// TODO: Fehler werfen
-			System.out.println("Du bist nicht dran, das Attribut auszuwählen!");
-		}
-		
-		if (!isCardAttributeValid(cardAttribute)) {
-			// TODO: Fehler werfen
-			System.out.println("Das ausgewählte Attribut ist nicht verfügar!");
-		}
 		
 		// TODO: Fehler werfen, wenn das Spiel bereits vorbei ist und ein Attribut ausgewählt wird
 		
@@ -167,25 +155,6 @@ public class GameplayService {
 			finishGameplay(gameplayID);
 		}
 		
-		return "Post :) - Der Gewinner ist: " + roundWinner;
-	}
-	
-	private Boolean isCardAttributeValid(String cardAttribute) {
-		ArrayList<String> validAttributeNames = new ArrayList<>();
-		validAttributeNames.add("likes");
-		validAttributeNames.add("comments");
-		validAttributeNames.add("temperature");
-		validAttributeNames.add("height");
-		
-		Boolean isValid = false;
-		
-		for (String attribute: validAttributeNames) {
-			if(cardAttribute.equals(attribute)) {
-				isValid = true;
-			}
-		}
-		
-		return isValid;
 	}
 	
 	private String getWinnerIDForGameplayID(String gameplayID, String selectedCardAttribute) {

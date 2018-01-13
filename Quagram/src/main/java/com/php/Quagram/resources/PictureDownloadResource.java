@@ -24,23 +24,24 @@ import org.glassfish.jersey.media.multipart.MultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
+import com.php.Quagram.exceptions.UserIsNotLoggedInException;
+import com.php.Quagram.service.ErrorService;
+
 import others.IFileService;
 
 @Path("/picture")
 public class PictureDownloadResource implements IFileService {
-	
+	ErrorService errorService = new ErrorService();
 	public static final String UPLOAD_FILE_SERVER = "D:/Demo/upload/";
 	
-	//http://localhost:8080/Quagram/webapi/picture/{card_picture_id} ??
 	@GET
 	@Path("/{pictureID}")
-	@Produces({"image/png", "image/jpg", "image/gif"}) //Welcher Typ kommt von Instagram zurück?
+	@Produces({"image/png", "image/jpg", "image/gif"})
 	public Response downloadImageFile(@PathParam("pictureID") String pictureID) {
+		errorService.isPictureIDValid(pictureID);
+		
 		String path = getURLPathForPictureID(pictureID);
-		
 		File file = new File(path);
-		
-		System.out.println("PATH: ------ " + path + pictureID);
 		
 		ResponseBuilder responseBuilder = Response.ok((Object) file);
 		responseBuilder.header("Content-Disposition", "attachment; filename=\"MyImageFile.png\"");

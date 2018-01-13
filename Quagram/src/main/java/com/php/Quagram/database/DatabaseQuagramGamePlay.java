@@ -60,6 +60,47 @@ public class DatabaseQuagramGamePlay {
 		}
 		return null;
 	}
+	
+	public void addGameplayWithID(String gameplayID, String turnInstagramID) {
+		try {
+			databaseConnection.statement = databaseConnection.connection.createStatement();
+			String sql;
+			
+			sql = "insert into gameplay values (";
+			sql += "'" + gameplayID + "',";
+			sql += "'" + turnInstagramID + "',";
+			sql += "" + 0 + ",";
+			sql += "" + 0 + "";
+			sql += ")";
+			
+			int result = databaseConnection.statement.executeUpdate(sql);
+			System.out.println("Inserted Gameplay (addGameplay): " +result);
+		} catch (SQLException e) {
+			// if contains id already -> make update instead of insert 
+			e.printStackTrace();
+		}
+	}
+	
+	public void updateGameplay(Gameplay gameplay) {
+		try {
+			databaseConnection.statement = databaseConnection.connection.createStatement();
+			String sql;
+			
+			sql = "update gameplay set ";
+			sql += "gameplay_id='" + gameplay.getGameplayID() + "', ";
+			sql += "turn_instagram_id='" + gameplay.getTurnInstagramID() + "',";
+			sql += "total_number_of_turns=" + gameplay.getTotalNumberOfTurns() + ", ";
+			sql += "current_turn_number=" + gameplay.getCurrentTurnNumber() + " ";
+			sql += "where gameplay_id='" + gameplay.getGameplayID() +"'";
+			
+			System.out.println("UPDATE GAMEPLAY: " +sql);
+			
+			int result = databaseConnection.statement.executeUpdate(sql);
+			System.out.println("Inserted Gameplay (addGameplay): " + result +" ----- " + sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public void addGameplay(Gameplay gameplay) {
 		try {

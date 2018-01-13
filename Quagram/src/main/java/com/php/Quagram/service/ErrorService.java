@@ -12,6 +12,7 @@ import com.php.Quagram.exceptions.SessionIDNotFoundException;
 import com.php.Quagram.exceptions.UserHasDeclinedInvitationException;
 import com.php.Quagram.exceptions.UserIsNotLoggedInException;
 import com.php.Quagram.exceptions.UserLoginInstagramTroubleException;
+import com.php.Quagram.exceptions.GameplayAttributeDoesNotExistException;
 import com.php.Quagram.exceptions.GameplayUserIsNotInTurnException;
 import com.php.Quagram.exceptions.InvitationAcceptedStatusDoesNotExistException;
 import com.php.Quagram.exceptions.InvitationAlreadySentToUserException;
@@ -162,6 +163,26 @@ public class ErrorService {
 		Gameplay gameplay = dbGameplay.getGameplay(gameplayID);
 		if(gameplay == null || !gameplay.getTurnInstagramID().equals(userID)) {
 			throw new GameplayUserIsNotInTurnException();
+		}
+	}
+	
+	public void isGameplayCardAttributeValid(String cardAttribute) {
+		ArrayList<String> validAttributeNames = new ArrayList<>();
+		validAttributeNames.add("likes");
+		validAttributeNames.add("comments");
+		validAttributeNames.add("temperature");
+		validAttributeNames.add("height");
+		
+		Boolean isValid = false;
+		
+		for (String attribute: validAttributeNames) {
+			if(cardAttribute.equals(attribute)) {
+				isValid = true;
+			}
+		}
+		
+		if (!isValid) {
+			throw new GameplayAttributeDoesNotExistException(cardAttribute);
 		}
 	}
 	

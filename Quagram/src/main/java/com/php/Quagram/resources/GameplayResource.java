@@ -11,6 +11,8 @@ import javax.ws.rs.core.MediaType;
 
 import org.json.JSONObject;
 
+import com.php.Quagram.database.DatabaseQuagramUsers;
+import com.php.Quagram.model.User;
 import com.php.Quagram.service.ErrorService;
 import com.php.Quagram.service.GameplayService;
 
@@ -28,15 +30,22 @@ public class GameplayResource {
 		errorService.isMatchSessionValid(matchSessionID);
 		
 		JSONObject gameplayJSON = gameplayService.getGameplay(sessionID, matchSessionID);
-		
 		return gameplayJSON.toString();
 	}
 	
 	@POST
 	@Path("/{sessionID}/matchSession/{matchSessionID}/card/{card_attribute}")
 	public String postGameplayAttribute(@PathParam("sessionID") String sessionID, @PathParam("matchSessionID") String matchSessionID, @PathParam("card_attribute") String card_attribute) {
-		return gameplayService.postSelectedGameplayAttribute(card_attribute, matchSessionID, sessionID);
-		//return "PUT\nSessionID: " + sessionID + "\nMatchSession: " + matchSessionID + "\nCard_attribute: " + card_attribute;
+		errorService.isSessionIDValid(sessionID);
+		errorService.isMatchSessionValid(matchSessionID);
+		User userWhoWantsToSayTheAttribute = new DatabaseQuagramUsers().getUserForSessionID(sessionID);
+		errorService.isUserInTurnForGameplay(matchSessionID, userWhoWantsToSayTheAttribute.getInstagramID());
+		errorService.isGameplayCardAttributeValid(card_attribute);
+		
+		gameplayService.postSelectedGameplayAttribute(card_attribute, matchSessionID, sessionID);
+		
+		JSONObject gameplayJSON = gameplayService.getGameplay(sessionID, matchSessionID);
+		return gameplayJSON.toString();
 	}
 	
 	@PUT
