@@ -12,6 +12,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.php.Quagram.database.DatabaseQuagramUsers;
+import com.php.Quagram.exceptions.UserIsNotLoggedInException;
+import com.php.Quagram.exceptions.UserLoginInstagramTroubleException;
+import com.php.Quagram.exceptions.UserLoginQuagramTroubleException;
+import com.php.Quagram.model.Gameplay;
 import com.php.Quagram.model.User;
 import com.php.Quagram.service.ErrorService;
 import com.php.Quagram.service.GameplayService;
@@ -64,7 +68,13 @@ public class LobbyResource {
 		
 		
 		errorService.isInvitationDeclined(matchSessionID);
-		return "Dummy erfolgreich ausgeführt";
+		
+		throw new UserLoginQuagramTroubleException();
+		
+//		Gameplay gameplay = null;
+//		String hello = "" + gameplay.getCurrentTurnNumber();
+//		
+//		return "Dummy erfolgreich ausgeführt " + hello;
 	}
 }
 
