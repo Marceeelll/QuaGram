@@ -193,6 +193,28 @@ public class DatabaseQuagramUsers {
 		return false;
 	}
 	
+	public Boolean isInstagramIDLoggedIn(String instagramID) {
+		try {
+			databaseConnection.statement = databaseConnection.connection.createStatement();
+			
+			String sql = "select session_id from user where instagram_id='" + instagramID + "'";
+			ResultSet rs = databaseConnection.statement.executeQuery(sql);
+			
+			if(rs.next()) {
+				String sessionID = rs.getString("session_id");
+				if (sessionID == null) {
+					return false;
+				} else {
+					return true;
+				}
+			}
+			 
+		} catch (Exception e) {
+			
+		}
+		return false;
+	}
+	
 	public int logoutUser(String sessionID) {
 		try {
 			databaseConnection.statement = databaseConnection.connection.createStatement();

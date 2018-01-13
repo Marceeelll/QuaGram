@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.php.Quagram.database.DatabaseQuagramInvitations;
 import com.php.Quagram.database.DatabaseQuagramUsers;
-import com.php.Quagram.exceptions.SessionIDNotFoundException;
 import com.php.Quagram.model.User;
 
 public class LobbyService {
@@ -25,11 +24,5 @@ public class LobbyService {
 	public void removeUserFromLobby(String sessionID) {
 		dbUsers.removeUserFromLobby(sessionID);
 	}
-	
-	public void isSessionIDValid(String sessionID) {
-		if (!dbUsers.isSessionIDValid(sessionID)) {
-			throw new SessionIDNotFoundException(sessionID);
-		}
-	}	
 	
 }

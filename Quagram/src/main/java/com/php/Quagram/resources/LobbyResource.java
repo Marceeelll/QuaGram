@@ -11,7 +11,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.php.Quagram.database.DatabaseQuagramUsers;
 import com.php.Quagram.model.User;
+import com.php.Quagram.service.ErrorService;
 import com.php.Quagram.service.GameplayService;
 import com.php.Quagram.service.LobbyService;
 
@@ -20,18 +22,20 @@ import com.php.Quagram.service.LobbyService;
 @Produces(MediaType.APPLICATION_JSON)
 public class LobbyResource {
 	LobbyService lobbyService = new LobbyService();
+	ErrorService errorService = new ErrorService();
 	
 	@GET
 	@Path("/{sessionID}")
 	public List<User> getUsersInLobby(@PathParam("sessionID") String sessionID) {
-		lobbyService.isSessionIDValid(sessionID);
+		errorService.isSessionIDValid(sessionID);
+		errorService.isUserInLobby(sessionID);
 		return lobbyService.getAllLobbyUsers();
 	}
 	
 	@POST
 	@Path("/{sessionID}")
 	public List<User> addUserToLobby(@PathParam("sessionID") String sessionID) {
-		lobbyService.isSessionIDValid(sessionID);
+		errorService.isSessionIDValid(sessionID);
 		lobbyService.addUserToLobby(sessionID);
 		return lobbyService.getAllLobbyUsers();
 	}
@@ -39,6 +43,7 @@ public class LobbyResource {
 	@DELETE
 	@Path("/{sessionID}")
 	public String deleteUserFromLobby(@PathParam("sessionID") String sessionID) {
+		errorService.isSessionIDValid(sessionID);
 		lobbyService.removeUserFromLobby(sessionID);
 		return "Successfully deleted";
 	}
@@ -48,15 +53,18 @@ public class LobbyResource {
 	@GET
 	@Path("dummy")
 	public String dummy() {
-		GameplayService service = new GameplayService();
-		service.finishGameplay("4757108a-cbfa-4212-a391-b19f56843a72");
+		ErrorService errorService = new ErrorService();
 		
-		//JSONObject object = service.getGameplayRoundJSON("23a80f93-ac97-4a30-bdba-54b6b8fae225", "e076c7a3-3965-4e0b-b3b1-89365c097793");
+		String sessionIDKrazycOde = "24104284-bd6a-4471-9148-ebe1ddae575b";
+		String sessionIDCrazyc0de = "250e93be-3dae-46ee-834d-15914d3e69e5";
+		String userToInviteInstagramID = "5894207441";
+		String matchSessionID = "3e5ec942-452f-4f56-88b4-64db05b4ae23";
+		String pictureID = "20481889_271943753284770_7151381797815713792_n.jpg";
+		//sessionID = "heeelooo";
 		
-		//new DatabaseQuagramUsers().incrementGameWonFromUser("c85105a4-003f-4196-a928-bce873574d76");
-		//new DatabaseQuagramUsers().incrementGameLostFromUser("c85105a4-003f-4196-a928-bce873574d76");
 		
-		return "Dummy erfolgreich ausgeführt - "; // - " + object;
+		errorService.isInvitationDeclined(matchSessionID);
+		return "Dummy erfolgreich ausgeführt";
 	}
 }
 

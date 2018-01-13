@@ -47,6 +47,43 @@ public class DatabaseQuagramInvitations {
 		}
 		return new ArrayList<>();
 	}
+	
+	public ArrayList<Invitation> getInvitationsForInstagramID(String instagramID) {
+		try {
+			databaseConnection.statement = databaseConnection.connection.createStatement();
+			
+			//Get InstagramID for SessionID
+			if(instagramID == null) {
+				return new ArrayList<>();
+			}
+			
+			String sql;
+			sql = "select * from invitation where receiver_id='" + instagramID + "'";
+			ResultSet result = databaseConnection.statement.executeQuery(sql);
+			
+			ArrayList<Invitation> invitations = new ArrayList<>();
+			
+			while (result.next()) {
+				Date created = result.getDate("created_on");
+				String hostUserID = result.getString("host_user_id");
+				String matchSessionID = result.getString("match_session_id");
+				
+				Invitation invitation = new Invitation();
+				invitation.setHostUserID(hostUserID);
+				invitation.setMatchSessionID(matchSessionID);
+				invitation.setCreated(created);
+				
+				invitations.add(invitation);
+			}
+			return invitations;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ArrayList<>();
+	}
+	
+	
 	//TODO: Wenn Spieler schon eingeladen wurde, darf die Einladung nicht noch einmal eingetragen werden
 	public void addInvitation(User receiver, Invitation invitation) {
 		try {
@@ -137,6 +174,21 @@ public class DatabaseQuagramInvitations {
 			// if contains id already -> make update instead of insert 
 			e.printStackTrace();
 		}
+	}
+	
+	public boolean doesInvitationExist(String matchSessionID) {
+		try {
+			databaseConnection.statement = databaseConnection.connection.createStatement();
+			
+			String sql = "select * from invitation where match_session_id='" + matchSessionID +"'";
+			ResultSet rs = databaseConnection.statement.executeQuery(sql);
+			
+			return rs.next();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return false;
 	}
 	
 	public boolean doesInvitationExist(String hostID, String receiverID) {

@@ -36,15 +36,20 @@ public class PictureDownloadResource implements IFileService {
 	@Path("/{pictureID}")
 	@Produces({"image/png", "image/jpg", "image/gif"}) //Welcher Typ kommt von Instagram zurück?
 	public Response downloadImageFile(@PathParam("pictureID") String pictureID) {
-		String path = "/Users/marcelhagmann/Desktop/DownloadFromInternet/";
+		String path = getURLPathForPictureID(pictureID);
 		
-		File file = new File(path + pictureID); //pictureID); // Hier muss das Image von Instagram rein
+		File file = new File(path);
 		
 		System.out.println("PATH: ------ " + path + pictureID);
 		
 		ResponseBuilder responseBuilder = Response.ok((Object) file);
 		responseBuilder.header("Content-Disposition", "attachment; filename=\"MyImageFile.png\"");
 		return responseBuilder.build();
+	}
+	
+	public String getURLPathForPictureID(String pictureID) {
+		String path = "/Users/marcelhagmann/Desktop/DownloadFromInternet/" + pictureID;
+		return path;
 	}
 	
 ///////////Ab hier brauchen wir eigl nichts mehr -> nur zur Vervollständigung////////
