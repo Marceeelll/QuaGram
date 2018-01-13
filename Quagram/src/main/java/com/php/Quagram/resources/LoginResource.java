@@ -11,10 +11,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import com.php.Quagram.exceptions.UserHasDeclinedInvitationException;
-import com.php.Quagram.exceptions.UserIsNotLoggedInException;
 import com.php.Quagram.exceptions.UserLogoutException;
-import com.php.Quagram.exceptions.UserIsNotInLobbyExceptionMapper;
 import com.php.Quagram.model.User;
 import com.php.Quagram.service.ErrorService;
 import com.php.Quagram.service.JSONClientOutput;

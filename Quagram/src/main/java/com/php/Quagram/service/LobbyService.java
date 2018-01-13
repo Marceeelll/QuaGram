@@ -1,5 +1,6 @@
 package com.php.Quagram.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.php.Quagram.database.DatabaseQuagramInvitations;
@@ -17,7 +18,7 @@ public class LobbyService {
 		dbUsers.addUserToLobby(sessionID);
 	}
 	
-	public List<User> getAllLobbyUsers() {
+	public ArrayList<User> getAllLobbyUsers() {
 		return dbUsers.getLobbyUsers();
 	}
 	

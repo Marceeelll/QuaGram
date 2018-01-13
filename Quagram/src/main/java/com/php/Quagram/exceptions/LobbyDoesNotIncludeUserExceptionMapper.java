@@ -12,9 +12,9 @@ public class LobbyDoesNotIncludeUserExceptionMapper implements ExceptionMapper<L
 	@Override
 	public Response toResponse(LobbyDoesNotIncludeUserException exception) {
 		ErrorMessage errorMessage = new ErrorMessage();
-		errorMessage.setErrorCode(401);
+		errorMessage.setErrorCode(410);
 		if (exception.getMessage() == null) {
-			errorMessage.setErrorMessage("Nutzer ist nicht eingeloggt.");
+			errorMessage.setErrorMessage("Nutzer befindet sich nicht in der Lobby.");
 		}
 		return Response.status(errorMessage.getErrorCode())
 				.entity(errorMessage)

@@ -13,6 +13,7 @@ import com.php.Quagram.exceptions.UserHasDeclinedInvitationException;
 import com.php.Quagram.exceptions.UserIsNotLoggedInException;
 import com.php.Quagram.exceptions.UserLoginInstagramTroubleException;
 import com.php.Quagram.exceptions.GameplayUserIsNotInTurnException;
+import com.php.Quagram.exceptions.InvitationAcceptedStatusDoesNotExistException;
 import com.php.Quagram.exceptions.InvitationAlreadySentToUserException;
 import com.php.Quagram.exceptions.InvitationCantBeSendToOneselfException;
 import com.php.Quagram.exceptions.InvitationDoesNotExistException;
@@ -82,14 +83,26 @@ public class ErrorService {
 	 * Invitation Fehler - 420...429
 	 * 
 	 * */
-	public void isUserAlreadyInvited(String userToInviteID, String matchSessionID) {
+//	public void isUserAlreadyInvited(String userToInviteID, String matchSessionID) {
+//		ArrayList<Invitation> invitations = dbInvitations.getInvitationsForInstagramID(userToInviteID);
+//		for (Invitation invitation: invitations) {
+//			if (invitation.getMatchSessionID().equals(matchSessionID)) {
+//				throw new InvitationAlreadySentToUserException("crazyc0de");
+//			}
+//		}
+//	}
+	public void isUserAlreadyInvited(String userToInviteID, String hostSessionID) {
 		ArrayList<Invitation> invitations = dbInvitations.getInvitationsForInstagramID(userToInviteID);
+		String matchSessionID = dbUsers.getMatchSessionIDFromUserSessionID(hostSessionID);
+		
 		for (Invitation invitation: invitations) {
 			if (invitation.getMatchSessionID().equals(matchSessionID)) {
-				throw new InvitationAlreadySentToUserException("crazyc0de");
+				User userToInvite = dbUsers.getUserForInstagramID(userToInviteID);
+				throw new InvitationAlreadySentToUserException(userToInvite.getUsername());
 			}
 		}
 	}
+	
 	
 	public void isInvitationAvailable(String sessionID, String matchSessionID) {
 		ArrayList<Invitation> invitations = dbInvitations.getInvitationsForUser(sessionID);
@@ -107,8 +120,8 @@ public class ErrorService {
 	}
 	
 	public void isSendingInvitationToYourself(String sessionID, String userIDToInvite) {
-		String hostID = dbUsers.getInstagramIDForSessionID(sessionID);
-		if (userIDToInvite.equals(hostID)) {
+		User hostUser = dbUsers.getUserForSessionID(sessionID);
+		if (userIDToInvite.equals(hostUser.getUsername())) {
 			throw new InvitationCantBeSendToOneselfException();
 		}
 	}
@@ -130,6 +143,12 @@ public class ErrorService {
 	public void isInvitationDeclined(String matchSessionID) {
 		if(!dbInvitations.doesInvitationExist(matchSessionID)) {
 			throw new UserHasDeclinedInvitationException();
+		}
+	}
+	
+	public void isInvitationAcceptedStatusExisting(String acceptedStatus) {		
+		if (!("0".equals(acceptedStatus) || "1".equals(acceptedStatus))) {
+			throw new InvitationAcceptedStatusDoesNotExistException(acceptedStatus);
 		}
 	}
 	

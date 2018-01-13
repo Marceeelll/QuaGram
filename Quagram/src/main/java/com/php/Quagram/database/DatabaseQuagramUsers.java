@@ -499,6 +499,29 @@ public class DatabaseQuagramUsers {
 			e.printStackTrace();
 		}
 	}
+	
+	public String getMatchSessionIDFromUserSessionID(String sessionID) {
+		try {
+			databaseConnection.statement = databaseConnection.connection.createStatement();
+			
+			String sql;
+			sql = "select match_session_id from user where session_id='" + sessionID + "'";
+			ResultSet rs = databaseConnection.statement.executeQuery(sql);
+			
+			if (rs.next()) {
+				String matchSessionID = rs.getString("match_session_id");
+				
+				rs.close();
+				return matchSessionID;
+			}
+
+		} catch(NullPointerException e) {
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
 
 }
 

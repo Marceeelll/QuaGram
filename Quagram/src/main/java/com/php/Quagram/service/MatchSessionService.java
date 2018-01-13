@@ -24,11 +24,11 @@ public class MatchSessionService {
 	}
 	
 	public void answerToMatchSessionInvitation(String sessionID, String matchSessionID, String accepted_status) {
-		if (accepted_status.equals("1")) {
+		if ("1".equals(accepted_status)) {
 			dbUsers.addMatchSessionIDToUser(sessionID, matchSessionID);
-		} else {
-			// TODO: was machen wir, wenn der Nutzer die Einladung ablehnt?
+			dbInvitations.deleteInvitation(matchSessionID);
+		} else if ("2".equals(accepted_status)) {
+			dbInvitations.deleteInvitation(matchSessionID);
 		}
-		dbInvitations.deleteInvitation(matchSessionID);
 	}
 }

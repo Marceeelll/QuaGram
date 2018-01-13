@@ -11,6 +11,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.json.JSONObject;
 
+import com.php.Quagram.service.ErrorService;
 import com.php.Quagram.service.GameplayService;
 
 @Path("/gameplay")
@@ -18,13 +19,17 @@ import com.php.Quagram.service.GameplayService;
 @Produces(MediaType.APPLICATION_JSON)
 public class GameplayResource {
 	GameplayService gameplayService = new GameplayService();
+	ErrorService errorService = new ErrorService();
 	
 	@GET
 	@Path("/{sessionID}/matchSession/{matchSessionID}")
 	public String getGamplay(@PathParam("sessionID") String sessionID, @PathParam("matchSessionID") String matchSessionID) {
+		errorService.isSessionIDValid(sessionID);
+		errorService.isMatchSessionValid(matchSessionID);
+		
 		JSONObject gameplayJSON = gameplayService.getGameplay(sessionID, matchSessionID);
+		
 		return gameplayJSON.toString();
-		//return "GET the Gameplay\nSessionID: " + sessionID +"\nMatchSessionID: " + matchSessionID;
 	}
 	
 	@POST
