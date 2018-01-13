@@ -218,7 +218,8 @@ public class DatabaseQuagramUsers {
 	public int logoutUser(String sessionID) {
 		try {
 			databaseConnection.statement = databaseConnection.connection.createStatement();
-			String sql = "update user set match_session_id=null and game_id=null and is_in_lobby=0 where session_id='" + sessionID + "'";
+			String sql = "update user set match_session_id=null, game_id=null, is_in_lobby=0, session_id=null where session_id='" + sessionID + "'";
+			System.out.println(sql);
 			int result = databaseConnection.statement.executeUpdate(sql);
 			return result;
 		} catch (SQLException e) {

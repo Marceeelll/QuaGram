@@ -8,10 +8,15 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
-import org.json.JSONObject;
-
+import com.php.Quagram.exceptions.UserHasDeclinedInvitationException;
+import com.php.Quagram.exceptions.UserIsNotLoggedInException;
+import com.php.Quagram.exceptions.UserLogoutException;
+import com.php.Quagram.exceptions.UserIsNotInLobbyExceptionMapper;
 import com.php.Quagram.model.User;
+import com.php.Quagram.service.ErrorService;
 import com.php.Quagram.service.JSONClientOutput;
 import com.php.Quagram.service.LoginService;
 
@@ -27,14 +32,18 @@ public class LoginResource {
 
 	@GET
 	@Path("/login")
-	public String instagramRegistration() {
-		String registrationURI = loginService.getRegistrationURI();
-		return registrationURI;
+	public Response instagramRegistration() {
+		String registrationURIResponse = loginService.getRegistrationURI();
+		return Response.status(Status.OK)
+				.entity(registrationURIResponse)
+				.build();
 	}
 	
 	@GET
 	public String userDidAllowedPermissions(@QueryParam("code") String code) {
 		String currentUserJSONRespond = loginService.requestAccessToken(code);
+		ErrorService errorService = new ErrorService();
+		errorService.isInstagramRegistrationSuccessfully(currentUserJSONRespond);
 		User instagramJSONRespondUser = jsonService.parseUserAfterLogin(currentUserJSONRespond);
 		User user = loginService.loginUser(instagramJSONRespondUser);
 		System.out.println("UUUUUSER-PROFILE-PIC: " + user.getProfilePic());
@@ -46,13 +55,13 @@ public class LoginResource {
 	
 	@PUT
 	@Path("logout/{sessionID}")
-	public String loggout(@PathParam("sessionID") String sessionID) {
+	public Response loggout(@PathParam("sessionID") String sessionID) {
 		int result = loginService.logoutUser(sessionID);
-		System.out.println("LOGOUT: " + result);
+		System.out.println("Logout result: " +result);
 		if (result == 1) {
-			return "Succesfully logged out!";
+			return Response.status(Status.NO_CONTENT).build();
 		} else {
-			return "Could not logg out!";
+			throw new UserLogoutException();
 		}
 	}
 	

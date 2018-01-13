@@ -3,12 +3,15 @@ package com.php.Quagram.service;
 import java.io.File;
 import java.util.ArrayList;
 
+import org.json.JSONObject;
+
 import com.php.Quagram.database.DatabaseQuagramGamePlay;
 import com.php.Quagram.database.DatabaseQuagramInvitations;
 import com.php.Quagram.database.DatabaseQuagramUsers;
 import com.php.Quagram.exceptions.SessionIDNotFoundException;
 import com.php.Quagram.exceptions.UserHasDeclinedInvitationException;
 import com.php.Quagram.exceptions.UserIsNotLoggedInException;
+import com.php.Quagram.exceptions.UserLoginInstagramTroubleException;
 import com.php.Quagram.exceptions.GameplayUserIsNotInTurnException;
 import com.php.Quagram.exceptions.InvitationAlreadySentToUserException;
 import com.php.Quagram.exceptions.InvitationCantBeSendToOneselfException;
@@ -42,6 +45,14 @@ public class ErrorService {
 		Boolean isUserLoggedIn = dbUsers.isInstagramIDLoggedIn(instagramID);
 		if (!isUserLoggedIn) {
 			throw new UserIsNotLoggedInException();
+		}
+	}
+	
+	public void isInstagramRegistrationSuccessfully(String jsonRespond) {
+		JSONObject object = new JSONObject(jsonRespond);
+		if (!object.has("access_token")) {
+			String errorType = object.getString("error_type");
+			throw new UserLoginInstagramTroubleException(errorType);
 		}
 	}
 	

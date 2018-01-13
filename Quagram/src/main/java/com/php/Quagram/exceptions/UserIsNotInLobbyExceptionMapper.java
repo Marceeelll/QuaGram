@@ -7,7 +7,7 @@ import javax.ws.rs.ext.Provider;
 import com.php.Quagram.model.ErrorMessage;
 
 @Provider
-public class UserNotInLobbyExceptionMapper implements ExceptionMapper<UserIsNotLoggedInException> {
+public class UserIsNotInLobbyExceptionMapper implements ExceptionMapper<UserIsNotLoggedInException> {
 
 	@Override
 	public Response toResponse(UserIsNotLoggedInException exception) {
