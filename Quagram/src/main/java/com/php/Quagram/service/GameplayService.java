@@ -22,21 +22,8 @@ public class GameplayService {
 	DatabaseQuagramGamePlay dbGameplay = new DatabaseQuagramGamePlay();
 	DatabaseQuagramRound dbRound = new DatabaseQuagramRound();
 	
-	public void putMatchIDtoGameplayID(String sessionID, String matchSessionID) {
-		Gameplay gameplay = dbGameplay.getGameplay(matchSessionID);
-		
-		if (gameplay == null) {
-			System.out.println("--> Gameplay existiert nicht");
-		} else {
-			makeMatchIDToGameplayID(matchSessionID);
-			System.out.println("--> Nutzer erfolgreich hinzugefügt");			
-		}
-	}
-	
 	private void makeMatchIDToGameplayID(String matchSessionID) {
 		ArrayList<User> usersInMatchSession = dbUsers.getUserForMatchSessionID(matchSessionID);
-		
-		System.out.println("hheeeeellllooooo.... ---> " + dbGameplay.getGameplay(matchSessionID));
 		
 		if (usersInMatchSession.size() != 0 && dbGameplay.getGameplay(matchSessionID) == null) {
 			dbGameplay.addGameplayWithID(matchSessionID, usersInMatchSession.get(0).getInstagramID());
@@ -50,9 +37,7 @@ public class GameplayService {
 	public JSONObject getGameplay(String sessionID, String matchSessionID) {
 		makeMatchIDToGameplayID(matchSessionID);
 		createGameplayIfNecessaryForMatchSessionID(matchSessionID, sessionID);
-		
-		System.out.println("Debug-sessionID: " + sessionID);
-		System.out.println("Debug-matchSessionID: " + matchSessionID);
+
 		JSONObject gameplayRoundJSON = getGameplayRoundJSON(sessionID, matchSessionID);
 		return gameplayRoundJSON;
 	}
@@ -135,18 +120,10 @@ public class GameplayService {
 	
 	
 	public void postSelectedGameplayAttribute(String cardAttribute, String gameplayID, String sessionID) {
-		// 1. checken ob Nutzer wirklich dran ist mit Attribut auswählen
-		// 1.1 - Nein Nutzer ist nicht dran - Fehler werfen
-		// 1.2 - Ja Nutzer ist dran
-		//			Gewinner in turn Runde schreiben
-		//			Gewinner und verlierer für die Runde zurück geben
-		// 2. Aktuelle Runde um 1 erhöhen
-		
-		
-		// TODO: Fehler werfen, wenn das Spiel bereits vorbei ist und ein Attribut ausgewählt wird
-		
-		String roundWinner = getWinnerIDForGameplayID(gameplayID, cardAttribute);
+		String roundWinnerID = getWinnerIDForGameplayID(gameplayID, cardAttribute);
 		incrementRound(gameplayID);
+		dbRound.addTurnForGameplay(roundWinnerID, gameplayID);
+		dbGameplay.updateGameplayTurnInstagramID(roundWinnerID, gameplayID);
 		
 		// TODO: hier nur Status zurück geben ob alles geklappt hat
 		// 		 Der Client muss dann die Anzeige logik übernehmen
@@ -249,20 +226,24 @@ public class GameplayService {
 	}
 	
 	public void finishGameplay(String gameplayID) {
+		System.out.println("\t\t\tpublic void finishGameplay(String gameplayID) { #######");
 		// verlierer/gewinner attribut beim user erhöhen
 		updateUsersLostWonNumbers(gameplayID);
 		
 		// gameSession & gameID von Nutzern austragen
 		cleanUpGameplayUserParticipants(gameplayID);
 		
-		// turn db spalte leeren
+		// turn db einträge leeren zu der gameplayID
 		cleanUpTurnDB(gameplayID);
+		
+		// match_session_card db einträge leeren zu der gameplayID
+		cleanUpMatchSessionCard(gameplayID);
 		
 		// gameplay aus db löschen
 		dbGameplay.deleteGameplayForGameplay(gameplayID);
 	}
 	
-	private void updateUsersLostWonNumbers(String gameplayID) {
+	public void updateUsersLostWonNumbers(String gameplayID) {
 		ArrayList<String> roundWinners = dbRound.getWinnersForGameplay(gameplayID);
 		HashMap<String, Integer> instagramIdAndWonRounds = new HashMap<>();
 		for (String roundWinner: roundWinners) {
@@ -285,11 +266,13 @@ public class GameplayService {
 				winnerInstagramID = instagramID;
 			}
 		}
+		System.out.println("WinnerID--- " +winnerInstagramID);
 		
 		dbUsers.incrementGameWonFromUser(winnerInstagramID);
 		for(String instagramIDWhoHasLost: instagramIdAndWonRounds.keySet()) {
 			if (!winnerInstagramID.equals(instagramIDWhoHasLost)) {
 				dbUsers.incrementGameLostFromUser(instagramIDWhoHasLost);
+				System.out.println("Looser-Wrote in hos profile--- " + instagramIDWhoHasLost);
 			}
 		}
 	}
@@ -308,19 +291,26 @@ public class GameplayService {
 		dbRound.deleteTurnsForGameplay(gameplayID);
 	}
 	
+	private void cleanUpMatchSessionCard(String gameplayID) {
+		dbMatchSessionCard.deleteMatchSessionCards(gameplayID);
+	}
+	
 	private String getUsernameWhoHasNextTurn(String gameplayID) {
 		String playerIdWhoHasNextTurn = getPlayerIdWhoHasNextTurn(gameplayID);
 		return getUsernameForPlayerID(playerIdWhoHasNextTurn);
 	}
 	
 	private String getPlayerIdWhoHasNextTurn(String gameplayID) {
-		ArrayList<String> winnerInRounds = dbRound.getWinnersForGameplay(gameplayID);
-		System.out.println("--->Hello--->: " + winnerInRounds.size());
-		if (winnerInRounds.size() == 0) {
-			System.out.println("Werfe hier eine keine Nutzer exepetion!");
-			return "Werfe hier eine keine Nutzer exepetion!";
-		}
-		return winnerInRounds.get(winnerInRounds.size()-1);
+//		ArrayList<String> winnerInRounds = dbRound.getWinnersForGameplay(gameplayID);
+//		System.out.println("--->Hello--->: " + winnerInRounds.size());
+//		if (winnerInRounds.size() == 0) {
+//			System.out.println("Werfe hier eine keine Nutzer exepetion!");
+//			return "Werfe hier eine keine Nutzer exepetion!";
+//		}
+//		return winnerInRounds.get(winnerInRounds.size()-1);
+		Gameplay gameplay = dbGameplay.getGameplay(gameplayID);
+		String nextTurnID = gameplay.getTurnInstagramID();
+		return nextTurnID;
 	}
 	
 	private String getUsernameForPlayerID(String instagramID) {

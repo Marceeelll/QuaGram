@@ -161,6 +161,8 @@ public class ErrorService {
 	 * */
 	public void isUserInTurnForGameplay(String gameplayID, String userID) {
 		Gameplay gameplay = dbGameplay.getGameplay(gameplayID);
+		System.out.println("toooooooo Debuuuuuuug getTurnInstagramID(): ---------     " + gameplay.getTurnInstagramID());
+		System.out.println("toooooooo Debuuuuuuug userID: ---------     " + userID);
 		if(gameplay == null || !gameplay.getTurnInstagramID().equals(userID)) {
 			throw new GameplayUserIsNotInTurnException();
 		}

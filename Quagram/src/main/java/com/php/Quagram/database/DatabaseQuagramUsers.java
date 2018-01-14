@@ -409,14 +409,14 @@ public class DatabaseQuagramUsers {
 		}
 	}
 	
-	public void incrementGameLostFromUser(String sessionID) {
-		int lostGames = getLostGamesFromUser(sessionID);
+	public void incrementGameLostFromUser(String instagramID) {
+		int lostGames = getLostGamesFromUser(instagramID);
 		if (lostGames != -1) {
 			lostGames += 1;
 			try {
 				databaseConnection.statement = databaseConnection.connection.createStatement();
 				
-				String sql = "update user set games_lost=" + lostGames + " where session_id='" + sessionID + "';";
+				String sql = "update user set games_lost=" + lostGames + " where instagram_id='" + instagramID + "';";
 				int result = databaseConnection.statement.executeUpdate(sql);
 				System.out.println("incrementGameLostFromUser: " + result);
 			} catch (Exception e) {
@@ -425,12 +425,12 @@ public class DatabaseQuagramUsers {
 		}
 	}
 	
-	public int getLostGamesFromUser(String sessionID) {
+	public int getLostGamesFromUser(String instagramID) {
 		try {
 			databaseConnection.statement = databaseConnection.connection.createStatement();
 			
 			String sql;
-			sql = "select games_lost from user where session_id='" + sessionID + "'";
+			sql = "select games_lost from user where instagram_id='" + instagramID + "'";
 			ResultSet rs = databaseConnection.statement.executeQuery(sql);
 			
 			if (rs.next()) {
@@ -448,15 +448,16 @@ public class DatabaseQuagramUsers {
 		return -1;
 	}
 	
-	public void incrementGameWonFromUser(String sessionID) {
-		int wonGames = getWonGamesFromUser(sessionID);
+	public void incrementGameWonFromUser(String instagramID) {
+		int wonGames = getWonGamesFromUser(instagramID);
+		System.out.println("\tWonGames: " + wonGames + " sessionID: " + instagramID);
 		
 		if (wonGames != -1) {
 			wonGames += 1;
 			try {
 				databaseConnection.statement = databaseConnection.connection.createStatement();
 				
-				String sql = "update user set games_won=" + wonGames + " where session_id='" + sessionID + "';";
+				String sql = "update user set games_won=" + wonGames + " where instagram_id='" + instagramID + "';";
 				int result = databaseConnection.statement.executeUpdate(sql);
 				System.out.println("incrementGameLostFromUser: " + result);
 			} catch (Exception e) {
@@ -465,12 +466,12 @@ public class DatabaseQuagramUsers {
 		}
 	}
 	
-	public int getWonGamesFromUser(String sessionID) {
+	public int getWonGamesFromUser(String instagramID) {
 		try {
 			databaseConnection.statement = databaseConnection.connection.createStatement();
 			
 			String sql;
-			sql = "select games_won from user where session_id='" + sessionID + "'";
+			sql = "select games_won from user where instagram_id='" + instagramID + "'";
 			ResultSet rs = databaseConnection.statement.executeQuery(sql);
 			
 			if (rs.next()) {

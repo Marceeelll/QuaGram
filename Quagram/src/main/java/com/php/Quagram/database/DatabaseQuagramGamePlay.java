@@ -101,6 +101,24 @@ public class DatabaseQuagramGamePlay {
 			e.printStackTrace();
 		}
 	}
+	
+	public void updateGameplayTurnInstagramID(String turnInstagramID, String gameplayID) {
+		try {
+			databaseConnection.statement = databaseConnection.connection.createStatement();
+			String sql;
+			
+			sql = "update gameplay set ";
+			sql += "turn_instagram_id='" + turnInstagramID + "' ";
+			sql += "where gameplay_id='" + gameplayID +"'";
+			
+			System.out.println("UPDATE GAMEPLAY Turn instagram ID: " +sql);
+			
+			int result = databaseConnection.statement.executeUpdate(sql);
+			System.out.println("Inserted Gameplay (addGameplay): " + result +" ----- " + sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public void addGameplay(Gameplay gameplay) {
 		try {
