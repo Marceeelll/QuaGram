@@ -29,9 +29,6 @@ public class JSONService {
 		PictureController pictureController = new PictureController();
 		String imageName = pictureController.saveImageToFilesystem(profilePictureURL);
 		
-		System.out.println("Profile Picture URL: " + profilePictureURL);
-		System.out.println("IMAGE-NAME: " + imageName);
-		
 		User user = new User();
 		user.setAccessToken(accessToken);
 		user.setUsername(username);
@@ -39,9 +36,6 @@ public class JSONService {
 		user.setProfilePic(imageName);
 		UUID sessionID = UUID.randomUUID();
 		user.setSessionID(sessionID.toString());
-		// TODO: profilePictureURL wird noch nicht verwendet
-		
-		System.out.println("USER-PROFILE-PIC: " + user.getProfilePic());
 		
 		return user;
 	}
@@ -61,7 +55,7 @@ public class JSONService {
 		int numberOfFollows = object.getInt("follows");
 		int numberOfFollowedBy = object.getInt("followed_by");
 		
-		// TODO: IG Nutzer in DB sichern ???
+		
 		System.out.println("\nProfil Info");
 		System.out.println("id: " + id);
 		System.out.println("username: " + username);

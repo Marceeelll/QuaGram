@@ -22,7 +22,6 @@ public class JSONClientOutput {
 		result.put("sessionID", user.getSessionID());
 		result.put("profile_pic", user.getProfilePic());
 		
-		System.out.println("MAAARCEL:) -- " + result);
 		return result;
 	}
 	
@@ -63,22 +62,26 @@ public class JSONClientOutput {
 	}
 	
 	public JSONObject parseCardToJSON(Card card) {
-		JSONObject cardObject = new JSONObject();
+		if (card != null) {
+			JSONObject cardObject = new JSONObject();
+			
+			cardObject.put("id", card.getId());
+			cardObject.put("likes", card.getLikes());
+			cardObject.put("comments", card.getComments());
+			cardObject.put("temperature", card.getTemperature());
+			cardObject.put("height_meter", card.getHeightMeter());
+			
+			JSONObject locationObject = new JSONObject();
+			locationObject.put("name", card.getLocation().getName());
+			locationObject.put("latitude", card.getLocation().getLatitude());
+			locationObject.put("longitude", card.getLocation().getLongitude());
+			
+			cardObject.put("location", locationObject);
+			return cardObject;
+		} else {
+			return null;
+		}
 		
-		cardObject.put("id", card.getId());
-		cardObject.put("likes", card.getLikes());
-		cardObject.put("comments", card.getComments());
-		cardObject.put("temperature", card.getTemperature());
-		cardObject.put("height_meter", card.getHeightMeter());
-		
-		JSONObject locationObject = new JSONObject();
-		locationObject.put("name", card.getLocation().getName());
-		locationObject.put("latitude", card.getLocation().getLatitude());
-		locationObject.put("longitude", card.getLocation().getLongitude());
-		
-		cardObject.put("location", locationObject);
-		
-		return cardObject;
 	}
 	
 	public JSONObject createGameplayJSON(String usernamePlayerInTurn,
@@ -91,7 +94,11 @@ public class JSONClientOutput {
 		gameplayObject.put("username_of_player_in_turn", usernamePlayerInTurn);
 		gameplayObject.put("number_of_max_rounds", numberOfMaxRounds);
 		gameplayObject.put("current_round", currentRound + 1);
-		gameplayObject.put("card", parseCardToJSON(cardToPlay));
+		if (cardToPlay == null) {
+			gameplayObject.put("card", JSONObject.NULL);
+		} else {
+			gameplayObject.put("card", parseCardToJSON(cardToPlay));
+		}
 		
 		JSONArray userGameplayInfos = new JSONArray();
 		for (String username: usersInGame.keySet()) {

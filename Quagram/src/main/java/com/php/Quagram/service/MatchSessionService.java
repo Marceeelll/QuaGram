@@ -27,7 +27,7 @@ public class MatchSessionService {
 		if ("1".equals(accepted_status)) {
 			dbUsers.addMatchSessionIDToUser(sessionID, matchSessionID);
 			dbInvitations.deleteInvitation(matchSessionID);
-		} else if ("2".equals(accepted_status)) {
+		} else if ("0".equals(accepted_status)) {
 			dbInvitations.deleteInvitation(matchSessionID);
 		}
 	}

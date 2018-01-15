@@ -20,8 +20,6 @@ public class InstagramRequestService {
 				.setPath("/v1/users/self/media/recent/")
 				.setParameter("access_token", instagramAccessToken);
 		
-		System.out.println("\n\nAll Images URL: " + builder.toString() + "\n\n");
-		
 		try {
 			String instagrammAllPictureResponse = URLConnectionReader.getText(builder.toString());
 			System.out.println(instagrammAllPictureResponse);
@@ -61,9 +59,7 @@ public class InstagramRequestService {
 		System.out.println("\nAll User Profile: " + builder.toString() + "\n");
 		
 		try {
-			System.out.println("URL---->" +builder.toString());
 			String instagramProfileResponse = URLConnectionReader.getText(builder.toString());
-			System.out.println("DATA---->" +instagramProfileResponse);
 			
 			JSONService parser = new JSONService();
 			parser.getInstagramUser(instagramProfileResponse);

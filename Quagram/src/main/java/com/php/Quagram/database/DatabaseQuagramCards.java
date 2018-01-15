@@ -46,8 +46,6 @@ public class DatabaseQuagramCards {
 				sql += ")";
 			}
 			
-			System.out.println(sql);
-			
 			int result = databaseConnection.statement.executeUpdate(sql);
 			
 			System.out.println("Card hinzugefügt: " + result);
@@ -127,6 +125,7 @@ public class DatabaseQuagramCards {
 			}
 			
 			return userCards;
+		} catch(NullPointerException e) {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

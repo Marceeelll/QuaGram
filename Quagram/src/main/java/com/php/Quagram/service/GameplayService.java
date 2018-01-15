@@ -9,6 +9,7 @@ import com.php.Quagram.database.DatabaseQuagramCards;
 import com.php.Quagram.database.DatabaseQuagramGamePlay;
 import com.php.Quagram.database.DatabaseQuagramMatchSessionCard;
 import com.php.Quagram.database.DatabaseQuagramRound;
+import com.php.Quagram.database.DatabaseQuagramSingleton;
 import com.php.Quagram.database.DatabaseQuagramUsers;
 import com.php.Quagram.model.Card;
 import com.php.Quagram.model.Gameplay;
@@ -46,26 +47,25 @@ public class GameplayService {
 		if (!dbMatchSessionCard.alreadyContainsCardsForMatchSessionID(matchSessionID)) {
 			ArrayList<User> usersInMatchSession = dbUsers.getUserForMatchSessionID(matchSessionID);
 			int maxRounds = numberOfMaximalRoundsCanBePlayed(usersInMatchSession);
+			System.out.println("\t --- maxRounds:" + maxRounds);
 			if (maxRounds > 15) {
 				maxRounds = 15;
 			}
 			
 			// Spieler Karten für die verschiedenen Runden aufteilen
-			ArrayList<Integer> randomNumbers = createRandomNumberArrayWithMaxNumber(maxRounds);
 			for(User user: usersInMatchSession) {
+				ArrayList<Integer> randomNumbers = DatabaseQuagramSingleton.sharedInstance.createRandomNumberArrayWithMaxNumber(maxRounds);
 				ArrayList<Card> userCards = dbCards.getCardsForUserInstagramID(user.getInstagramID());
-				System.out.println("\tUsername: " + user.getUsername() + "\t " + dbCards.getCardsForUserInstagramID(user.getInstagramID()).size());
 				for(int i = 0; i < randomNumbers.size(); i++) {
 					// Karte in MatchSessionCard eintragen
 					int currentTurn = randomNumbers.get(i);
 					String ownerID = user.getInstagramID();
-					String cardPicID = userCards.get(currentTurn).getId();
+					String cardPicID = userCards.get(i).getId();
 					MatchSessionCard matchSessionCard = new MatchSessionCard(matchSessionID, currentTurn, ownerID, cardPicID);
 					dbMatchSessionCard.addMatchSessionCard(matchSessionCard);
 				}
 				
 				// Spieler in turn eintragen
-				System.out.println("Trägt spieler in turn ein.");
 				dbRound.addTurnForGameplay(user.getInstagramID(), matchSessionID);
 			}
 			
@@ -81,7 +81,6 @@ public class GameplayService {
 		int min = -1;
 		
 		for(User user: usersInMatchSession) {
-			System.out.println("Username: " + user.getUsername() + " --> " + user.getInstagramID());
 			int numberOfCards = dbCards.numberOfCardsFromUser(user.getInstagramID());
 			if (min < 0) {
 				min = numberOfCards;
@@ -92,19 +91,6 @@ public class GameplayService {
 		}
 		
 		return min;
-	}
-	
-	private ArrayList<Integer> createRandomNumberArrayWithMaxNumber(int maxNumber) {
-		ArrayList<Integer> randomNumbers = new ArrayList<>();
-		
-		while(randomNumbers.size() < maxNumber) {
-			int randomNumber = (int)(Math.random() * maxNumber);
-			if (!randomNumbers.contains(randomNumber)) {
-				randomNumbers.add(randomNumber);
-			}
-		}
-		
-		return randomNumbers;
 	}
 	
 	private void createGamePlayInDB(String gameplayID, String hostID, int maxTurns) {
@@ -120,18 +106,19 @@ public class GameplayService {
 	
 	
 	public void postSelectedGameplayAttribute(String cardAttribute, String gameplayID, String sessionID) {
-		String roundWinnerID = getWinnerIDForGameplayID(gameplayID, cardAttribute);
-		incrementRound(gameplayID);
-		dbRound.addTurnForGameplay(roundWinnerID, gameplayID);
-		dbGameplay.updateGameplayTurnInstagramID(roundWinnerID, gameplayID);
 		
 		// TODO: hier nur Status zurück geben ob alles geklappt hat
 		// 		 Der Client muss dann die Anzeige logik übernehmen
 		
 		if (checkIfIsLastGameplayRound(gameplayID)) {
+			System.out.println("GAME DID FINISHED");
 			finishGameplay(gameplayID);
 		}
 		
+		String roundWinnerID = getWinnerIDForGameplayID(gameplayID, cardAttribute);
+		dbRound.addTurnForGameplay(roundWinnerID, gameplayID);
+		dbGameplay.updateGameplayTurnInstagramID(roundWinnerID, gameplayID);
+		incrementRound(gameplayID);
 	}
 	
 	private String getWinnerIDForGameplayID(String gameplayID, String selectedCardAttribute) {
@@ -204,24 +191,33 @@ public class GameplayService {
 		String userID = dbUsers.getInstagramIDForSessionID(sessionID);
 		Card userCard = getCardToPlay(gameplayID, userID);
 		// TODO: 🚨⚠️ wenn das Gameplay zu Ende ist, steht in der nachfolgenden Zeile --> null
-		String usernameWhoHasNextTurn = getUsernameWhoHasNextTurn(gameplayID);
-		if (usernameWhoHasNextTurn != null) {
+		
+		System.out.println("Card: " + userCard);
+		
+		JSONClientOutput jsonOutput = new JSONClientOutput();
+		
+		if (userCard != null) {
+			String usernameWhoHasNextTurn = getUsernameWhoHasNextTurn(gameplayID);
 			HashMap<String, Integer> gameplayInfo = createGameplayInfos(gameplayID);
 			Gameplay gameplay = dbGameplay.getGameplay(gameplayID);
 			int numberOfMaxRounds = gameplay.getTotalNumberOfTurns();
 			int currentRound = gameplay.getCurrentTurnNumber();
 			
-			JSONClientOutput jsonOutput = new JSONClientOutput();
 			JSONObject gameplayJSON = jsonOutput.createGameplayJSON(usernameWhoHasNextTurn, userCard, gameplayInfo, numberOfMaxRounds, currentRound);
 			
 			return gameplayJSON;
 		} else {
-			return new JSONObject();
+			System.out.println("Print gameende JSON");
+			HashMap<String, Integer> gameplayInfo = createGameplayInfos(gameplayID);
+			JSONObject gameplayJSON = jsonOutput.createGameplayJSON("Marcel", null, gameplayInfo, 4, 2);
+			
+			return gameplayJSON;
 		}
 	}
 	
 	private Boolean checkIfIsLastGameplayRound(String gameplayID) {
 		Gameplay gameplay = dbGameplay.getGameplay(gameplayID);
+		System.out.println("LAST GAMEPLAY-- " + gameplay.getCurrentTurnNumber() + "----  " + gameplay.getTotalNumberOfTurns());
 		return gameplay.getCurrentTurnNumber() == gameplay.getTotalNumberOfTurns();
 	}
 	
@@ -231,16 +227,16 @@ public class GameplayService {
 		updateUsersLostWonNumbers(gameplayID);
 		
 		// gameSession & gameID von Nutzern austragen
-		cleanUpGameplayUserParticipants(gameplayID);
+//		cleanUpGameplayUserParticipants(gameplayID);  ⚠️✅
 		
 		// turn db einträge leeren zu der gameplayID
-		cleanUpTurnDB(gameplayID);
+//		cleanUpTurnDB(gameplayID);  ⚠️✅
 		
 		// match_session_card db einträge leeren zu der gameplayID
-		cleanUpMatchSessionCard(gameplayID);
+//		cleanUpMatchSessionCard(gameplayID);  ⚠️✅
 		
 		// gameplay aus db löschen
-		dbGameplay.deleteGameplayForGameplay(gameplayID);
+//		dbGameplay.deleteGameplayForGameplay(gameplayID);  ⚠️✅
 	}
 	
 	public void updateUsersLostWonNumbers(String gameplayID) {
@@ -266,13 +262,11 @@ public class GameplayService {
 				winnerInstagramID = instagramID;
 			}
 		}
-		System.out.println("WinnerID--- " +winnerInstagramID);
 		
 		dbUsers.incrementGameWonFromUser(winnerInstagramID);
 		for(String instagramIDWhoHasLost: instagramIdAndWonRounds.keySet()) {
 			if (!winnerInstagramID.equals(instagramIDWhoHasLost)) {
 				dbUsers.incrementGameLostFromUser(instagramIDWhoHasLost);
-				System.out.println("Looser-Wrote in hos profile--- " + instagramIDWhoHasLost);
 			}
 		}
 	}
@@ -301,13 +295,6 @@ public class GameplayService {
 	}
 	
 	private String getPlayerIdWhoHasNextTurn(String gameplayID) {
-//		ArrayList<String> winnerInRounds = dbRound.getWinnersForGameplay(gameplayID);
-//		System.out.println("--->Hello--->: " + winnerInRounds.size());
-//		if (winnerInRounds.size() == 0) {
-//			System.out.println("Werfe hier eine keine Nutzer exepetion!");
-//			return "Werfe hier eine keine Nutzer exepetion!";
-//		}
-//		return winnerInRounds.get(winnerInRounds.size()-1);
 		Gameplay gameplay = dbGameplay.getGameplay(gameplayID);
 		String nextTurnID = gameplay.getTurnInstagramID();
 		return nextTurnID;
@@ -354,20 +341,12 @@ public class GameplayService {
 			
 			for(Card card: dbCards.getCardsForUserInstagramID(instagramID)) {
 				if(card.getId().equals(cardID)) {
-					System.out.println("\tCARD ID: " + card.getId() + " turn: " + currentTurn + " likes: " + card.getLikes());
 					return card;
 				}
 			}			
 		}
-		
 		return null;
 	}
 	
  }
-
-
-
-
-
-
 

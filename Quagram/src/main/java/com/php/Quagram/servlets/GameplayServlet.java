@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 
+import com.php.Quagram.exceptions.MatchSessionIDNotFoundException;
 import com.php.Quagram.service.GameplayService;
 
 @WebServlet("/GameplayServlet")
@@ -43,7 +44,8 @@ public class GameplayServlet extends HttpServlet {
 			response.flushBuffer();
 			printwriter.close();
 		} catch (NullPointerException e) {
-			
+			System.out.println("##GameplayServlet##GameplayServlet GameplayServlet ## GameplayServlet# ## GameplayServlet");
+			throw new MatchSessionIDNotFoundException("Hey :)");
 		}
 	}
 

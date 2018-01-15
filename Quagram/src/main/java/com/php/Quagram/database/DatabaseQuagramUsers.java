@@ -15,8 +15,6 @@ public class DatabaseQuagramUsers {
 	}
 	
 	private void addUser(User user, Boolean shouldInsert) {
-		System.out.println("Creating statement - " + shouldInsert);
-		
 		try {
 			databaseConnection.statement = databaseConnection.connection.createStatement();
 			
@@ -26,7 +24,6 @@ public class DatabaseQuagramUsers {
 				System.out.println("Inserted User (addUser): " +result);
 			} else {
 				String sql = "update user set access_token='" + user.getAccessToken() + "', session_id='" + user.getSessionID() + "', profile_pic='" + user.getProfilePic() + "' where instagram_id='" + user.getInstagramID() + "'";
-				System.out.println("sql: " + sql);
 				int result = databaseConnection.statement.executeUpdate(sql);
 				System.out.println("Updated User (addUser): " +result);
 			}
@@ -141,6 +138,8 @@ public class DatabaseQuagramUsers {
 			return lobbyUser;
 
 		} catch(NullPointerException e) {
+			
+		} catch(SQLException e) {
 			
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -93,8 +93,6 @@ public class DatabaseQuagramGamePlay {
 			sql += "current_turn_number=" + gameplay.getCurrentTurnNumber() + " ";
 			sql += "where gameplay_id='" + gameplay.getGameplayID() +"'";
 			
-			System.out.println("UPDATE GAMEPLAY: " +sql);
-			
 			int result = databaseConnection.statement.executeUpdate(sql);
 			System.out.println("Inserted Gameplay (addGameplay): " + result +" ----- " + sql);
 		} catch (SQLException e) {
@@ -110,8 +108,6 @@ public class DatabaseQuagramGamePlay {
 			sql = "update gameplay set ";
 			sql += "turn_instagram_id='" + turnInstagramID + "' ";
 			sql += "where gameplay_id='" + gameplayID +"'";
-			
-			System.out.println("UPDATE GAMEPLAY Turn instagram ID: " +sql);
 			
 			int result = databaseConnection.statement.executeUpdate(sql);
 			System.out.println("Inserted Gameplay (addGameplay): " + result +" ----- " + sql);

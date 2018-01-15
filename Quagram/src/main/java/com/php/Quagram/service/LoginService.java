@@ -19,6 +19,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 
+import com.php.Quagram.database.DatabaseQuagramGamePlay;
 import com.php.Quagram.database.DatabaseQuagramInvitations;
 import com.php.Quagram.database.DatabaseQuagramMatchSessionCard;
 import com.php.Quagram.database.DatabaseQuagramUsers;
@@ -111,6 +112,7 @@ public class LoginService {
 		if (result == 1) {
 			String userID = dbUsers.getInstagramIDForSessionID(sessionID);
 			dbInvitations.deleteAllInvitationsFromUserID(userID);
+			dbUsers.removeUserFromLobby(sessionID);
 		}
 		return result;
 	}

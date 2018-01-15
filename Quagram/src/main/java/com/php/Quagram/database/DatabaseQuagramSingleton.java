@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class DatabaseQuagramSingleton {
 	public static DatabaseQuagramSingleton sharedInstance = new DatabaseQuagramSingleton();
@@ -54,6 +55,19 @@ public class DatabaseQuagramSingleton {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public ArrayList<Integer> createRandomNumberArrayWithMaxNumber(int maxNumber) {
+		ArrayList<Integer> randomNumbers = new ArrayList<>();
+		
+		while(randomNumbers.size() < maxNumber) {
+			int randomNumber = (int)(Math.random() * maxNumber);
+			if (!randomNumbers.contains(randomNumber)) {
+				randomNumbers.add(randomNumber);
+			}
+		}
+		
+		return randomNumbers;
 	}
 	
 }

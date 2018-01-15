@@ -40,8 +40,6 @@ public class MatchSessionServlet extends HttpServlet {
 		
 		try {
 			ArrayList<User> matchSessionUsers = new DatabaseQuagramUsers().getUserForMatchSessionID(matchSessionID);
-			System.out.println("-------> " + matchSessionUsers);
-			System.out.println("-------> " + matchSessionUsers.size());
 			JSONClientOutput jsonOutput = new JSONClientOutput();
 			JSONArray invitationJSONArray = jsonOutput.parseUserArrayListToJSON(matchSessionUsers, "");
 			

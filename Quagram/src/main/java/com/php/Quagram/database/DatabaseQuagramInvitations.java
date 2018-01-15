@@ -17,7 +17,6 @@ public class DatabaseQuagramInvitations {
 			
 			//Get InstagramID for SessionID
 			String instagramID = new DatabaseQuagramUsers().getInstagramIDForSessionID(sessionID);
-			System.out.println(instagramID);
 			if(instagramID == null) {
 				return new ArrayList<>();
 			}
@@ -42,6 +41,8 @@ public class DatabaseQuagramInvitations {
 			}
 			return invitations;
 
+		} catch(SQLException e) {
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -207,31 +208,4 @@ public class DatabaseQuagramInvitations {
 		return false;
 	}
 	
-	/*
-	 * TODO: implementieren, wenn mehrere Nutzer zu einer matchSessionID hinzugefügt werden sollen
-	public Invitation getInvitationForMatchSessionID(String matchSessionID) {
-		try {
-			stmt = conn.createStatement();
-			
-			String sql;
-			sql = "select * from invitation where matchSessionID='" + matchSessionID + "'";
-			ResultSet result = stmt.executeQuery(sql);
-			
-			if (result.next()) {
-				Date created = result.getDate("created");
-				String hostUserID = result.getString("hostUserID");
-				
-				Invitation invitation = new Invitation();
-				invitation.setHostUserID(hostUserID);
-				invitation.setMatchSessionID(matchSessionID);
-				invitation.setCreated(created);
-				
-				return invitation;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	*/
 }

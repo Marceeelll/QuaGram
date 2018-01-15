@@ -84,20 +84,12 @@ public class ErrorService {
 	 * Invitation Fehler - 420...429
 	 * 
 	 * */
-//	public void isUserAlreadyInvited(String userToInviteID, String matchSessionID) {
-//		ArrayList<Invitation> invitations = dbInvitations.getInvitationsForInstagramID(userToInviteID);
-//		for (Invitation invitation: invitations) {
-//			if (invitation.getMatchSessionID().equals(matchSessionID)) {
-//				throw new InvitationAlreadySentToUserException("crazyc0de");
-//			}
-//		}
-//	}
 	public void isUserAlreadyInvited(String userToInviteID, String hostSessionID) {
 		ArrayList<Invitation> invitations = dbInvitations.getInvitationsForInstagramID(userToInviteID);
-		String matchSessionID = dbUsers.getMatchSessionIDFromUserSessionID(hostSessionID);
+		String hostInstagramID = dbUsers.getInstagramIDForSessionID(hostSessionID);
 		
 		for (Invitation invitation: invitations) {
-			if (invitation.getMatchSessionID().equals(matchSessionID)) {
+			if (invitation.getHostUserID().equals(hostInstagramID)) {
 				User userToInvite = dbUsers.getUserForInstagramID(userToInviteID);
 				throw new InvitationAlreadySentToUserException(userToInvite.getUsername());
 			}
@@ -161,8 +153,6 @@ public class ErrorService {
 	 * */
 	public void isUserInTurnForGameplay(String gameplayID, String userID) {
 		Gameplay gameplay = dbGameplay.getGameplay(gameplayID);
-		System.out.println("toooooooo Debuuuuuuug getTurnInstagramID(): ---------     " + gameplay.getTurnInstagramID());
-		System.out.println("toooooooo Debuuuuuuug userID: ---------     " + userID);
 		if(gameplay == null || !gameplay.getTurnInstagramID().equals(userID)) {
 			throw new GameplayUserIsNotInTurnException();
 		}
