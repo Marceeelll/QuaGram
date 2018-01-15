@@ -15,8 +15,6 @@ import javax.ws.rs.core.Response.Status;
 
 import org.json.JSONObject;
 
-import com.php.Quagram.database.DatabaseQuagramSingleton;
-import com.php.Quagram.database.DatabaseQuagramUsers;
 import com.php.Quagram.model.User;
 import com.php.Quagram.service.ErrorService;
 import com.php.Quagram.service.GameplayService;

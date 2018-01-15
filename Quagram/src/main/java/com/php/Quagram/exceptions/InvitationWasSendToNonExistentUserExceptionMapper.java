@@ -11,7 +11,7 @@ public class InvitationWasSendToNonExistentUserExceptionMapper implements Except
 	
 	@Override
 	public Response toResponse(InvitationWasSendToNonExistentUserException exception) {
-		ErrorMessage errorMessage = new ErrorMessage(423, "Der eingeladenen Nutzer mit dem Nutzername (" + exception.getMessage() + ") wurde nicht gefunden."); 
+		ErrorMessage errorMessage = new ErrorMessage(404, "Der eingeladenen Nutzer mit dem Nutzername (" + exception.getMessage() + ") wurde nicht gefunden."); 
 		return Response.status(errorMessage.getErrorCode())
 				.entity(errorMessage)
 				.build();

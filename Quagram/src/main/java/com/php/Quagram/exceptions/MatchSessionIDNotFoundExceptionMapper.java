@@ -11,7 +11,7 @@ public class MatchSessionIDNotFoundExceptionMapper implements ExceptionMapper<Ma
 
 	@Override
 	public Response toResponse(MatchSessionIDNotFoundException exception) {
-		ErrorMessage errorMessage = new ErrorMessage(430, "MatchSession mit der ID " + exception.getMessage() + " wurde nicht gefunden."); 
+		ErrorMessage errorMessage = new ErrorMessage(403, "MatchSession mit der ID " + exception.getMessage() + " wurde nicht gefunden."); 
 		return Response.status(errorMessage.getErrorCode())
 				.entity(errorMessage)
 				.build();

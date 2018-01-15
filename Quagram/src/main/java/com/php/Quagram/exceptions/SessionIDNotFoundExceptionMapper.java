@@ -10,7 +10,7 @@ public class SessionIDNotFoundExceptionMapper implements ExceptionMapper<Session
 
 	@Override
 	public Response toResponse(SessionIDNotFoundException exception) {
-		ErrorMessage errorMessage = new ErrorMessage(402, "Session mit der ID " + exception.getMessage() + " wurde nicht gefunden."); 
+		ErrorMessage errorMessage = new ErrorMessage(403, "Session mit der ID " + exception.getMessage() + " wurde nicht gefunden."); 
 		return Response.status(errorMessage.getErrorCode())
 				.entity(errorMessage)
 				.build();

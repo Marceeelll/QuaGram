@@ -11,7 +11,7 @@ public class InvitationAlreadySentToUserExceptionMapper implements ExceptionMapp
 	
 	@Override
 	public Response toResponse(InvitationAlreadySentToUserException exception) {
-		ErrorMessage errorMessage = new ErrorMessage(420, "Der Nutzer (" + exception.getMessage() + ") wurde bereits eingeladen.");
+		ErrorMessage errorMessage = new ErrorMessage(409, "Der Nutzer (" + exception.getMessage() + ") wurde bereits eingeladen.");
 		return Response.status(errorMessage.getErrorCode())
 				.entity(errorMessage)
 				.build();

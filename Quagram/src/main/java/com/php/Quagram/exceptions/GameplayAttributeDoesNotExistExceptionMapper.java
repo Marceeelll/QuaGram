@@ -12,7 +12,7 @@ public class GameplayAttributeDoesNotExistExceptionMapper implements ExceptionMa
 	@Override
 	public Response toResponse(GameplayAttributeDoesNotExistException exception) {
 		String clientTriedAcceptedStatus = exception.getMessage();
-		ErrorMessage errorMessage = new ErrorMessage(441, "Der Parameter (" + clientTriedAcceptedStatus + ") ist ungültig. Folgende Parameter sind gültig: likes/comments/temperature/height.");
+		ErrorMessage errorMessage = new ErrorMessage(404, "Der Parameter (" + clientTriedAcceptedStatus + ") ist ungültig. Folgende Parameter sind gültig: likes/comments/temperature/height.");
 		return Response.status(errorMessage.getErrorCode())
 				.entity(errorMessage)
 				.build();

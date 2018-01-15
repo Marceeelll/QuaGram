@@ -11,7 +11,7 @@ public class InvitationCantBeSendToOneselfExceptionMapper implements ExceptionMa
 	
 	@Override
 	public Response toResponse(InvitationCantBeSendToOneselfException exception) {
-		ErrorMessage errorMessage = new ErrorMessage(422, "Einladung kann nicht an sich selbst versendet werden.");
+		ErrorMessage errorMessage = new ErrorMessage(409, "Einladung kann nicht an sich selbst versendet werden.");
 		return Response.status(errorMessage.getErrorCode())
 				.entity(errorMessage)
 				.build();

@@ -11,7 +11,7 @@ public class UserLogoutExceptionMapper implements ExceptionMapper<UserLogoutExce
 
 	@Override
 	public Response toResponse(UserLogoutException exception) {
-		ErrorMessage errorMessage = new ErrorMessage(450, "TEEEEST nicht möglich. Quagram kann Sie derzeit nicht anmelden."); 
+		ErrorMessage errorMessage = new ErrorMessage(409, "TEEEEST nicht möglich. Quagram kann Sie derzeit nicht anmelden."); 
 		return Response.status(errorMessage.getErrorCode())
 				.entity(errorMessage)
 				.build();

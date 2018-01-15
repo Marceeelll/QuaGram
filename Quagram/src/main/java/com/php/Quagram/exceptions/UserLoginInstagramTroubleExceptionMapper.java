@@ -11,7 +11,7 @@ public class UserLoginInstagramTroubleExceptionMapper implements ExceptionMapper
 
 	@Override
 	public Response toResponse(UserLoginInstagramTroubleException exception) {
-		ErrorMessage errorMessage = new ErrorMessage(405, "Einloggen nicht möglich. Instagram Fehlermeldung: " + exception.getMessage()); 
+		ErrorMessage errorMessage = new ErrorMessage(400, "Einloggen nicht möglich. Instagram Fehlermeldung: " + exception.getMessage()); 
 		return Response.status(errorMessage.getErrorCode())
 				.entity(errorMessage)
 				.build();

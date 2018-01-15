@@ -11,7 +11,7 @@ public class PictureIDIsWrongExceptionMapper implements ExceptionMapper<PictureI
 
 	@Override
 	public Response toResponse(PictureIDIsWrongException exception) {
-		ErrorMessage errorMessage = new ErrorMessage(450, "Bild mit der ID " + exception.getMessage() + " wurde nicht gefunden."); 
+		ErrorMessage errorMessage = new ErrorMessage(404, "Bild mit der ID " + exception.getMessage() + " wurde nicht gefunden."); 
 		return Response.status(errorMessage.getErrorCode())
 				.entity(errorMessage)
 				.build();

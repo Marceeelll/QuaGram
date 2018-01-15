@@ -11,7 +11,7 @@ public class InvitationDoesNotExistExceptionMapper implements ExceptionMapper<In
 	
 	@Override
 	public Response toResponse(InvitationDoesNotExistException exception) {
-		ErrorMessage errorMessage = new ErrorMessage(421, "Die Einladung mit der ID " + exception.getMessage() +" ist nicht mehr verfügbar.");
+		ErrorMessage errorMessage = new ErrorMessage(404, "Die Einladung mit der ID " + exception.getMessage() +" ist nicht mehr verfügbar.");
 		return Response.status(errorMessage.getErrorCode())
 				.entity(errorMessage)
 				.build();

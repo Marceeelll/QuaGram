@@ -102,7 +102,7 @@ public class DatabaseQuagramCards {
 			
 			while (rs.next()) {
 				String id = rs.getString("card_pic_id");
-				String owner_id = rs.getString("owner_id");
+				//String owner_id = rs.getString("owner_id");
 				int number_of_comments = rs.getInt("number_of_comments");
 				int number_of_likes = rs.getInt("number_of_likes");
 				Double longitude = rs.getDouble("longitude");

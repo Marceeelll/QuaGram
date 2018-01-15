@@ -1,7 +1,6 @@
 package com.php.Quagram.service;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import com.php.Quagram.database.DatabaseQuagramInvitations;
 import com.php.Quagram.database.DatabaseQuagramUsers;

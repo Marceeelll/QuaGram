@@ -227,16 +227,16 @@ public class GameplayService {
 		updateUsersLostWonNumbers(gameplayID);
 		
 		// gameSession & gameID von Nutzern austragen
-//		cleanUpGameplayUserParticipants(gameplayID);  ⚠️✅
+		cleanUpGameplayUserParticipants(gameplayID); //  ⚠️✅
 		
 		// turn db einträge leeren zu der gameplayID
-//		cleanUpTurnDB(gameplayID);  ⚠️✅
+		cleanUpTurnDB(gameplayID); //  ⚠️✅
 		
 		// match_session_card db einträge leeren zu der gameplayID
-//		cleanUpMatchSessionCard(gameplayID);  ⚠️✅
+		cleanUpMatchSessionCard(gameplayID); //  ⚠️✅
 		
 		// gameplay aus db löschen
-//		dbGameplay.deleteGameplayForGameplay(gameplayID);  ⚠️✅
+		dbGameplay.deleteGameplayForGameplay(gameplayID); //  ⚠️✅
 	}
 	
 	public void updateUsersLostWonNumbers(String gameplayID) {

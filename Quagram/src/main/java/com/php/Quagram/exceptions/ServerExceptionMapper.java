@@ -7,7 +7,7 @@ import javax.ws.rs.ext.Provider;
 import com.php.Quagram.model.ErrorMessage;
 
 
-
+@Provider
 public class ServerExceptionMapper implements ExceptionMapper<Throwable> {
 
 	@Override

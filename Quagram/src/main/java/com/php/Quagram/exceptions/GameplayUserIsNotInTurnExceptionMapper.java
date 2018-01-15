@@ -11,7 +11,7 @@ public class GameplayUserIsNotInTurnExceptionMapper implements ExceptionMapper<G
 	
 	@Override
 	public Response toResponse(GameplayUserIsNotInTurnException exception) {
-		ErrorMessage errorMessage = new ErrorMessage(440, "Nutzer ist nicht an der Reihe, ein Attribut auszuwählen.");
+		ErrorMessage errorMessage = new ErrorMessage(423, "Nutzer ist nicht an der Reihe, ein Attribut auszuwählen.");
 		return Response.status(errorMessage.getErrorCode())
 				.entity(errorMessage)
 				.build();
