@@ -13,7 +13,7 @@ public class DatabaseQuagramSingleton {
 	}
 	
 	// JDBC driver name and database url
-	//TODO: benötigen wir das? --> private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
+	private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 	private static final String DB_URL = "jdbc:mysql://localhost/Quagram";
 		
 	// Database credentials
@@ -26,7 +26,7 @@ public class DatabaseQuagramSingleton {
 	private void startConnection() {
 		try {
 			// Register JDBC driver
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName(JDBC_DRIVER);
 
 			// Open connection
 			System.out.println("Connecting to database...");
