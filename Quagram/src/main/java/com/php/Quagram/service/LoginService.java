@@ -19,8 +19,10 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 
+import com.php.Quagram.database.DatabaseQuagramGamePlay;
 import com.php.Quagram.database.DatabaseQuagramInvitations;
 import com.php.Quagram.database.DatabaseQuagramMatchSessionCard;
+import com.php.Quagram.database.DatabaseQuagramRound;
 import com.php.Quagram.database.DatabaseQuagramUsers;
 import com.php.Quagram.model.User;
 
@@ -28,6 +30,9 @@ public class LoginService {
 	DatabaseQuagramUsers dbUsers = new DatabaseQuagramUsers();
 	DatabaseQuagramInvitations dbInvitations = new DatabaseQuagramInvitations();
 	DatabaseQuagramMatchSessionCard dbMatchSessionCards = new DatabaseQuagramMatchSessionCard();
+	DatabaseQuagramRound dbRound = new DatabaseQuagramRound();
+	DatabaseQuagramMatchSessionCard dbMatchSessionCard = new DatabaseQuagramMatchSessionCard();
+	DatabaseQuagramGamePlay dbGameplay = new DatabaseQuagramGamePlay();
 	
 	private String clientID = "334bddc7b37f437dbb709f44661dc458";
 	private String redirectURI = "http://localhost:8080/Quagram/webapi/registration";
@@ -108,8 +113,42 @@ public class LoginService {
 			String userID = dbUsers.getInstagramIDForSessionID(sessionID);
 			dbInvitations.deleteAllInvitationsFromUserID(userID);
 			dbUsers.removeUserFromLobby(sessionID);
+			
+			String gameplayID = dbUsers.getMatchSessionIDFromUserSessionID(sessionID);
+			
+			if (gameplayID != null) {
+				// gameSession & gameID von Nutzern austragen
+				cleanUpGameplayUserParticipants(gameplayID);
+				
+				// turn db einträge leeren zu der gameplayID
+				cleanUpTurnDB(gameplayID);
+				
+				// match_session_card db einträge leeren zu der gameplayID
+				cleanUpMatchSessionCard(gameplayID);
+				
+				// gameplay aus db löschen
+				dbGameplay.deleteGameplayForGameplay(gameplayID);
+			}
 		}
 		return result;
+	}
+	
+	private void cleanUpGameplayUserParticipants(String gameplayID) {
+		// match_session_id & game_id -- in der Nutzer DB entfernen
+		ArrayList<User> gameplayUsers = dbUsers.getUserForMatchSessionID(gameplayID);
+		
+		for (User user: gameplayUsers) {
+			dbUsers.setUserAttribetuToNull("match_session_id", user.getSessionID());
+			dbUsers.setUserAttribetuToNull("game_id", user.getSessionID());
+		}
+	}
+	
+	private void cleanUpTurnDB(String gameplayID) {
+		dbRound.deleteTurnsForGameplay(gameplayID);
+	}
+	
+	private void cleanUpMatchSessionCard(String gameplayID) {
+		dbMatchSessionCard.deleteMatchSessionCards(gameplayID);
 	}
 
 }

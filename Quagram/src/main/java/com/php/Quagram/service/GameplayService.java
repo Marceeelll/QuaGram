@@ -110,15 +110,20 @@ public class GameplayService {
 		// TODO: hier nur Status zurück geben ob alles geklappt hat
 		// 		 Der Client muss dann die Anzeige logik übernehmen
 		
-		if (checkIfIsLastGameplayRound(gameplayID)) {
-			System.out.println("GAME DID FINISHED");
-			finishGameplay(gameplayID);
-		}
+//		if (checkIfIsLastGameplayRound(gameplayID)) {
+//			System.out.println("GAME DID FINISHED");
+//			finishGameplay(gameplayID);
+//		}
 		
 		String roundWinnerID = getWinnerIDForGameplayID(gameplayID, cardAttribute);
 		dbRound.addTurnForGameplay(roundWinnerID, gameplayID);
 		dbGameplay.updateGameplayTurnInstagramID(roundWinnerID, gameplayID);
 		incrementRound(gameplayID);
+		
+		if (checkIfIsLastGameplayRound(gameplayID)) {
+			System.out.println("GAME DID FINISHED");
+			finishGameplay(gameplayID);
+		}
 	}
 	
 	private String getWinnerIDForGameplayID(String gameplayID, String selectedCardAttribute) {
@@ -194,22 +199,23 @@ public class GameplayService {
 		
 		System.out.println("Card: " + userCard);
 		
-		JSONClientOutput jsonOutput = new JSONClientOutput();
+		Gameplay gameplay = dbGameplay.getGameplay(gameplayID);
+		int numberOfMaxRounds = gameplay.getTotalNumberOfTurns();
+		int currentRound = gameplay.getCurrentTurnNumber();
 		
 		if (userCard != null) {
 			String usernameWhoHasNextTurn = getUsernameWhoHasNextTurn(gameplayID);
 			HashMap<String, Integer> gameplayInfo = createGameplayInfos(gameplayID);
-			Gameplay gameplay = dbGameplay.getGameplay(gameplayID);
-			int numberOfMaxRounds = gameplay.getTotalNumberOfTurns();
-			int currentRound = gameplay.getCurrentTurnNumber();
 			
+			JSONClientOutput jsonOutput = new JSONClientOutput();
 			JSONObject gameplayJSON = jsonOutput.createGameplayJSON(usernameWhoHasNextTurn, userCard, gameplayInfo, numberOfMaxRounds, currentRound);
 			
 			return gameplayJSON;
 		} else {
 			System.out.println("Print gameende JSON");
 			HashMap<String, Integer> gameplayInfo = createGameplayInfos(gameplayID);
-			JSONObject gameplayJSON = jsonOutput.createGameplayJSON("Marcel", null, gameplayInfo, 4, 2);
+			JSONClientOutput jsonOutput = new JSONClientOutput();
+			JSONObject gameplayJSON = jsonOutput.createGameplayJSON(null, null, gameplayInfo, numberOfMaxRounds, currentRound);
 			
 			return gameplayJSON;
 		}
@@ -227,16 +233,16 @@ public class GameplayService {
 		updateUsersLostWonNumbers(gameplayID);
 		
 		// gameSession & gameID von Nutzern austragen
-		cleanUpGameplayUserParticipants(gameplayID); //  ⚠️✅
+		//cleanUpGameplayUserParticipants(gameplayID); //  ⚠️✅
 		
 		// turn db einträge leeren zu der gameplayID
-		cleanUpTurnDB(gameplayID); //  ⚠️✅
+		//cleanUpTurnDB(gameplayID); //  ⚠️✅
 		
 		// match_session_card db einträge leeren zu der gameplayID
-		cleanUpMatchSessionCard(gameplayID); //  ⚠️✅
+		//cleanUpMatchSessionCard(gameplayID); //  ⚠️✅
 		
 		// gameplay aus db löschen
-		dbGameplay.deleteGameplayForGameplay(gameplayID); //  ⚠️✅
+		//dbGameplay.deleteGameplayForGameplay(gameplayID); //  ⚠️✅
 	}
 	
 	public void updateUsersLostWonNumbers(String gameplayID) {

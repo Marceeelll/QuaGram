@@ -91,13 +91,19 @@ public class JSONClientOutput {
 									int currentRound) {
 		JSONObject gameplayObject = new JSONObject();
 		
-		gameplayObject.put("username_of_player_in_turn", usernamePlayerInTurn);
-		gameplayObject.put("number_of_max_rounds", numberOfMaxRounds);
-		gameplayObject.put("current_round", currentRound + 1);
 		if (cardToPlay == null) {
+			// wenn das Gameplay zu Ende ist
 			gameplayObject.put("card", JSONObject.NULL);
+			gameplayObject.put("username_of_player_in_turn", JSONObject.NULL);
+			gameplayObject.put("number_of_max_rounds", numberOfMaxRounds);
+			int gameSessionHasEndedStatus = -1;
+			gameplayObject.put("current_round", gameSessionHasEndedStatus);
 		} else {
+			// wenn das Gameplay läuft
 			gameplayObject.put("card", parseCardToJSON(cardToPlay));
+			gameplayObject.put("username_of_player_in_turn", usernamePlayerInTurn);
+			gameplayObject.put("number_of_max_rounds", numberOfMaxRounds);
+			gameplayObject.put("current_round", currentRound + 1);
 		}
 		
 		JSONArray userGameplayInfos = new JSONArray();

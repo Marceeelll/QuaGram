@@ -30,7 +30,12 @@ public class InvitationRessource {
 		errorService.isSessionIDValid(sessionID);
 		errorService.isUserInLobby(sessionID);
 		
-		return invitationService.getInvitationsForSessionID(sessionID);
+		ArrayList<Invitation> invitations = invitationService.getInvitationsForSessionID(sessionID);
+		for(Invitation invitation: invitations) {
+			invitation.addLink("URL", "REL", "TYPE", "TITLE");
+		}
+		
+		return invitations;
 	}
 	
 	@PUT

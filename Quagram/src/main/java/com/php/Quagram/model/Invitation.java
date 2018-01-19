@@ -2,8 +2,10 @@ package com.php.Quagram.model;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -12,6 +14,9 @@ public class Invitation {
 	private Date created;
 	private String hostUserID;
 	private String matchSessionID;
+	
+	@XmlElement(name = "link-templates")
+	private ArrayList<Link> links = new ArrayList<>();
 	
 	@XmlTransient
 	public Date getCreated() {
@@ -62,5 +67,13 @@ public class Invitation {
 		return dateFormatter.format(created);
 	}
 	
+	public void addLink(String url, String rel, String type, String title) {
+		Link link = new Link();
+		link.setLink(url);
+		link.setRel(rel);
+		link.setType(type);
+		link.setTitle(title);
+		links.add(link);
+	}
 	
 }

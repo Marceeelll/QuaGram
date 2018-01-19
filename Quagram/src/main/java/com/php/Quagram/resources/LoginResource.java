@@ -39,6 +39,7 @@ public class LoginResource {
 	@GET
 	@Path("/registration")
 	public String userDidAllowedPermissions(@QueryParam("code") String code) {
+		System.out.println("--userDidAllowedPermissions");
 		String currentUserJSONRespond = loginService.requestAccessToken(code);
 		ErrorService errorService = new ErrorService();
 		errorService.isInstagramRegistrationSuccessfully(currentUserJSONRespond);

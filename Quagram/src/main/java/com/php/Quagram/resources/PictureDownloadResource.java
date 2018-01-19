@@ -30,7 +30,7 @@ public class PictureDownloadResource implements IFileService {
 	
 	@GET
 	@Path("/{pictureID}")
-	@Produces({"image/png", "image/jpg", "image/gif"})
+	@Produces({"image/jpg"})
 	public Response downloadImageFile(@PathParam("pictureID") String pictureID) {
 		errorService.isPictureIDValid(pictureID);
 		
@@ -38,7 +38,7 @@ public class PictureDownloadResource implements IFileService {
 		File file = new File(path);
 		
 		ResponseBuilder responseBuilder = Response.ok((Object) file);
-		responseBuilder.header("Content-Disposition", "attachment; filename=\"MyImageFile.png\"");
+		responseBuilder.header("Content-Disposition", "attachment; filename=\"" + pictureID + "\"");
 		return responseBuilder.build();
 	}
 	
