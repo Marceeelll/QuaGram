@@ -37,6 +37,7 @@ public class GameplayResource {
 	public String postGameplayAttribute(@PathParam("sessionID") String sessionID, @PathParam("matchSessionID") String matchSessionID, @PathParam("card_attribute") String card_attribute) {
 		errorService.isSessionIDValid(sessionID);
 		errorService.isMatchSessionValid(matchSessionID);
+		errorService.isGameplayOver(sessionID, matchSessionID);
 		User userWhoWantsToSayTheAttribute = new DatabaseQuagramUsers().getUserForSessionID(sessionID);
 		errorService.isUserInTurnForGameplay(matchSessionID, userWhoWantsToSayTheAttribute.getInstagramID());
 		errorService.isGameplayCardAttributeValid(card_attribute);

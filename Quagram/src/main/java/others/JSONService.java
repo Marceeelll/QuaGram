@@ -35,7 +35,8 @@ public class JSONService {
 		user.setInstagramID(userInstagramID);
 		user.setProfilePic(imageName);
 		UUID sessionID = UUID.randomUUID();
-		user.setSessionID(sessionID.toString());
+		String shortSessionID = sessionID.toString().substring(0, 6); // TODO: nur für die Abgabe, später dann länger = sicherer
+		user.setSessionID(shortSessionID);
 		
 		return user;
 	}

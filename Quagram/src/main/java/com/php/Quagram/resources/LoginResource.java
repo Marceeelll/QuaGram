@@ -11,8 +11,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.json.JSONObject;
-
 import com.php.Quagram.exceptions.UserLogoutException;
 import com.php.Quagram.model.User;
 import com.php.Quagram.service.ErrorService;

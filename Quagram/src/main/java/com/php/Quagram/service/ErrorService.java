@@ -13,6 +13,7 @@ import com.php.Quagram.exceptions.UserHasDeclinedInvitationException;
 import com.php.Quagram.exceptions.UserIsNotLoggedInException;
 import com.php.Quagram.exceptions.UserLoginInstagramTroubleException;
 import com.php.Quagram.exceptions.GameplayAttributeDoesNotExistException;
+import com.php.Quagram.exceptions.GameplayIsOverException;
 import com.php.Quagram.exceptions.GameplayUserIsNotInTurnException;
 import com.php.Quagram.exceptions.InvitationAcceptedStatusDoesNotExistException;
 import com.php.Quagram.exceptions.InvitationAlreadySentToUserException;
@@ -21,6 +22,7 @@ import com.php.Quagram.exceptions.InvitationDoesNotExistException;
 import com.php.Quagram.exceptions.LobbyDoesNotIncludeUserException;
 import com.php.Quagram.exceptions.MatchSessionIDNotFoundException;
 import com.php.Quagram.exceptions.PictureIDIsWrongException;
+import com.php.Quagram.model.Card;
 import com.php.Quagram.model.Gameplay;
 import com.php.Quagram.model.Invitation;
 import com.php.Quagram.model.User;
@@ -33,7 +35,7 @@ public class ErrorService {
 	
 	/*
 	 * 
-	 * Allgemeine Fehler - 400...409
+	 * Allgemeine Fehler
 	 * 
 	 * */
 	public void isSessionIDValid(String sessionID) {
@@ -61,7 +63,7 @@ public class ErrorService {
 	
 	/*
 	 * 
-	 * Lobby Fehler - 410...419
+	 * Lobby Fehler
 	 * 
 	 * */
 	public void isUserInLobby(String sessionID) {
@@ -81,7 +83,7 @@ public class ErrorService {
 	
 	/*
 	 * 
-	 * Invitation Fehler - 420...429
+	 * Invitation Fehler
 	 * 
 	 * */
 	public void isUserAlreadyInvited(String userToInviteID, String hostSessionID) {
@@ -121,7 +123,7 @@ public class ErrorService {
 	
 	/*
 	 * 
-	 * MatchSession Fehler - 430...439
+	 * MatchSession Fehler
 	 * 
 	 * */
 	public void isMatchSessionValid(String matchSessionID) {
@@ -148,7 +150,7 @@ public class ErrorService {
 	
 	/*
 	 * 
-	 * Gameplay Fehler - 440...449
+	 * Gameplay Fehler
 	 * 
 	 * */
 	public void isUserInTurnForGameplay(String gameplayID, String userID) {
@@ -178,10 +180,20 @@ public class ErrorService {
 		}
 	}
 	
+	public void isGameplayOver(String sessionID, String gameplayID) {
+		String userID = dbUsers.getInstagramIDForSessionID(sessionID);
+		Card userCard = new GameplayService().getCardToPlay(gameplayID, userID);
+		System.out.println("#### isGameplayOver - userCard: " + userCard);
+		if (userCard == null) {
+			System.out.println("THROW isGameplayOver");
+			throw new GameplayIsOverException(gameplayID);
+		}
+	}
+	
 	
 	/*
 	 * 
-	 * Picture Fehler - 450...459
+	 * Picture Fehler
 	 * 
 	 * */
 	public void isPictureIDValid(String pictureID) {

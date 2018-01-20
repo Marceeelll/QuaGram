@@ -106,19 +106,17 @@ public class GameplayService {
 	
 	
 	public void postSelectedGameplayAttribute(String cardAttribute, String gameplayID, String sessionID) {
-		
-		// TODO: hier nur Status zurück geben ob alles geklappt hat
-		// 		 Der Client muss dann die Anzeige logik übernehmen
-		
-//		if (checkIfIsLastGameplayRound(gameplayID)) {
-//			System.out.println("GAME DID FINISHED");
-//			finishGameplay(gameplayID);
-//		}
-		
 		String roundWinnerID = getWinnerIDForGameplayID(gameplayID, cardAttribute);
-		dbRound.addTurnForGameplay(roundWinnerID, gameplayID);
-		dbGameplay.updateGameplayTurnInstagramID(roundWinnerID, gameplayID);
-		incrementRound(gameplayID);
+		
+		if (roundWinnerID == null) {
+			// unentschieden
+			incrementRound(gameplayID);
+		} else {
+			// wenn es einen Gewinner gibt
+			dbRound.addTurnForGameplay(roundWinnerID, gameplayID);
+			dbGameplay.updateGameplayTurnInstagramID(roundWinnerID, gameplayID);
+			incrementRound(gameplayID);
+		}
 		
 		if (checkIfIsLastGameplayRound(gameplayID)) {
 			System.out.println("GAME DID FINISHED");
@@ -127,7 +125,7 @@ public class GameplayService {
 	}
 	
 	private String getWinnerIDForGameplayID(String gameplayID, String selectedCardAttribute) {
-		ArrayList<User> userInMatchSession = dbUsers.getUserForMatchSessionID(gameplayID); // TODO: eigentlich matchSessionID nicht gameplayID!
+		ArrayList<User> userInMatchSession = dbUsers.getUserForMatchSessionID(gameplayID);
 		HashMap<String, Card> usersAndCards = new HashMap<>();
 		
 		for (User user: userInMatchSession) {
@@ -145,25 +143,33 @@ public class GameplayService {
 			} else {
 				switch (selectedCardAttribute) {
 				case "likes":
-					if(winnerCard.getLikes() < card.getLikes()) {
+					if (winnerCard.getLikes() == card.getLikes()) {
+						return null;
+					} else if(winnerCard.getLikes() < card.getLikes()) {
 						winnerCard = card;
 						winnerID = userID;
 					}
 					break;
 				case "comments":
-					if(winnerCard.getComments() < card.getComments()) {
+					if (winnerCard.getComments() == card.getComments()) {
+						return null;
+					} else if(winnerCard.getComments() < card.getComments()) {
 						winnerCard = card;
 						winnerID = userID;
 					}
 					break;
 				case "temperature":
-					if (Math.abs(winnerCard.getTemperature()) < Math.abs(card.getTemperature())) {
+					if (Math.abs(winnerCard.getTemperature()) == Math.abs(card.getTemperature())) {
+						return null;
+					} else if (Math.abs(winnerCard.getTemperature()) < Math.abs(card.getTemperature())) {
 						winnerCard = card;
 						winnerID = userID;
 					}
 					break;
 				case "height":
-					if (winnerCard.getHeightMeter() < card.getHeightMeter()) {
+					if (winnerCard.getHeightMeter() == card.getHeightMeter()) {
+						return null;
+					} else if (winnerCard.getHeightMeter() < card.getHeightMeter()) {
 						winnerCard = card;
 						winnerID = userID;
 					}
@@ -171,7 +177,6 @@ public class GameplayService {
 				default:
 					break;
 				}
-				// TODO: alle Attribute implementieren !
 			}
 		}
 		
@@ -195,8 +200,7 @@ public class GameplayService {
 	public JSONObject getGameplayRoundJSON(String sessionID, String gameplayID) {
 		String userID = dbUsers.getInstagramIDForSessionID(sessionID);
 		Card userCard = getCardToPlay(gameplayID, userID);
-		// TODO: 🚨⚠️ wenn das Gameplay zu Ende ist, steht in der nachfolgenden Zeile --> null
-		
+
 		System.out.println("Card: " + userCard);
 		
 		Gameplay gameplay = dbGameplay.getGameplay(gameplayID);
@@ -231,18 +235,6 @@ public class GameplayService {
 		System.out.println("\t\t\tpublic void finishGameplay(String gameplayID) { #######");
 		// verlierer/gewinner attribut beim user erhöhen
 		updateUsersLostWonNumbers(gameplayID);
-		
-		// gameSession & gameID von Nutzern austragen
-		//cleanUpGameplayUserParticipants(gameplayID); //  ⚠️✅
-		
-		// turn db einträge leeren zu der gameplayID
-		//cleanUpTurnDB(gameplayID); //  ⚠️✅
-		
-		// match_session_card db einträge leeren zu der gameplayID
-		//cleanUpMatchSessionCard(gameplayID); //  ⚠️✅
-		
-		// gameplay aus db löschen
-		//dbGameplay.deleteGameplayForGameplay(gameplayID); //  ⚠️✅
 	}
 	
 	public void updateUsersLostWonNumbers(String gameplayID) {
@@ -269,30 +261,36 @@ public class GameplayService {
 			}
 		}
 		
-		dbUsers.incrementGameWonFromUser(winnerInstagramID);
-		for(String instagramIDWhoHasLost: instagramIdAndWonRounds.keySet()) {
-			if (!winnerInstagramID.equals(instagramIDWhoHasLost)) {
-				dbUsers.incrementGameLostFromUser(instagramIDWhoHasLost);
+		// unentschieden heraufsinden
+		ArrayList<String> drawPlayers = new ArrayList<>();
+		for (String instagramID: instagramIdAndWonRounds.keySet()) {
+			int wons = instagramIdAndWonRounds.get(instagramID);
+			if (wons == maxWons && !instagramID.equals(winnerInstagramID)) {
+				drawPlayers.add(instagramID);
 			}
 		}
-	}
-	
-	private void cleanUpGameplayUserParticipants(String gameplayID) {
-		// match_session_id & game_id -- in der Nutzer DB entfernen
-		ArrayList<User> gameplayUsers = dbUsers.getUserForMatchSessionID(gameplayID);
 		
-		for (User user: gameplayUsers) {
-			dbUsers.setUserAttribetuToNull("match_session_id", user.getSessionID());
-			dbUsers.setUserAttribetuToNull("game_id", user.getSessionID());
+		
+		if (drawPlayers.size() > 0) {
+			System.out.println("ES FAND EIN UNENTSCHIEDEN STATT!");
+			// es hat ein unentschieden stattgefunden
+			dbUsers.incrementGameWonFromUser(winnerInstagramID);
+			for(String drawPlayerID: drawPlayers) {
+				dbUsers.incrementGameWonFromUser(drawPlayerID);
+			}
+			// hier durch den Rest durchaufen, falls später das Spiel auf mehr als
+			// zwei Spieler erhöht wird und dementsprechend die Werte erhöhen.
+		} else {
+			System.out.println("ES FAND ---->KEIN<---- UNENTSCHIEDEN STATT!");
+			// kein untentschieden
+			// die Werte der Spieler erhöhen
+			dbUsers.incrementGameWonFromUser(winnerInstagramID);
+			for(String instagramIDWhoHasLost: instagramIdAndWonRounds.keySet()) {
+				if (!winnerInstagramID.equals(instagramIDWhoHasLost)) {
+					dbUsers.incrementGameLostFromUser(instagramIDWhoHasLost);
+				}
+			}
 		}
-	}
-	
-	private void cleanUpTurnDB(String gameplayID) {
-		dbRound.deleteTurnsForGameplay(gameplayID);
-	}
-	
-	private void cleanUpMatchSessionCard(String gameplayID) {
-		dbMatchSessionCard.deleteMatchSessionCards(gameplayID);
 	}
 	
 	private String getUsernameWhoHasNextTurn(String gameplayID) {
