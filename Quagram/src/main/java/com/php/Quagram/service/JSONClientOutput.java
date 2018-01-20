@@ -121,9 +121,10 @@ public class JSONClientOutput {
 		return gameplayObject;
 	}
 	
-	public JSONObject createLobbyJSON(ArrayList<User> lobbyUsers) {
-		
-		return null;
+	public JSONObject getURLJSON(String url) {
+		JSONObject json = new JSONObject();
+		json.put("url", url);
+		return json;
 	}
 }
 

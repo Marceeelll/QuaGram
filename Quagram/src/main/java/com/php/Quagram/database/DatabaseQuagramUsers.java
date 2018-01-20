@@ -147,6 +147,52 @@ public class DatabaseQuagramUsers {
 		return new ArrayList<>();
 	}
 	
+	public ArrayList<User> getLobbyUsersWithoutSessionID(String withoutSessionID) {
+		try {
+			databaseConnection.statement = databaseConnection.connection.createStatement();
+			
+			String sql;
+			sql = "select * from user where is_in_lobby=1";
+			ResultSet rs = databaseConnection.statement.executeQuery(sql);
+			
+			ArrayList<User> lobbyUser = new ArrayList<>();
+			
+			User currentUser = getUserForSessionID(withoutSessionID);
+			
+			while (rs.next()) {
+				String id = rs.getString("instagram_id");
+				String accessToken = rs.getString("access_token");
+				String sessionID = rs.getString("session_id");
+				String username = rs.getString("username");
+				int gamesLost = rs.getInt("games_lost");
+				int gamesWon = rs.getInt("games_won");
+				
+				if (!currentUser.getUsername().equals(username)) {
+					User user = new User();
+					user.setSessionID(id);
+					user.setAccessToken(accessToken);
+					user.setSessionID(sessionID);
+					user.setUsername(username);
+					user.setGamesLost(gamesLost);
+					user.setGamesWin(gamesWon);
+					lobbyUser.add(user);
+				}
+				
+			}
+			
+			rs.close();
+			return lobbyUser;
+
+		} catch(NullPointerException e) {
+			
+		} catch(SQLException e) {
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ArrayList<>();
+	}
+	
 	public void removeUserFromLobby(String sessionID) {
 		try {
 			databaseConnection.statement = databaseConnection.connection.createStatement();

@@ -33,7 +33,7 @@ public class LobbyResource {
 		errorService.isSessionIDValid(sessionID);
 		errorService.isUserInLobby(sessionID);
 		
-		ArrayList<User> users = lobbyService.getAllLobbyUsers();
+		ArrayList<User> users = lobbyService.getAllLobbyUsersWithoutSessionID(sessionID);
 		return users;
 	}
 	
@@ -43,7 +43,7 @@ public class LobbyResource {
 		errorService.isSessionIDValid(sessionID);
 		lobbyService.addUserToLobby(sessionID);
 		
-		ArrayList<User> users = lobbyService.getAllLobbyUsers();
+		ArrayList<User> users = lobbyService.getAllLobbyUsersWithoutSessionID(sessionID);
 		return users;
 	}
 	

@@ -11,6 +11,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.json.JSONObject;
+
 import com.php.Quagram.exceptions.UserLogoutException;
 import com.php.Quagram.model.User;
 import com.php.Quagram.service.ErrorService;
@@ -31,14 +33,22 @@ public class LoginResource {
 	@Path("/registration/login")
 	public Response instagramRegistration() {
 		String registrationURIResponse = loginService.getRegistrationURI();
+		String jsonURLEntityString = new JSONClientOutput().getURLJSON(registrationURIResponse).toString();
 		return Response.status(Status.OK)
-				.entity(registrationURIResponse)
+				.entity(jsonURLEntityString)
 				.build();
 	}
 	
 	@GET
 	@Path("/registration")
-	public String userDidAllowedPermissions(@QueryParam("code") String code) {
+	public String userDidAllowedPermissions(@QueryParam("code") String code, @QueryParam("error") String error, @QueryParam("error_reason") String error_reason, @QueryParam("error_description") String error_description, @QueryParam("type") String type) {
+		
+		System.out.println("AAAAAA: " + type);
+		String result = "error: " + error;
+		result += "\nerror_reason: " + error_reason;
+		result += "\nerror_description: " + error_description;
+		System.out.println(result);
+		
 		System.out.println("--userDidAllowedPermissions");
 		String currentUserJSONRespond = loginService.requestAccessToken(code);
 		ErrorService errorService = new ErrorService();
@@ -51,6 +61,15 @@ public class LoginResource {
 		cardDownloadController.downloadCardsForUserAndSafeToDB(user.getAccessToken(), user.getInstagramID());
 		return "" + new JSONClientOutput().parseLoginUserWithSessionID(user);
 	}
+	
+//	@GET
+//	@Path("/registration")
+//	public String userDidAllowedPermissionsErrorOccured(@QueryParam("error") String error, @QueryParam("error_reason") String error_reason, @QueryParam("error_description") String error_description) {
+//		String result = "error: " + error;
+//		result += "\nerror_reason: " + error_reason;
+//		result += "\nerror_description: " + error_description;
+//		return result;
+//	}
 	
 	@PUT
 	@Path("/logout/{sessionID}")

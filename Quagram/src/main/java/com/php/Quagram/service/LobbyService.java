@@ -17,8 +17,8 @@ public class LobbyService {
 		dbUsers.addUserToLobby(sessionID);
 	}
 	
-	public ArrayList<User> getAllLobbyUsers() {
-		return dbUsers.getLobbyUsers();
+	public ArrayList<User> getAllLobbyUsersWithoutSessionID(String withoutSessionID) {
+		return dbUsers.getLobbyUsersWithoutSessionID(withoutSessionID);
 	}
 	
 	public void removeUserFromLobby(String sessionID) {
