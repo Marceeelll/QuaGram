@@ -13,11 +13,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.json.JSONObject;
-
 import com.php.Quagram.model.User;
 import com.php.Quagram.service.ErrorService;
-import com.php.Quagram.service.GameplayService;
 import com.php.Quagram.service.LobbyService;
 
 @Path("/lobby")
@@ -62,8 +59,7 @@ public class LobbyResource {
 	@GET
 	@Path("dummy")
 	public String dummy() {
-		JSONObject json =  new GameplayService().getGameplayRoundJSON("927e0746-16e1-4ba9-8cdd-628abde86b95", "test");
-		return "Dummy erfolgreich ausgeführt - " + json;
+		return "Dummy erfolgreich ausgeführt";
 	}
 }
 

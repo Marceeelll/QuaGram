@@ -7,7 +7,6 @@ public class Link {
 	private String link;
 	private String rel;
 	private String type;
-	private String title;
 	
 	public String getLink() {
 		return link;
@@ -26,11 +25,5 @@ public class Link {
 	}
 	public void setType(String type) {
 		this.type = type;
-	}
-	public String getTitle() {
-		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
 	}
 }

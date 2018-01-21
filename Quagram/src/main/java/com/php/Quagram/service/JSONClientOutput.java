@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import com.php.Quagram.database.DatabaseQuagramUsers;
 import com.php.Quagram.model.Card;
 import com.php.Quagram.model.Invitation;
+import com.php.Quagram.model.Link;
 import com.php.Quagram.model.User;
 
 public class JSONClientOutput {
@@ -44,6 +45,19 @@ public class JSONClientOutput {
 		return userArray;
 	}
 	
+	public JSONObject parseInvitationToJSON(Invitation invitation) {
+		DatabaseQuagramUsers userDB = new DatabaseQuagramUsers();
+		
+		JSONObject invitationObject = new JSONObject();
+		invitationObject.put("createdDate", invitation.getCreatedDate());
+		User hostUser = userDB.getUserForInstagramID(invitation.getHostUserID());
+		invitationObject.put("hostUsername", hostUser.getUsername());
+		invitationObject.put("matchSessionID", invitation.getMatchSessionID());
+		invitationObject.put("link-templates", parseLinkListToJSON(invitation.getLinks()));
+		
+		return invitationObject;
+	}
+	
 	public JSONArray parseInvitationListToJSON(ArrayList<Invitation> invitations) {
 		JSONArray invitationArray = new JSONArray();
 		
@@ -55,10 +69,24 @@ public class JSONClientOutput {
 			User hostUser = userDB.getUserForInstagramID(invitation.getHostUserID());
 			invitationObject.put("hostUsername", hostUser.getUsername());
 			invitationObject.put("matchSessionID", invitation.getMatchSessionID());
+			invitationObject.put("link-templates", parseLinkListToJSON(invitation.getLinks()));
+			
 			invitationArray.put(invitationObject);
 		}
 		
 		return invitationArray;
+	}
+	
+	private JSONArray parseLinkListToJSON(ArrayList<Link> links) {
+		JSONArray linksJSON = new JSONArray();
+		for (Link link: links) {
+			JSONObject objectLink = new JSONObject();
+			objectLink.put("type", link.getType());
+			objectLink.put("rel", link.getRel());
+			objectLink.put("link", link.getLink());
+			linksJSON.put(objectLink);
+		}
+		return linksJSON;
 	}
 	
 	public JSONObject parseCardToJSON(Card card) {

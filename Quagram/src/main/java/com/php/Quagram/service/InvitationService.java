@@ -4,11 +4,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 
+import javax.ws.rs.core.UriInfo;
+
+import org.json.JSONObject;
+
 import com.php.Quagram.database.DatabaseQuagramInvitations;
 import com.php.Quagram.database.DatabaseQuagramUsers;
 import com.php.Quagram.exceptions.SessionIDNotFoundException;
 import com.php.Quagram.model.Invitation;
 import com.php.Quagram.model.User;
+import com.php.Quagram.resources.InvitationRessource;
+import com.php.Quagram.resources.MatchSessionRessource;
 
 public class InvitationService {
 	DatabaseQuagramUsers dbUsers = new DatabaseQuagramUsers();
@@ -28,6 +34,20 @@ public class InvitationService {
 		ArrayList<Invitation> invitations = dbInvitations.getInvitationsForUser(sessionID);
 		
 		return invitations;
+	}
+	
+	public JSONObject getInvitationForSessionIDAndHostName(String sessionID, String hostUsername, UriInfo uriInfo) {
+		ArrayList<Invitation> invitations = getInvitationsForSessionID(sessionID);
+		
+		for(Invitation invitation: invitations) {
+			User user = dbUsers.getUserForInstagramID(invitation.getHostUserID());
+			if (user.getUsername().equals(hostUsername)) {
+				appendHypermediaToInvitation(invitation, uriInfo, sessionID);
+				return new JSONClientOutput().parseInvitationToJSON(invitation);
+			}
+		}
+		
+		return null;
 	}
 	
 	public Invitation sendInvitaitonToInstagramUsername(String instagramUsername, String hostSessionID) {
@@ -58,6 +78,31 @@ public class InvitationService {
 	
 	private void appendInvitationToUser(User userWhoGotInvitation, Invitation invitation) {
 		dbInvitations.addInvitation(userWhoGotInvitation, invitation);
+	}
+	
+	public void appendHypermediaToInvitations(ArrayList<Invitation> invitations, UriInfo uriInfo, String sessionID) {
+		for(Invitation invitation: invitations) {
+			appendHypermediaToInvitation(invitation, uriInfo, sessionID);
+		}
+	}
+	
+	public void appendHypermediaToInvitation(Invitation invitation, UriInfo uriInfo, String sessionID) {
+		// self
+		User hostUser = dbUsers.getUserForInstagramID(invitation.getHostUserID());
+		String selfURI = uriInfo.getBaseUriBuilder().path(InvitationRessource.class).path(sessionID).path("invitation").path(hostUser.getUsername()).build().toString();
+		invitation.addLink(selfURI, "self", "GET");
+					
+		// matchSession
+		String matchSessionURI = uriInfo.getBaseUriBuilder().path(MatchSessionRessource.class).path(invitation.getMatchSessionID()).build().toString();
+		invitation.addLink(matchSessionURI, "matchSession", "GET");
+					
+		// acceptInvitation
+		String acceptInvitationURI = uriInfo.getBaseUriBuilder().path(MatchSessionRessource.class).path(sessionID).path(invitation.getMatchSessionID()).queryParam("accepted", "1").build().toString();
+		invitation.addLink(acceptInvitationURI, "acceptInvitation", "PUT");
+					
+		// declinedInvitation
+		String declinedInvitationURI = uriInfo.getBaseUriBuilder().path(MatchSessionRessource.class).path(sessionID).path(invitation.getMatchSessionID()).queryParam("accepted", "0").build().toString();
+		invitation.addLink(declinedInvitationURI, "declineInvitation", "PUT");
 	}
 	
 }

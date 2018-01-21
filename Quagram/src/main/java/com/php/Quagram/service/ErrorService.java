@@ -16,7 +16,6 @@ import com.php.Quagram.exceptions.GameplayAttributeDoesNotExistException;
 import com.php.Quagram.exceptions.GameplayIsOverException;
 import com.php.Quagram.exceptions.GameplayUserIsNotInTurnException;
 import com.php.Quagram.exceptions.InvitationAcceptedStatusDoesNotExistException;
-import com.php.Quagram.exceptions.InvitationAlreadySentToUserException;
 import com.php.Quagram.exceptions.InvitationCantBeSendToOneselfException;
 import com.php.Quagram.exceptions.InvitationDoesNotExistException;
 import com.php.Quagram.exceptions.LobbyDoesNotIncludeUserException;
@@ -92,8 +91,8 @@ public class ErrorService {
 		
 		for (Invitation invitation: invitations) {
 			if (invitation.getHostUserID().equals(hostInstagramID)) {
-				User userToInvite = dbUsers.getUserForInstagramID(userToInviteID);
-				throw new InvitationAlreadySentToUserException(userToInvite.getUsername());
+				// User userToInvite = dbUsers.getUserForInstagramID(userToInviteID);
+				dbInvitations.deleteInvitationWithHostID(hostInstagramID);
 			}
 		}
 	}

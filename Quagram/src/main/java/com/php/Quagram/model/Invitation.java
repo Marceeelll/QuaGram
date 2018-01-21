@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -15,7 +14,7 @@ public class Invitation {
 	private String hostUserID;
 	private String matchSessionID;
 	
-	@XmlElement(name = "link-templates")
+	//@XmlElement(name = "link-templates")
 	private ArrayList<Link> links = new ArrayList<>();
 	
 	@XmlTransient
@@ -66,13 +65,15 @@ public class Invitation {
 		SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 		return dateFormatter.format(created);
 	}
+	public ArrayList<Link> getLinks() {
+		return links;
+	}
 	
-	public void addLink(String url, String rel, String type, String title) {
+	public void addLink(String url, String rel, String type) {
 		Link link = new Link();
 		link.setLink(url);
 		link.setRel(rel);
 		link.setType(type);
-		link.setTitle(title);
 		links.add(link);
 	}
 	

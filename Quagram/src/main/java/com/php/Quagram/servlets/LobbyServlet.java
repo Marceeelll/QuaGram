@@ -39,12 +39,14 @@ public class LobbyServlet extends HttpServlet {
 
 		printwriter = response.getWriter();
 		
+		System.out.println("Anfrage von ID: " + sessionID);
+		
 		ArrayList<User> users = new DatabaseQuagramUsers().getLobbyUsers();
 		
-		JSONClientOutput test = new JSONClientOutput();
-		JSONArray hello = test.parseUserArrayListToJSON(users, sessionID);
+		JSONClientOutput clientJSONOutput = new JSONClientOutput();
+		JSONArray lobbyJSON = clientJSONOutput.parseUserArrayListToJSON(users, sessionID);
 		
-		printwriter.print("data: { \"data\": " + hello + " }" + "\n\n");
+		printwriter.print("data: { \"data\": " + lobbyJSON + " }" + "\n\n");
 		
 		response.flushBuffer();
 		printwriter.close();
