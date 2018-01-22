@@ -11,6 +11,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.json.JSONObject;
+
+import com.php.Quagram.database.DatabaseQuagramUsers;
 import com.php.Quagram.exceptions.UserLogoutException;
 import com.php.Quagram.model.User;
 import com.php.Quagram.service.ErrorService;
@@ -63,6 +66,21 @@ public class LoginResource {
 		} else {
 			throw new UserLogoutException();
 		}
+	}
+	
+	
+	/*
+	 * Die nachfolgende Resource ist nur für das iPad implementiert, auf dem die Studienarbeit
+	 * abgegeben wird, da auf diesem Gerät OAuth nicht richtig funktioniert und von Instagram aus schwirigkeiten bereitet.
+	 * 
+	 * */
+	@GET
+	@Path("/iPadProfileInformation/{sessionID}")
+	public Response getPlayerInformationForIPadThatCantUseOAuth(@PathParam("sessionID") String sessionID) {
+		User user = new DatabaseQuagramUsers().getUserForSessionID(sessionID);
+		JSONObject jsonRespond = new JSONClientOutput().parseLoginUserWithSessionID(user);
+		System.out.println(jsonRespond);
+		return Response.status(Status.OK).entity(jsonRespond.toString()).build();
 	}
 	
 }

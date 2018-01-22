@@ -44,10 +44,12 @@ public class DatabaseQuagramUsers {
 				String id = rs.getString("instagram_id");
 				String accessToken = rs.getString("access_token");
 				String username = rs.getString("username");
+				String profilePic = rs.getString("profile_pic");
 				int gamesLost = rs.getInt("games_lost");
 				int gamesWon = rs.getInt("games_won");
 				
 				User user = new User();
+				user.setProfilePic(profilePic);
 				user.setInstagramID(id);
 				user.setAccessToken(accessToken);
 				user.setSessionID(sessionID);
