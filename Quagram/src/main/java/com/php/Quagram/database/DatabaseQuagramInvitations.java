@@ -15,7 +15,6 @@ public class DatabaseQuagramInvitations {
 		try {
 			databaseConnection.statement = databaseConnection.connection.createStatement();
 			
-			//Get InstagramID for SessionID
 			String instagramID = new DatabaseQuagramUsers().getInstagramIDForSessionID(sessionID);
 			if(instagramID == null) {
 				return new ArrayList<>();
@@ -53,7 +52,6 @@ public class DatabaseQuagramInvitations {
 		try {
 			databaseConnection.statement = databaseConnection.connection.createStatement();
 			
-			//Get InstagramID for SessionID
 			if(instagramID == null) {
 				return new ArrayList<>();
 			}
@@ -85,7 +83,6 @@ public class DatabaseQuagramInvitations {
 	}
 	
 	
-	//TODO: Wenn Spieler schon eingeladen wurde, darf die Einladung nicht noch einmal eingetragen werden
 	public void addInvitation(User receiver, Invitation invitation) {
 		try {
 			databaseConnection.statement = databaseConnection.connection.createStatement();
@@ -100,8 +97,7 @@ public class DatabaseQuagramInvitations {
 			
 			int result = databaseConnection.statement.executeUpdate(sql);
 			System.out.println("Inserted Invitation (addInvitation): " +result);
-		} catch (SQLException e) {
-			// if contains id already -> make update instead of insert 
+		} catch (SQLException e) { 
 			e.printStackTrace();
 		}
 	}
@@ -119,7 +115,6 @@ public class DatabaseQuagramInvitations {
 			int result = databaseConnection.statement.executeUpdate(sql);
 			System.out.println("Delete Invitation (deleteInvitation): " + result);
 		} catch (SQLException e) {
-			// if contains id already -> make update instead of insert 
 			e.printStackTrace();
 		}
 	}
@@ -134,8 +129,7 @@ public class DatabaseQuagramInvitations {
 			
 			int result = databaseConnection.statement.executeUpdate(sql);
 			System.out.println("Delete Invitation (deleteInvitation): " + result);
-		} catch (SQLException e) {
-			// if contains id already -> make update instead of insert 
+		} catch (SQLException e) { 
 			e.printStackTrace();
 		}
 	}
@@ -156,7 +150,6 @@ public class DatabaseQuagramInvitations {
 			int result = databaseConnection.statement.executeUpdate(sql);
 			System.out.println("Delete Invitation (deleteInvitation): " + result);
 		} catch (SQLException e) {
-			// if contains id already -> make update instead of insert 
 			e.printStackTrace();
 		}
 	}
@@ -172,7 +165,6 @@ public class DatabaseQuagramInvitations {
 			int result = databaseConnection.statement.executeUpdate(sql);
 			System.out.println("Delete Invitation (deleteInvitation): " + result);
 		} catch (SQLException e) {
-			// if contains id already -> make update instead of insert 
 			e.printStackTrace();
 		}
 	}

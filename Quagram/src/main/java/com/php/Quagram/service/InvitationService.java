@@ -58,7 +58,6 @@ public class InvitationService {
 		
 		User userToInvite = dbUsers.getLobbyUserForInstagramUsername(instagramUsername);
 		if(userToInvite == null) {
-			System.out.println("TODO--throw-Error- sendInvitaitonToInstagramID-2");
 			return null;
 		}
 		

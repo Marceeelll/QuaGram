@@ -40,7 +40,6 @@ public class User {
 		this.accessToken = accessToken;
 	}
 	
-	
 	@XmlTransient
 	public String getSessionID() {
 		return sessionID;

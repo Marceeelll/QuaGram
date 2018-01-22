@@ -50,7 +50,6 @@ public class DatabaseQuagramCards {
 			
 			System.out.println("Card hinzugefügt: " + result);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
@@ -75,7 +74,6 @@ public class DatabaseQuagramCards {
 		try {
 			databaseConnection.statement = databaseConnection.connection.createStatement();
 			
-			//String sql = "select * from card where owner_id='" + userInstagramID + "'";
 			String sql = "select * from card where owner_id='" + userInstagramID + "'";
 			ResultSet rs = databaseConnection.statement.executeQuery(sql);
 			
@@ -102,7 +100,6 @@ public class DatabaseQuagramCards {
 			
 			while (rs.next()) {
 				String id = rs.getString("card_pic_id");
-				//String owner_id = rs.getString("owner_id");
 				int number_of_comments = rs.getInt("number_of_comments");
 				int number_of_likes = rs.getInt("number_of_likes");
 				Double longitude = rs.getDouble("longitude");
@@ -119,7 +116,6 @@ public class DatabaseQuagramCards {
 				location.setLongitude(longitude);
 				location.setName(place_name);
 				
-				// TODO: Picture URL NOCH SETZEN!
 				Card card = new Card(id, "", number_of_likes, number_of_comments, temperature, elevation, location, humidity, engagement, windspeed);
 				userCards.add(card);
 			}
@@ -132,8 +128,4 @@ public class DatabaseQuagramCards {
 		return null;
 	}
 }
-
-
-
-
 

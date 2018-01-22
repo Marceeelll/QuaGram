@@ -155,13 +155,3 @@ public class JSONClientOutput {
 		return json;
 	}
 }
-
-
-
-
-
-
-
-
-
-

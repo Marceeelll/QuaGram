@@ -47,25 +47,6 @@ public class GameplayResource {
 		JSONObject gameplayJSON = gameplayService.getGameplay(sessionID, matchSessionID);
 		return gameplayJSON.toString();
 	}
-	
-	// TODO: Delete methode implementieren, um Gameplay zu beenden!
-	// TODO: Keine Nutzer in Gameplay Exception werfen!
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

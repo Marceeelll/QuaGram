@@ -40,13 +40,6 @@ public class LoginResource {
 	@GET
 	@Path("/registration")
 	public String userDidAllowedPermissions(@QueryParam("code") String code, @QueryParam("error") String error, @QueryParam("error_reason") String error_reason, @QueryParam("error_description") String error_description, @QueryParam("type") String type) {
-		
-		System.out.println("AAAAAA: " + type);
-		String result = "error: " + error;
-		result += "\nerror_reason: " + error_reason;
-		result += "\nerror_description: " + error_description;
-		System.out.println(result);
-		
 		System.out.println("--userDidAllowedPermissions");
 		String currentUserJSONRespond = loginService.requestAccessToken(code);
 		ErrorService errorService = new ErrorService();
@@ -60,15 +53,6 @@ public class LoginResource {
 		return "" + new JSONClientOutput().parseLoginUserWithSessionID(user);
 	}
 	
-//	@GET
-//	@Path("/registration")
-//	public String userDidAllowedPermissionsErrorOccured(@QueryParam("error") String error, @QueryParam("error_reason") String error_reason, @QueryParam("error_description") String error_description) {
-//		String result = "error: " + error;
-//		result += "\nerror_reason: " + error_reason;
-//		result += "\nerror_description: " + error_description;
-//		return result;
-//	}
-	
 	@PUT
 	@Path("/logout/{sessionID}")
 	public Response loggout(@PathParam("sessionID") String sessionID) {
@@ -77,7 +61,6 @@ public class LoginResource {
 		if (result == 1) {
 			return Response.status(Status.NO_CONTENT).build();
 		} else {
-//			throw new PictureIDIsWrongException("hello");
 			throw new UserLogoutException();
 		}
 	}

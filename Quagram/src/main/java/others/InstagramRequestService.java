@@ -36,18 +36,6 @@ public class InstagramRequestService {
 		// DOKU-LINK: https://www.instagram.com/developer/endpoints/users/#get_users_self
 		// https://api.instagram.com/v1/users/self/?access_token=ACCESS-TOKEN
 		
-		// data
-		// 		id
-		// 		username
-		// 		full_name
-		//		profile_picture
-		//		bio
-		//		website
-		//		counts
-		//			media
-		//			follows
-		//			followed_by
-		
 		URIBuilder builder = new URIBuilder()
 				.setScheme("https")
 				.setHost("api.instagram.com")

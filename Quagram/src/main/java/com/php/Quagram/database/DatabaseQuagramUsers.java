@@ -28,7 +28,6 @@ public class DatabaseQuagramUsers {
 				System.out.println("Updated User (addUser): " +result);
 			}
 		} catch (SQLException e) {
-			// if contains id already -> make update instead of insert 
 			addUser(user, false);
 		}
 	}
@@ -412,7 +411,6 @@ public class DatabaseQuagramUsers {
 	public void leaveMatchSession(String sessionID, String matchSessionID) {
 		try {
 			databaseConnection.statement = databaseConnection.connection.createStatement();
-			//TODO: ACHTUNG HIER WIRD NICHT AUF DIE MATCHSESSIONID EINGEGANGEN !!?!!
 			String sql = "update user set match_session_id=null where session_id='" + sessionID +"'";
 			int result = databaseConnection.statement.executeUpdate(sql);
 			System.out.println("Match Session Leave-Status: " + result);
@@ -425,9 +423,7 @@ public class DatabaseQuagramUsers {
 		
 		try {
 			databaseConnection.statement = databaseConnection.connection.createStatement();
-			
-			//TODO: vorher muss neues Gameplay erstellt werden -> Dann die gameplayID hier zum User hinzufügen
-			
+
 			String sql;
 			sql = "update user set game_id='" + gameplayID + "' where instagram_id='" + instagramID + "'";
 			System.out.println("VOR der EXCELPTION: sql: " +sql);
@@ -442,9 +438,7 @@ public class DatabaseQuagramUsers {
 		
 		try {
 			databaseConnection.statement = databaseConnection.connection.createStatement();
-			
-			//TODO: vorher muss neues Gameplay erstellt werden -> Dann die gameplayID hier zum User hinzufügen
-			
+
 			String sql;
 			sql = "update user set game_id='NULL' where instagram_id='" + instagramID + "'";
 			int result = databaseConnection.statement.executeUpdate(sql);

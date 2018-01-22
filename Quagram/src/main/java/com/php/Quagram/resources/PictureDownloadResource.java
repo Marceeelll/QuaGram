@@ -47,9 +47,10 @@ public class PictureDownloadResource implements IFileService {
 		return path;
 	}
 	
-///////////Ab hier brauchen wir eigl nichts mehr -> nur zur Vervollständigung////////
 	
-	//http://localhost:8080/Quagram/webapi/picture/upload
+	
+	/*		Zur Vervollständigung 		*/
+	
 	@POST
 	@Path("/upload")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -100,36 +101,4 @@ public class PictureDownloadResource implements IFileService {
 		}
 		return qualifiedUploadFilePath;
 	}
-	
-	
-///////////Ab hier war alles nur zum Testen///////////////////////////////	
-	
-	/*final Application application = new ResourceConfig()
-		    .packages("org.glassfish.jersey.examples.multipart")
-		    .register(MultiPartFeature.class);*/
-	
-	/*
-	@GET
-	@Path("{pictureID}")
-	@Produces("multipart/mixed")
-	public MultiPart getPicture(@PathParam("pictureID") String pictureID) {
-		MultiPart multiPartEntity = new MultiPart()
-		        .bodyPart(new BodyPart().entity("hello"))
-		        .bodyPart(new BodyPart(new JaxbBean("xml"), MediaType.APPLICATION_XML_TYPE))
-		        .bodyPart(new BodyPart(new JaxbBean("json"), MediaType.APPLICATION_JSON_TYPE));
-	}*/
-	
-	/*
-	@GET
-	@Path("/{pictureID}")
-	@Produces("image/jpg")
-	public Response getPicture(@PathParam("pictureID") String pictureID) {
-		System.out.println("joasodjaosjdoasjd");
-		File file = new File();
-		
-		ResponseBuilder response = Response.ok((Object) file);
-		response.header("Content-Disposition", "attachment; filename=PictureID.jpg");
-		
-		return response.build();
-	}*/
 }

@@ -54,13 +54,11 @@ public class LobbyResource {
 		return Response.status(Status.NO_CONTENT).build();
 	}
 	
-	
-	// TODO: DELETE nur für Debugging
-	@GET
-	@Path("dummy")
-	public String dummy() {
-		return "Dummy erfolgreich ausgeführt";
-	}
+//	@GET
+//	@Path("dummy")
+//	public String dummy() {
+//		return "Dummy erfolgreich ausgeführt";
+//	}
 }
 
 

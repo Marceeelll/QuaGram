@@ -56,7 +56,6 @@ public class DatabaseQuagramMatchSessionCard {
 			int result = databaseConnection.statement.executeUpdate(sql);
 			System.out.println("Inserted MatchSessionCard (addMatchSessionCard): " +result);
 		} catch (SQLException e) {
-			// if contains id already -> make update instead of insert 
 			e.printStackTrace();
 		}
 	}

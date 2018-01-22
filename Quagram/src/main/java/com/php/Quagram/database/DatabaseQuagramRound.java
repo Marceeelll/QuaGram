@@ -43,7 +43,6 @@ public class DatabaseQuagramRound {
 			int result = databaseConnection.statement.executeUpdate(sql);
 			System.out.println("Inserted Turn (addTurnForGameplay): " +result);
 		} catch (SQLException e) {
-			// if contains id already -> make update instead of insert 
 			e.printStackTrace();
 		}
 	}
@@ -59,7 +58,6 @@ public class DatabaseQuagramRound {
 			int result = databaseConnection.statement.executeUpdate(sql);
 			System.out.println("Delete Turns (deleteTurnsForGameplay): " + result);
 		} catch (SQLException e) {
-			// if contains id already -> make update instead of insert 
 			e.printStackTrace();
 		}
 	}

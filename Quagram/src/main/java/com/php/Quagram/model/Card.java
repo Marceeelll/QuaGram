@@ -2,8 +2,6 @@ package com.php.Quagram.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-//Die Paula, die hat Flecken
-
 @XmlRootElement
 public class Card {
 	private String id;

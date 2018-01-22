@@ -76,7 +76,6 @@ public class DatabaseQuagramGamePlay {
 			int result = databaseConnection.statement.executeUpdate(sql);
 			System.out.println("Inserted Gameplay (addGameplay): " +result);
 		} catch (SQLException e) {
-			// if contains id already -> make update instead of insert 
 			e.printStackTrace();
 		}
 	}
@@ -131,7 +130,6 @@ public class DatabaseQuagramGamePlay {
 			int result = databaseConnection.statement.executeUpdate(sql);
 			System.out.println("Inserted Gameplay (addGameplay): " +result);
 		} catch (SQLException e) {
-			// if contains id already -> make update instead of insert 
 			e.printStackTrace();
 		}
 	}
@@ -163,5 +161,4 @@ public class DatabaseQuagramGamePlay {
 			e.printStackTrace();
 		}
 	}
-	
 }

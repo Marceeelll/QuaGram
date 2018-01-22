@@ -130,7 +130,6 @@ public class JSONService {
 		int humidity = object.getInt("humidity");
 		String windSpeed = object.getString("windSpeed");
 		int windSpeedInt = Integer.valueOf(windSpeed);
-		// TODO: ???? String countryCode = object.getString("countryCode");
 		
 		Card card = new Card();
 		card.setHeightMeter(elevation);
